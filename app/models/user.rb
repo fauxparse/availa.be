@@ -1,5 +1,6 @@
 class User
   include Mongoid::Document
+  include Mongoid::Paranoia # never really delete users
 
   devise :database_authenticatable,
     :registerable,
@@ -15,6 +16,7 @@ class User
   validates :name, presence: true
 
   embeds_many :memberships
+  has_many :events
 
   def groups
     memberships.collect(&:group)

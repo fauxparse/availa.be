@@ -4,6 +4,8 @@ class Group
 
   field :name, type: String
 
+  has_many :events
+
   include Sluggable
 
   def users
