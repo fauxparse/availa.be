@@ -21,6 +21,19 @@ class User
   end
 
   def groups=(groups)
-    self.memberships = Array(groups).collect { |g| Membership.new(group: g) }
+    self.memberships = Array(groups).collect { |g| membership_of(g) }
+  end
+
+  def membership_of(group, admin = false)
+    memberships.detect { |m| m.group == group } ||
+    Membership.new(group: group, admin: admin)
+  end
+
+  def member_of?(group)
+    membership_of(group).exists?
+  end
+
+  def admin_of?(group)
+    membership_of(group).admin?
   end
 end

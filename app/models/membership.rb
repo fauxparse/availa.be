@@ -6,4 +6,8 @@ class Membership
   field :admin, type: Boolean, default: false
 
   validates_uniqueness_of :group_id
+
+  def exists?
+    !new_record?
+  end
 end

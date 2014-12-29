@@ -45,4 +45,66 @@ RSpec.describe User, :type => :model do
       expect(user.groups).to eq([group])
     end
   end
+
+  context "not in a group" do
+    describe "#membership_of" do
+      it "does not exist" do
+        expect(user.membership_of(group)).not_to exist
+      end
+    end
+
+    describe "#member_of?" do
+      it "returns false" do
+        expect(user.member_of?(group)).to be false
+      end
+    end
+  end
+
+  context "in a group" do
+    before do
+      user.update groups: [group]
+    end
+
+    describe "#membership_of" do
+      it "exists" do
+        expect(user.membership_of(group)).to exist
+      end
+    end
+
+    describe "#member_of?" do
+      it "returns true" do
+        expect(user.member_of?(group)).to be true
+      end
+    end
+
+    describe "#admin_of?" do
+      it "returns false" do
+        expect(user.admin_of?(group)).to be false
+      end
+    end
+  end
+
+  context "as admin of a group" do
+    before do
+      user.update memberships: [user.membership_of(group, true)]
+    end
+
+    describe "#membership_of" do
+      it "exists" do
+        expect(user.membership_of(group)).to exist
+      end
+    end
+
+    describe "#member_of?" do
+      it "returns true" do
+        expect(user.member_of?(group)).to be true
+      end
+    end
+
+    describe "#admin_of?" do
+      it "returns true" do
+        expect(user.admin_of?(group)).to be true
+      end
+    end
+  end
 end

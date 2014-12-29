@@ -22,9 +22,21 @@ RSpec.describe Group, :type => :model do
         FactoryGirl.create(u, groups: [group])
       end
       dumbledore = FactoryGirl.create(:dumbledore)
-      
+
       expect(group.users).to eq(users)
       expect(group.users).not_to include(dumbledore)
+    end
+  end
+
+  describe "#admins" do
+    it "returns a list of admins" do
+      users = {dumbledore: true, harry: false, hermione: false}
+      users.each_pair do |u, admin|
+        m = Membership.new(group: group, admin: admin)
+        FactoryGirl.create u, memberships: [m]
+      end
+
+      expect(group.admins.collect(&:name)).to eq(["Dumbledore"])
     end
   end
 end
