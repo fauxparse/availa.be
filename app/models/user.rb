@@ -13,10 +13,10 @@ class User
   field :email, type: String
   field :encrypted_password, type: String
 
-  validates :name, presence: true
-
-  embeds_many :memberships
+  embeds_many :memberships, class_name: "User::Membership"
   has_many :events
+
+  validates :name, presence: true
 
   def groups
     memberships.collect(&:group)
@@ -28,7 +28,7 @@ class User
 
   def membership_of(group, admin = false)
     memberships.detect { |m| m.group == group } ||
-    Membership.new(group: group, admin: admin)
+    User::Membership.new(group: group, admin: admin)
   end
 
   def member_of?(group)

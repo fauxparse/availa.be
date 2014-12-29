@@ -10,14 +10,14 @@ RSpec.describe User, :type => :model do
 
   describe "#memberships" do
     it "keeps track of group memberships" do
-      user.memberships << Membership.new(group: group)
+      user.memberships << User::Membership.new(group: group)
 
       expect(user.memberships.collect(&:group)).to eq([group])
     end
 
     it "cannot join the same group twice" do
       2.times do
-        user.memberships << Membership.new(group: group)
+        user.memberships << User::Membership.new(group: group)
       end
 
       expect(user).not_to be_valid
@@ -26,7 +26,7 @@ RSpec.describe User, :type => :model do
 
   describe "#groups" do
     it "returns a list of groups" do
-      user.memberships << Membership.new(group: group)
+      user.memberships << User::Membership.new(group: group)
 
       expect(user.groups).to eq([group])
     end

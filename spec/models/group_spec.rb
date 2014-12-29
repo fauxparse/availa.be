@@ -32,7 +32,7 @@ RSpec.describe Group, :type => :model do
     it "returns a list of admins" do
       users = {dumbledore: true, harry: false, hermione: false}
       users.each_pair do |u, admin|
-        m = Membership.new(group: group, admin: admin)
+        m = User::Membership.new(group: group, admin: admin)
         FactoryGirl.create u, memberships: [m]
       end
 

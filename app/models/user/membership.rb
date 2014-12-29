@@ -1,4 +1,4 @@
-class Membership
+class User::Membership
   include Mongoid::Document
 
   embedded_in :user
