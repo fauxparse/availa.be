@@ -13,7 +13,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'mongoid', github: 'mongoid/mongoid'
 gem 'mongoid_paranoia'
 
-gem 'devise', github: 'fauxparse/devise', branch: 'case_insensitive_uniqueness'
+gem 'devise'
 gem 'bcrypt', '~> 3.1.7'
 gem 'stringex'
 

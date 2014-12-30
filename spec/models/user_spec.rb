@@ -3,10 +3,13 @@ require 'rails_helper'
 RSpec.describe User, :type => :model do
   subject(:user) { FactoryGirl.create :user }
   let(:group) { FactoryGirl.create :group }
+  let(:event) { FactoryGirl.create :event, recurrences: [{ start_date: Date.today + 1.year, end_date: Date.today + 1.year + 1.month }] }
+  let(:skill) { FactoryGirl.create :skill }
+  let(:role) { FactoryGirl.create :role, skill: skill, event: event }
 
   it { is_expected.to validate_presence_of(:name) }
   it { is_expected.to validate_presence_of(:email) }
-  it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
+  it { is_expected.to validate_uniqueness_of(:email) }
 
   describe "#memberships" do
     it "keeps track of group memberships" do
@@ -105,6 +108,20 @@ RSpec.describe User, :type => :model do
       it "returns true" do
         expect(user.admin_of?(group)).to be true
       end
+    end
+  end
+
+  context "assigned to an event" do
+    before do
+      role.update assignments: [Event::Assignment.new(user: user)]
+    end
+
+    it "finds the event" do
+      expect(user.events).to include(event)
+    end
+
+    it "does not show the event as pending" do
+      expect(user.pending).not_to include(event)
     end
   end
 end

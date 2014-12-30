@@ -16,6 +16,11 @@ FactoryGirl.define do
       name "Hermione Granger"
       email "hermione.granger@hogwarts.ac.uk"
     end
+
+    factory :ron do
+      name "Ron Weasley"
+      email "ronald.weasley@hogwarts.ac.uk"
+    end
   end
 
 end

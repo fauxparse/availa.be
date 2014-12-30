@@ -38,4 +38,17 @@ class User
   def admin_of?(group)
     membership_of(group).admin?
   end
+
+  def events
+    Event.where "roles.assignments.user_id" => id
+  end
+
+  def pending
+    Event.where(
+      "recurrences.start_date" => { :$gte => Time.now },
+      "$not" => {
+        "roles.assignments.user_id" => id
+      }
+    )
+  end
 end
