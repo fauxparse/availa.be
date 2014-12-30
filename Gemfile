@@ -13,7 +13,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'mongoid', github: 'mongoid/mongoid'
 gem 'mongoid_paranoia'
 
-gem 'devise'
+gem 'devise', github: 'fauxparse/devise', branch: 'case_insensitive_uniqueness'
 gem 'bcrypt', '~> 3.1.7'
 gem 'stringex'
 
@@ -21,7 +21,7 @@ gem 'unicorn'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0'
-  gem 'shoulda-matchers'
+  gem 'mongoid-rspec', '~> 2.0.0.rc1'
   gem 'factory_girl_rails'
   gem 'database_cleaner'
   gem 'simplecov', :require => false

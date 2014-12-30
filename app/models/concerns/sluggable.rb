@@ -10,5 +10,7 @@ module Sluggable
     validates :slug,
       presence: true,
       uniqueness: { case_sensitive: false }
+
+    alias_attribute :to_param, :slug
   end
 end

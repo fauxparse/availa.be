@@ -5,6 +5,8 @@ class User::Membership
   belongs_to :group
   field :admin, type: Boolean, default: false
 
+  embeds_many :abilities, class_name: "User::Ability"
+
   validates_uniqueness_of :group_id
 
   def exists?
