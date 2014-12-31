@@ -41,18 +41,11 @@ class User
   end
 
   def events
-    Event.where "roles.assignments.user_id" => id
+    Event.assigned_to_user(self)
   end
 
   def pending
-    Event.where(
-      "recurrences.start_date" => { :$gte => Time.now },
-      "roles.skill_id" => { :$in => abilities.collect(&:skill_id) },
-      "$nor" => [
-        { "roles.assignments.user_id" => id },
-        { "availability.user_id" => id }
-      ]
-    )
+    Event.pending_for_user(self)
   end
 
   # https://github.com/plataformatec/devise/issues/2949

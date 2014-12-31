@@ -24,6 +24,7 @@ RSpec.describe Event::Recurrence, :type => :model do
 
   describe "#start_date=" do
     it "sets the date in the correct timezone" do
+      recurrence.time_zone = "Wellington"
       recurrence.start_date = "2015-01-01"
 
       expect(recurrence.start_date.utc).to eq(Time.utc(2014, 12, 31, 11, 00))
@@ -38,6 +39,7 @@ RSpec.describe Event::Recurrence, :type => :model do
 
   describe "#end_date=" do
     it "sets the date in the correct timezone" do
+      recurrence.time_zone = "Wellington"
       recurrence.end_date = "2015-01-01"
 
       expect(recurrence.end_date.utc).to eq(Time.utc(2015, 1, 1, 10, 59).end_of_minute)

@@ -4,7 +4,7 @@ RSpec.describe User, :type => :model do
   subject(:user) { FactoryGirl.create :user, abilities: [ability] }
   let(:ability) { FactoryGirl.build :ability, skill: skill }
   let(:group) { FactoryGirl.create :group }
-  let(:event) { FactoryGirl.create :event, roles: [Event::Role.new(skill: skill)], recurrences: [{ start_date: Date.today + 1.year, end_date: Date.today + 1.year + 1.month }] }
+  let(:event) { FactoryGirl.create :event, group: group, roles: [Event::Role.new(skill: skill)], recurrences: [{ start_date: Date.today + 1.year, end_date: Date.today + 1.year + 1.month }] }
   let(:skill) { FactoryGirl.create :skill, group: group }
   let(:role) { event.roles.first }
 
@@ -127,10 +127,11 @@ RSpec.describe User, :type => :model do
   end
 
   describe "#pending" do
-    context "event is in the past" do
+    context "when the event is in the past" do
       before do
         old = 1.year.ago
-        event.recurrences.first.update start_date: old, end_date: old + 1.week
+        event.update recurrences: [{ start_date: Date.today - 1.year, end_date: Date.today - 1.year + 1.month }]
+        event.recurrences.first.update! start_date: old, end_date: old + 1.week
       end
 
       it "does not include the event" do
@@ -162,6 +163,12 @@ RSpec.describe User, :type => :model do
       it "does not include the event" do
         expect(user.pending).not_to include event
       end
+    end
+  end
+
+  describe "to_key" do
+    it "represents itself as a string" do
+      expect(user.to_key).to eq(user.id.to_s)
     end
   end
 end
