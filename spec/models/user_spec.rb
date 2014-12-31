@@ -124,4 +124,33 @@ RSpec.describe User, :type => :model do
       expect(user.pending).not_to include(event)
     end
   end
+
+  describe "#pending" do
+    context "event is in the past" do
+      before do
+        old = 1.year.ago
+        event.recurrences.first.update start_date: old, end_date: old + 1.week
+      end
+
+      it "does not include the event" do
+        expect(user.pending).not_to include event
+      end
+    end
+
+    context "when user has not given availability" do
+      it "includes the event" do
+        expect(user.pending).to include event
+      end
+    end
+
+    context "when user has given availability" do
+      before do
+        event.availability_for(user).update(available: false)
+      end
+
+      it "does not include the event" do
+        expect(user.pending).not_to include event
+      end
+    end
+  end
 end

@@ -46,9 +46,10 @@ class User
   def pending
     Event.where(
       "recurrences.start_date" => { :$gte => Time.now },
-      "$not" => {
-        "roles.assignments.user_id" => id
-      }
+      "$nor" => [
+        { "roles.assignments.user_id" => id },
+        { "availability.user_id" => id }
+      ]
     )
   end
 

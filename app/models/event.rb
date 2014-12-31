@@ -12,6 +12,7 @@ class Event
   belongs_to :creator, class_name: "User", inverse_of: "events"
   embeds_many :recurrences, class_name: "Event::Recurrence"
   embeds_many :roles, class_name: "Event::Role", order: :position.asc
+  embeds_many :availability, class_name: "Event::Availability"
 
   keep_ordered :roles
 
@@ -19,6 +20,15 @@ class Event
 
   def times
     recurrences.collect(&:times).flatten.sort_by(&:first)
+  end
+
+  def starts_at?(time)
+    times.any? { |instance| instance.first == time }
+  end
+
+  def availability_for(user)
+    availability.detect { |record| record.user == user } ||
+    availability.build(user: user, available: false)
   end
 
 end
