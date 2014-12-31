@@ -1,11 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe User, :type => :model do
-  subject(:user) { FactoryGirl.create :user }
+  subject(:user) { FactoryGirl.create :user, abilities: [ability] }
+  let(:ability) { FactoryGirl.build :ability, skill: skill }
   let(:group) { FactoryGirl.create :group }
-  let(:event) { FactoryGirl.create :event, recurrences: [{ start_date: Date.today + 1.year, end_date: Date.today + 1.year + 1.month }] }
-  let(:skill) { FactoryGirl.create :skill }
-  let(:role) { FactoryGirl.create :role, skill: skill, event: event }
+  let(:event) { FactoryGirl.create :event, roles: [Event::Role.new(skill: skill)], recurrences: [{ start_date: Date.today + 1.year, end_date: Date.today + 1.year + 1.month }] }
+  let(:skill) { FactoryGirl.create :skill, group: group }
+  let(:role) { event.roles.first }
 
   it { is_expected.to validate_presence_of(:name) }
   it { is_expected.to validate_presence_of(:email) }
@@ -146,6 +147,16 @@ RSpec.describe User, :type => :model do
     context "when user has given availability" do
       before do
         event.availability_for(user).update(available: false)
+      end
+
+      it "does not include the event" do
+        expect(user.pending).not_to include event
+      end
+    end
+
+    context "when user doesn't have the right skills" do
+      before do
+        user.update abilities: []
       end
 
       it "does not include the event" do

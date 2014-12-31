@@ -14,6 +14,7 @@ class User
   field :remember_created_at, type: Time
 
   embeds_many :memberships, class_name: "User::Membership"
+  embeds_many :abilities, class_name: "User::Ability"
   has_many :events
 
   validates :name, presence: true
@@ -46,6 +47,7 @@ class User
   def pending
     Event.where(
       "recurrences.start_date" => { :$gte => Time.now },
+      "roles.skill_id" => { :$in => abilities.collect(&:skill_id) },
       "$nor" => [
         { "roles.assignments.user_id" => id },
         { "availability.user_id" => id }
