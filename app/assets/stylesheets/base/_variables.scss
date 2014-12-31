@@ -1,0 +1,83 @@
+@import "colors";
+
+// Typography
+$sans-serif: "Roboto", $helvetica;
+$serif: "Roboto Slab", $georgia;
+$base-font-family: $sans-serif;
+$header-font-family: $serif;
+$base-font-weight: 300;
+$bold-font-weight: 500;
+$light-font-weight: 200;
+$header-font-weight: 400;
+
+// Font Sizes
+$base-font-size: 1em;
+$h1-font-size: $base-font-size * 2.25;
+$h2-font-size: $base-font-size * 2;
+$h3-font-size: $base-font-size * 1.75;
+$h4-font-size: $base-font-size * 1.5;
+$h5-font-size: $base-font-size * 1.25;
+$h6-font-size: $base-font-size;
+
+// Line height
+$base-line-height: 1.5;
+$header-line-height: 1.25;
+
+// Other Sizes
+$base-border-radius: 3px;
+$base-spacing: $base-line-height * 1em;
+$base-z-index: 0;
+
+// Background Color
+$base-background-color: white;
+
+// Font Colors
+$base-font-color: text-color();
+$base-accent-color: $pink;
+$light-accent-color: $pink-100;
+$dark-accent-color: $pink-700;
+$base-secondary-color: $light-blue-A200;
+$light-secondary-color: $light-blue-A100;
+$dark-secondary-color: $light-blue-A400;
+
+// Link Colors
+$base-link-color: $base-accent-color;
+$hover-link-color: darken($base-accent-color, 15);
+$base-button-color: $base-link-color;
+$hover-button-color: $hover-link-color;
+
+// Flash Colors
+$alert-color: $yellow-100;
+$error-color: $red-100;
+$notice-color: $light-blue-100;
+$success-color: $light-green-100;
+
+// Border color
+$base-border-color: divider-color();
+$base-border: 1px solid $base-border-color;
+
+// Forms
+$form-border-color: $base-border-color;
+$form-border-color-hover: $base-border-color;
+$form-border-color-focus: $base-accent-color;
+$form-border-radius: $base-border-radius;
+$form-box-shadow: inset 0 1px 3px rgba(black,0.06);
+$form-box-shadow-focus: $form-box-shadow, 0 0 5px rgba(darken($form-border-color-focus, 5), 0.7);
+$form-font-size: $base-font-size;
+$form-font-family: $base-font-family;
+
+// Animation
+$animation-duration: 0.5s;
+$animation-timing-function: $ease-out-cubic;
+$reverse-animation-timing-function: $ease-in-cubic;
+
+$keyline: 4.5rem;
+
+// App bar
+$app-bar-height: 3.5rem;
+$app-bar-background-color: $base-accent-color;
+$app-bar-color: white;
+
+// Navigation
+$side-navigation-max-width: 25rem;
+$side-navigation-z-index: 1000;

@@ -13,11 +13,15 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'mongoid', github: 'mongoid/mongoid'
 gem 'mongoid_paranoia'
 
-gem 'devise'
+gem 'devise', github: 'plataformatec/devise'
 gem 'bcrypt', '~> 3.1.7'
 gem 'stringex'
 
 gem 'unicorn'
+
+gem 'bourbon', '~> 3.2.3'
+gem 'neat'
+gem 'bitters'
 
 group :development, :test do
   gem 'rspec-rails', '~> 3.0'

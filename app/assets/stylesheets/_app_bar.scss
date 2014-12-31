@@ -1,0 +1,61 @@
+.app-bar {
+  position: relative;
+  height: $app-bar-height;
+  background-color: $app-bar-background-color;
+  color: white;
+  padding: 1rem;
+
+  @include align-items(stretch);
+  @include display(flex);
+  @include flex-direction(row);
+  @include justify-content(flex-start);
+
+  [flex] {
+    @include flex(1);
+  }
+
+  .title {
+    @include type-title(white);
+    @include ellipsis;
+
+    margin: 0 1rem;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    section.main &:first-child {
+      margin-left: $keyline;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  button,
+  .button {
+    font-size: 1.5rem;
+    height: 1em;
+    width: 1em;
+    position: relative;
+    line-height: 1.5rem;
+    cursor: pointer;
+    background: none;
+    padding: 0;
+    margin: 0 0.5em;
+    outline: none;
+
+    &:first-child { margin-left: 0; }
+    &:last-child { margin-right: 0; }
+
+    &::before {
+      content: "";
+      @include position(absolute, 50% 0rem 0rem 50%);
+      margin: -1.5rem;
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+    }
+  }
+}

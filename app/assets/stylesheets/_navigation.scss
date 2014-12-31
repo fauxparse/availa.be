@@ -1,0 +1,52 @@
+nav.main-navigation {
+  @include position(fixed, 0rem null 0rem (-$side-navigation-max-width));
+  z-index: $side-navigation-z-index;
+  width: 100%;
+  max-width: $side-navigation-max-width + $app-bar-height;
+  padding-left: $app-bar-height;
+  background: white;
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.25);
+  margin-left: -$app-bar-height;
+
+  @include transition(left $animation-duration $reverse-animation-timing-function);
+
+  + .scrim {
+    @include position(fixed, 0rem 0rem 0rem 0rem);
+    background-color: rgba(dark-scrim-color(), 0);
+    pointer-events: none;
+    @include transition(background-color $animation-duration $reverse-animation-timing-function);
+  }
+
+  #show-navigation:checked ~ & {
+    left: 0rem;
+    @include transition(left $animation-duration $animation-timing-function);
+
+    + .scrim {
+      background: dark-scrim-color();
+      pointer-events: auto;
+      @include transition(background-color $animation-duration $animation-timing-function);
+    }
+  }
+}
+
+@include media($huge-screen) {
+  nav.main-navigation {
+    left: 0rem;
+    box-shadow: none;
+    border-right: 1px solid divider-color();
+    @include transition(none);
+  }
+
+  .main {
+    left: $side-navigation-max-width;
+
+    > header [for=show-navigation] {
+      visibility: hidden;
+    }
+  }
+}
+
+
+#show-navigation {
+  display: none;
+}

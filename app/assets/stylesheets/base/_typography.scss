@@ -1,0 +1,186 @@
+html {
+  font-size: $base-font-size;
+}
+
+@mixin type-display-4($color: $base-font-color) {
+  font-size: 7rem; // 112px
+  line-height: 1rem;
+  font-weight: $font-weight-light;
+  color: secondary-color($color);
+}
+
+@mixin type-display-3($color: $base-font-color) {
+  font-size: 3.5rem; // 56px
+  line-height: 1rem;
+  font-weight: $base-font-weight;
+  color: secondary-color($color);
+}
+
+@mixin type-display-2($color: $base-font-color) {
+  font-size: 2.8125rem; // 45px
+  line-height: 3rem; // 48px
+  font-weight: $base-font-weight;
+  color: secondary-color($color);
+}
+
+@mixin type-display-1($color: $base-font-color) {
+  font-size: 2.125rem; // 34px
+  line-height: 2.5rem; // 40px
+  font-weight: $base-font-weight;
+  color: secondary-color($color);
+}
+
+@mixin type-headline($color: $base-font-color) {
+  font-size: 1.5rem; // 24px
+  line-height: 2rem; // 32px
+  font-weight: $base-font-weight;
+  color: text-color($color);
+}
+
+@mixin type-title($color: $base-font-color) {
+  font-size: 1.25rem; // 20px
+  line-height: 1.5rem; // 32px
+  font-weight: $bold-font-weight;
+  color: text-color($color);
+}
+
+@mixin type-subhead($color: $base-font-color) {
+  font-size: 1rem; // 16px
+  line-height: 1.5rem; // 24px
+  font-weight: $base-font-weight;
+  color: text-color($color);
+}
+
+@mixin type-form-control($color: $base-font-color) {
+  font-size: 1rem; // 16px
+  line-height: 1rem;
+  font-weight: $base-font-weight;
+  color: text-color($color);
+  -webkit-font-smoothing: antialiased;
+}
+
+@mixin type-body-1($color: $base-font-color) {
+  font-size: 0.875rem; // 14px
+  line-height: 1.25rem; // 20px
+  font-weight: $base-font-weight;
+  color: text-color($color);
+}
+
+@mixin type-body-2($color: $base-font-color) {
+  @include type-body-1($color);
+  font-weight: $bold-font-weight;
+}
+
+@mixin type-caption($color: $base-font-color) {
+  font-size: 0.75rem; // 12px
+  line-height: 1rem; // 16px
+  font-weight: $base-font-weight;
+  color: secondary-color($color);
+}
+
+@mixin type-tab($color: $base-font-color) {
+  font-size: 0.875rem; // 14px
+  line-height: 1.5rem; // 24px
+  font-weight: $bold-font-weight;
+  text-transform: uppercase;
+  color: text-color($color);
+}
+
+@mixin type-button($color: $base-font-color) {
+  font-size: 0.875rem; // 14px
+  line-height: 1.5rem; // 24px
+  font-weight: $bold-font-weight;
+  text-transform: uppercase;
+  color: text-color($color);
+}
+
+@mixin type-navigation-section-header($color: $base-font-color) {
+  font-size: 0.875rem; // 14px
+  line-height: 1.5rem; // 24px
+  font-weight: $bold-font-weight;
+  color: secondary-color($color);
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  background-color: $base-background-color;
+  color: text-color($base-font-color);
+  font-family: $base-font-family;
+  font-size: $base-font-size;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  text-rendering: optimizeLegibility; // Fix the character spacing for headings
+}
+
+h1 {
+  @include type-display-1;
+}
+
+h2 {
+  @include type-headline;
+}
+
+h3 {
+  @include type-title;
+}
+
+h4 {
+  @include type-subhead;
+}
+
+p {
+  @include type-body-1;
+  margin-bottom: 1.25rem;
+  max-width: 60em;
+}
+
+p.emphasis {
+  @include type-body-2;
+}
+
+a {
+  @include transition(color 0.1s linear);
+  text-decoration: none;
+  color: $base-accent-color;
+
+  &:hover {
+    color: $hover-link-color;
+  }
+
+  &:active, &:focus {
+    color: $hover-link-color;
+    outline: none;
+  }
+}
+
+hr {
+  border-bottom: $base-border;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  margin: $base-spacing 0;
+}
+
+img,
+picture {
+  margin: 0;
+  max-width: 100%;
+}
+
+blockquote {
+  border-left: 2px solid $base-border-color;
+  color: lighten($base-font-color, 15);
+  margin: $base-spacing 0;
+  padding-left: $base-spacing / 2;
+}
+
+cite {
+  color: lighten($base-font-color, 25);
+  font-style: italic;
+
+  &:before {
+    content: "\2014 \00A0";
+  }
+}

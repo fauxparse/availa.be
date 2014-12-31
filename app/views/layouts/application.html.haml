@@ -1,0 +1,22 @@
+!!!
+%html
+  %head
+    %title Ok
+    = stylesheet_link_tag "http://fonts.googleapis.com/css?family=Roboto+Slab|Roboto:500,300,300italic,200"
+    = stylesheet_link_tag "application", media: "all"
+    = javascript_include_tag "application"
+    = csrf_meta_tags
+  %body
+    %section.main
+      %header.app-bar
+        %label.button{for: "show-navigation"}
+          %i.md.md-menu
+        .title{flex: true}= yield :title
+        = yield :app_bar_buttons
+      %section.content
+        = yield
+    %input#show-navigation{type: :checkbox, autocomplete: :off}
+    %nav.main-navigation
+      %header.app-bar
+        .title= current_user.name
+    %label.scrim{for: "show-navigation"}

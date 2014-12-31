@@ -6,12 +6,12 @@ class User
     :registerable,
     :recoverable,
     :rememberable,
-    :trackable,
     :validatable
 
   field :name, type: String
   field :email, type: String
   field :encrypted_password, type: String
+  field :remember_created_at, type: Time
 
   embeds_many :memberships, class_name: "User::Membership"
   has_many :events
@@ -50,5 +50,10 @@ class User
         "roles.assignments.user_id" => id
       }
     )
+  end
+
+  # https://github.com/plataformatec/devise/issues/2949
+  def to_key
+    id.to_s
   end
 end
