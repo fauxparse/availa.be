@@ -4,4 +4,11 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   respond_to :html, :json
+
+  serialization_scope :view_context
+
+protected
+  def default_serializer_options
+    { root: false }
+  end
 end

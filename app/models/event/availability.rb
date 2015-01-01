@@ -12,8 +12,8 @@ class Event::Availability
 
   def available_for?(time)
     available? &&
-    (times.empty? || times.include?(time)) &&
-    (!event? || event.starts_at?(time))
+    times.include?(time) &&
+    event.starts_at?(time)
   end
 
   def exists?

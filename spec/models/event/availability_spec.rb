@@ -31,8 +31,8 @@ RSpec.describe Event::Availability, :type => :model do
       expect(event.availability_for(harry)).to exist
     end
 
-    it "is available" do
-      expect(event.availability_for(harry)).to be_available_for(event.times.first.first)
+    it "is not available" do
+      expect(event.availability_for(harry)).not_to be_available_for(event.times.first.first)
     end
   end
 

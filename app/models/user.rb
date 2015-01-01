@@ -15,12 +15,26 @@ class User
 
   embeds_many :memberships, class_name: "User::Membership"
   embeds_many :abilities, class_name: "User::Ability"
+  embeds_one :preferences, class_name: "User::Preferences"
   has_many :events
 
   validates :name, presence: true
 
+  before_validation :build_preferences, unless: :preferences?
+
+  scope :neighbors_of, ->(user) do
+    where :$or => [
+      { :id => user.id },
+      { :"memberships.group_id".in => user.groups.collect(&:id) }
+    ]
+  end
+
   def groups
-    memberships.collect(&:group)
+    if memberships.any?
+      Array Group.find(*memberships.collect(&:group_id))
+    else
+      []
+    end
   end
 
   def groups=(groups)
@@ -29,7 +43,7 @@ class User
 
   def membership_of(group, admin = false)
     memberships.detect { |m| m.group == group } ||
-    User::Membership.new(group: group, admin: admin)
+    memberships.build(group: group, admin: admin)
   end
 
   def member_of?(group)

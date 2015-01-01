@@ -20,6 +20,14 @@ GIT
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
 
+GIT
+  remote: git://github.com/rails-api/active_model_serializers.git
+  revision: 64cc5385bc38f7e2c25564d80fc9e1bb8ccf49b5
+  branch: 0-9-stable
+  specs:
+    active_model_serializers (0.9.1)
+      activemodel (>= 3.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -66,8 +74,8 @@ GEM
       bourbon (>= 3.2)
       sass (>= 3.2)
       thor
-    bourbon (3.2.3)
-      sass (~> 3.2)
+    bourbon (4.1.0)
+      sass (~> 3.3)
       thor
     bson (2.3.0)
     builder (3.2.2)
@@ -122,6 +130,7 @@ GEM
       railties (>= 4.2.0)
       thor (>= 0.14, < 2.0)
     json (1.8.1)
+    json2-rails (1.1.0)
     kgio (2.9.2)
     loofah (2.0.1)
       nokogiri (>= 1.5.9)
@@ -257,9 +266,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_model_serializers!
   bcrypt (~> 3.1.7)
   bitters
-  bourbon (~> 3.2.3)
+  bourbon (~> 4.1)
   byebug
   coffee-rails (~> 4.1.0)
   database_cleaner
@@ -268,6 +278,7 @@ DEPENDENCIES
   haml-rails
   jbuilder (~> 2.0)
   jquery-rails
+  json2-rails
   mongoid!
   mongoid-rspec (~> 2.0.0.rc1)
   mongoid_paranoia

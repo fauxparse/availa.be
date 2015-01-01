@@ -1,0 +1,6 @@
+en:
+  dashboards:
+    show:
+      link: Inbox
+      icon: inbox
+      title: Inbox

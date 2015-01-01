@@ -7,6 +7,7 @@ class User::Membership
 
   embeds_many :abilities, class_name: "User::Ability"
 
+  validates_presence_of :group_id
   validates_uniqueness_of :group_id
 
   def exists?

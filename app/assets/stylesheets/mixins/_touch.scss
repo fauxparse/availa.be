@@ -1,0 +1,10 @@
+@mixin tappable-region {
+  &::after {
+    content: "";
+    @include position(absolute, 50% 0rem 0rem 50%);
+    margin: -1.5rem;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+  }
+}

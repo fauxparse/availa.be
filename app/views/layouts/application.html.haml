@@ -10,7 +10,7 @@
     %section.main
       %header.app-bar
         %label.button{for: "show-navigation"}
-          %i.md.md-menu
+          = icon :menu
         .title{flex: true}= yield :title
         = yield :app_bar_buttons
       %section.content
@@ -19,4 +19,34 @@
     %nav.main-navigation
       %header.app-bar
         .title= current_user.name
+      %section.content
+        %ul.list
+          %li.list-item
+            = link_to root_path, class: "primary-action" do
+              = icon t("dashboards.show.icon")
+              .text
+                .line= t("dashboards.show.link")
+          %li.list-item
+            = link_to root_path, class: "primary-action" do
+              = icon t("events.calendar.icon")
+              .text
+                .line= t("events.calendar.link")
+
+        %ul.list
+          - current_user.groups.each do |group|
+            %li.list-item
+              = link_to "#", class: "primary-action" do
+                .avatar
+                  = icon :group
+                .text
+                  .line= group
+                  .line Lorem ipsum dolor sit amet qui adipisicing elit derp
+              = link_to "#", class: "secondary-action" do
+                = icon :settings
+
     %label.scrim{for: "show-navigation"}
+
+    :coffee
+      moment.tz.setDefault "#{current_user.preferences.time_zone}"
+
+    = yield :scripts

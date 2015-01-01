@@ -5,13 +5,16 @@ nav.main-navigation {
   max-width: $side-navigation-max-width + $app-bar-height;
   padding-left: $app-bar-height;
   background: white;
-  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.25);
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0);
   margin-left: -$app-bar-height;
+  overflow-y: auto;
+  -webkit-overflow-scroll: touch;
 
-  @include transition(left $animation-duration $reverse-animation-timing-function);
+  @include transition(all $animation-duration $animation-timing-function);
 
   + .scrim {
     @include position(fixed, 0rem 0rem 0rem 0rem);
+    margin: 0rem;
     background-color: rgba(dark-scrim-color(), 0);
     pointer-events: none;
     @include transition(background-color $animation-duration $reverse-animation-timing-function);
@@ -19,7 +22,8 @@ nav.main-navigation {
 
   #show-navigation:checked ~ & {
     left: 0rem;
-    @include transition(left $animation-duration $animation-timing-function);
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.25);
+    @include transition(all $animation-duration $animation-timing-function);
 
     + .scrim {
       background: dark-scrim-color();
@@ -27,14 +31,29 @@ nav.main-navigation {
       @include transition(background-color $animation-duration $animation-timing-function);
     }
   }
+
+  .app-bar {
+    height: 10rem;
+  }
+
+  .list-item {
+    &.active,
+    &:hover {
+      background: rgba(black, 0.02);
+    }
+  }
 }
 
 @include media($huge-screen) {
   nav.main-navigation {
     left: 0rem;
-    box-shadow: none;
+    box-shadow: none !important;
     border-right: 1px solid divider-color();
     @include transition(none);
+
+    #show-navigation:checked ~ & + .scrim {
+      display: none;
+    }
   }
 
   .main {
@@ -45,7 +64,6 @@ nav.main-navigation {
     }
   }
 }
-
 
 #show-navigation {
   display: none;

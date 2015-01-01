@@ -7,11 +7,13 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'haml-rails'
 
 gem 'jquery-rails'
+gem 'json2-rails'
 gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 gem 'mongoid', github: 'mongoid/mongoid'
 gem 'mongoid_paranoia'
+gem 'active_model_serializers', github: 'rails-api/active_model_serializers', branch: '0-9-stable'
 
 gem 'devise', github: 'plataformatec/devise'
 gem 'bcrypt', '~> 3.1.7'
@@ -19,7 +21,7 @@ gem 'stringex'
 
 gem 'unicorn'
 
-gem 'bourbon', '~> 3.2.3'
+gem 'bourbon', '~> 4.1'
 gem 'neat'
 gem 'bitters'
 

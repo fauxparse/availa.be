@@ -8,7 +8,8 @@
   text-rendering: auto;
 
   // Better Font Rendering
-  -webkit-font-smoothing: antialiased;
+  // -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing: subpixel-antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
