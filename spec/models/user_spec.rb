@@ -73,6 +73,10 @@ RSpec.describe User, :type => :model do
       it "exists" do
         expect(user.membership_of(group)).to exist
       end
+
+      it "has preferences" do
+        expect(user.membership_of(group).preferences).to be_present
+      end
     end
 
     describe "#member_of?" do
@@ -166,9 +170,4 @@ RSpec.describe User, :type => :model do
     end
   end
 
-  describe "to_key" do
-    it "represents itself as a string" do
-      expect(user.to_key).to eq(user.id.to_s)
-    end
-  end
 end
