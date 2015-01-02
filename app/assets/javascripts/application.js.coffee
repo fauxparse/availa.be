@@ -2,17 +2,17 @@
 
 #= require jquery2
 #= require jquery_ujs
-#= require vendor/transit
+#= require transit
 
-#= require vendor/spine/spine
-#= require vendor/spine/ajax
-#= require vendor/spine/route
-#= require vendor/spine/manager
+#= require spine/spine
+#= require spine/ajax
+#= require spine/route
+#= require spine/manager
 #= require hamlcoffee
 
-#= require vendor/md5
-#= require vendor/moment/moment
-#= require vendor/moment/moment-timezone
+#= require md5
+#= require moment/moment
+#= require moment/moment-timezone
 
 #= require i18n
 #= require i18n/translations
