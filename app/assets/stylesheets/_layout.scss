@@ -1,4 +1,4 @@
-.main {
+.stack > section {
   @include position(absolute, 0rem 0rem 0rem 0rem);
   overflow-y: auto;
 }

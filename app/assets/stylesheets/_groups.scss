@@ -1,0 +1,9 @@
+.main-navigation .groups {
+  .list:not(:last-child) {
+    padding-bottom: 0;
+  }
+
+  .list + .list {
+    padding-top: 0;
+  }
+}

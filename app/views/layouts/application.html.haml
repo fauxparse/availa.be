@@ -8,41 +8,20 @@
     = csrf_meta_tags
   %body
     %section.main
-      %header.app-bar
-        %label.button{for: "show-navigation"}
-          = icon :menu
-        .title{flex: true}= yield :title
-        = yield :app_bar_buttons
-      %section.content
-        = yield
     %input#show-navigation{type: :checkbox, autocomplete: :off}
     %nav.main-navigation
       %header.app-bar
         .title= current_user.name
       %section.content
         %ul.list
-          %li.list-item
-            = link_to root_path, class: "primary-action" do
-              = icon t("dashboards.show.icon")
-              .text
-                .line= t("dashboards.show.link")
-          %li.list-item
-            = link_to root_path, class: "primary-action" do
-              = icon t("events.calendar.icon")
-              .text
-                .line= t("events.calendar.link")
+          = navigation_item "dashboards.show", "/"
+          = navigation_item "events.calendar", "/events"
 
-        %ul.list
-          - current_user.groups.each do |group|
-            %li.list-item
-              = link_to "#", class: "primary-action" do
-                .avatar
-                  = icon :group
-                .text
-                  .line= group
-                  .line Lorem ipsum dolor sit amet qui adipisicing elit derp
-              = link_to "#", class: "secondary-action" do
-                = icon :settings
+        %section.groups
+          %h3= t("groups.index.title")
+          %ul.list.groups-list
+          %ul.list
+            = navigation_item "groups.new", new_group_path
 
     %label.scrim{for: "show-navigation"}
 

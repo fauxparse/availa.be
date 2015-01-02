@@ -1,0 +1,7 @@
+en:
+  groups:
+    index:
+      title: My groups
+    new:
+      link: Add a group
+      icon: add

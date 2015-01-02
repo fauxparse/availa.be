@@ -36,12 +36,30 @@ nav.main-navigation {
     height: 10rem;
   }
 
+  h3 {
+    @include type-subhead;
+    padding: 0.5rem 1rem;
+    border-top: 1px solid divider-color();
+
+    + .list {
+      padding-top: 0;
+    }
+  }
+
   .list-item {
+    .primary-action .icon {
+      left: 1.5rem;
+    }
+
     &.active,
     &:hover {
       background: rgba(black, 0.02);
     }
   }
+}
+
+.main.stack {
+  @include position(absolute, 0rem 0rem 0rem 0rem);
 }
 
 @include media($huge-screen) {
@@ -56,10 +74,10 @@ nav.main-navigation {
     }
   }
 
-  .main {
+  .main.stack {
     left: $side-navigation-max-width;
 
-    > header [for=show-navigation] {
+    section > header [for=show-navigation] {
       visibility: hidden;
     }
   }
@@ -67,4 +85,8 @@ nav.main-navigation {
 
 #show-navigation {
   display: none;
+}
+
+.stack > *:not(.active) {
+  display: none
 }

@@ -17,7 +17,7 @@
   .title {
     @include type-title(white);
     @include ellipsis;
-
+    color: white;
     margin: 0 1rem;
 
     &:first-child {

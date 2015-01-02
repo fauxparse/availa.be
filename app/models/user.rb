@@ -62,8 +62,4 @@ class User
     Event.pending_for_user(self)
   end
 
-  # https://github.com/plataformatec/devise/issues/2949
-  def to_key
-    id.to_s
-  end
 end

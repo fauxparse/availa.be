@@ -10,14 +10,18 @@ gem 'jquery-rails'
 gem 'json2-rails'
 gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
+gem 'haml_coffee_assets', git: 'https://github.com/netzpirat/haml_coffee_assets.git'
+gem 'i18n-js', git: 'https://github.com/fnando/i18n-js.git'
 
 gem 'mongoid', github: 'mongoid/mongoid'
 gem 'mongoid_paranoia'
-gem 'active_model_serializers', github: 'rails-api/active_model_serializers', branch: '0-9-stable'
+gem 'active_model_serializers', github: 'rails-api/active_model_serializers', branch: '0-8-stable'
 
 gem 'devise', github: 'plataformatec/devise'
 gem 'bcrypt', '~> 3.1.7'
 gem 'stringex'
+
+gem 'cancancan', '~> 1.9'
 
 gem 'unicorn'
 

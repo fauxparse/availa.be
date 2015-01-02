@@ -2,6 +2,8 @@ class App.User extends Spine.Model
   @configure "User", "name", "email"
   @extend Spine.Model.Ajax
 
+  @current: -> @_current
+
   @fetchCurrent: ->
     promise = $.Deferred()
     if @_current
@@ -10,6 +12,8 @@ class App.User extends Spine.Model
       $.getJSON("/users/current")
         .done (data) =>
           @one "refresh", (records) =>
-            promise.resolve records[0]
+            @_current = records[0]
+            promise.resolve @_current
           @refresh data
+          App.Group.refresh data.groups
     promise

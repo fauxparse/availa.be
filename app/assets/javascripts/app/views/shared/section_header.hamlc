@@ -1,0 +1,3 @@
+%label.button{for: "show-navigation"}
+  %i.icon.md.md-menu
+.title{flex: true}

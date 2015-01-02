@@ -3,3 +3,4 @@ en:
     calendar:
       link: Calendar
       icon: event
+      title: Calendar
