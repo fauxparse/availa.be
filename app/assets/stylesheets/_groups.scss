@@ -7,3 +7,26 @@
     padding-top: 0;
   }
 }
+
+.group-preferences {
+  .color-selector {
+    text-align: center;
+    margin: 0 auto;
+    max-width: 22rem;
+  }
+
+  .color {
+    display: inline-block;
+    position: relative;
+    width: 1.5em;
+    height: 1.5em;
+    margin: 0.5em;
+    border-radius: 50%;
+    @include tappable-region;
+    @include transition(transform $animation-duration $animation-timing-function);
+
+    &.active {
+      @include transform(scale(1.5));
+    }
+  }
+}

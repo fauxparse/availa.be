@@ -5,3 +5,7 @@ en:
     new:
       link: Add a group
       icon: add
+    preferences:
+      title: "Settings for %{group}"
+      icon: settings
+      save: Save

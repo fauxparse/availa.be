@@ -9,7 +9,7 @@ class User::Membership
   embeds_one :preferences, class_name: "User::Membership::Preferences"
 
   before_validation :build_preferences, unless: :preferences?
-  
+
   validates_presence_of :group_id
   validates_uniqueness_of :group_id
 

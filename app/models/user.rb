@@ -19,7 +19,8 @@ class User
   has_many :events
 
   validates :name, presence: true
-
+  validates_associated :memberships
+  
   before_validation :build_preferences, unless: :preferences?
 
   scope :neighbors_of, ->(user) do

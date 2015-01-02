@@ -3,12 +3,14 @@
 
 class App.Stack extends Spine.Stack
   controllers:
-    dashboard: App.Dashboard
-    events: App.Events
-    groups: App.Groups
+    dashboard: App.DashboardController
+    events: App.EventsController
+    groups: App.GroupsController
 
   routes:
     "/events": -> @events.active()
+    "/groups/:id/preferences": -> @groups.active()
+    "/groups/:id": -> @groups.active()
     "/groups": -> @groups.active()
     "/":       -> @dashboard.active()
 

@@ -1,4 +1,4 @@
-class App.Dashboard extends Spine.Section
+class App.DashboardController extends Spine.Section
   className: "dashboard"
 
   init: ->

@@ -5,5 +5,5 @@
     .text
       .line{style: "color: #{@group.color()};"}= @group.name
       .line Lorem ipsum dolor sit amet
-  %a.secondary-action{href: "/groups/#{@group.slug}"}
-    %i.icon.md.md-settings
+  %a.secondary-action{href: "/groups/#{@group.slug}/preferences", rel: "preferences"}
+    %i{class: "icon md md-#{I18n.t("groups.preferences.icon")}"}

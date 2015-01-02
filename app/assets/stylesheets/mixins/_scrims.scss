@@ -1,0 +1,13 @@
+@mixin scrim-inactive {
+  @include position(fixed, 0rem 0rem 0rem 0rem);
+  margin: 0rem;
+  background-color: rgba(dark-scrim-color(), 0);
+  pointer-events: none;
+  @include transition(background-color $animation-duration $reverse-animation-timing-function);
+}
+
+@mixin scrim-active {
+  background: dark-scrim-color();
+  pointer-events: auto;
+  @include transition(background-color $animation-duration $animation-timing-function);
+}

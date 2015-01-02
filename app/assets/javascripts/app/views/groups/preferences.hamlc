@@ -1,0 +1,3 @@
+.color-selector
+  - for color in Color.all()
+    .color{color: color.name, style: "background-color: #{color};", class: "#{if @group.color() == color then "active" else ""}"}

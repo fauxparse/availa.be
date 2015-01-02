@@ -1,4 +1,4 @@
-class App.Events extends Spine.Section
+class App.EventsController extends Spine.Section
   className: "events"
 
   init: ->

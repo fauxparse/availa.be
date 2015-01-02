@@ -19,6 +19,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  rescue_from CanCan::AccessDenied do |exception|
+    render file: "#{Rails.root}/public/403", formats: [:html], status: 403, layout: false
+  end
+
 protected
   def default_serializer_options
     { root: false }

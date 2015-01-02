@@ -2,6 +2,10 @@ html {
   font-size: $base-font-size;
 }
 
+html, body, input, textarea, select, button {
+  font-family: $base-font-family;
+}
+
 @mixin type-display-4($color: $base-font-color) {
   font-size: 7rem; // 112px
   line-height: 1rem;

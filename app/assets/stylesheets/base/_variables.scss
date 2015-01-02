@@ -24,7 +24,7 @@ $base-line-height: 1.5;
 $header-line-height: 1.25;
 
 // Other Sizes
-$base-border-radius: 3px;
+$base-border-radius: 2px;
 $base-spacing: $base-line-height * 1em;
 $base-z-index: 0;
 
@@ -43,8 +43,11 @@ $dark-secondary-color: $light-blue-A400;
 // Link Colors
 $base-link-color: $base-accent-color;
 $hover-link-color: darken($base-accent-color, 15);
-$base-button-color: $base-link-color;
-$hover-button-color: $hover-link-color;
+$base-button-color: text-color();
+$base-button-background: transparent;
+$hover-button-background: rgba(#999, 0.2);
+$focus-button-background: $hover-button-background;
+$active-button-background: rgba(#999, 0.4);
 
 // Flash Colors
 $alert-color: $yellow-100;
@@ -80,7 +83,14 @@ $app-bar-color: white;
 
 // Navigation
 $side-navigation-max-width: 25rem;
-$side-navigation-z-index: 1000;
+$side-navigation-z-index: 100;
 
 // Lists
 $list-item-padding: 1rem;
+
+// Dialogs
+$dialog-footer-height: 3rem;
+$dialog-margin: 2.5rem;
+$dialog-z-index: 200;
+$dialog-border-radius: 0.125rem;
+$dialog-shadow: 0px 1rem 0.75rem 0px rgba(0, 0, 0, 0.22), 0px 1.25rem 2.5rem 0px rgba(0, 0, 0, 0.30);
