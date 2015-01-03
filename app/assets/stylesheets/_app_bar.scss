@@ -45,10 +45,15 @@
     padding: 0;
     margin: 0 0.5em;
     outline: none;
+    color: white;
 
     &:first-child { margin-left: 0rem; }
     &:last-child { margin-right: 0; }
 
     @include tappable-region;
+  }
+
+  .top-left-button .button {
+    margin-left: 0rem;
   }
 }

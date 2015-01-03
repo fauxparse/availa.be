@@ -1,7 +1,7 @@
 %li.list-item{"group-id" => @group.id}
   %a.primary-action{href: "/groups/#{@group.slug}"}
     .avatar{style: "background-color: #{@group.color()};"}
-      %i.icon.md.md-group
+      %i.icon.icon-group
     .text
       .line{style: "color: #{@group.color()};"}= @group.name
       .line Lorem ipsum dolor sit amet

@@ -1,6 +1,6 @@
 module ApplicationHelper
   def icon(icon)
-    content_tag :i, nil, class: "icon md md-#{icon}"
+    content_tag :i, nil, class: "icon icon-#{icon}"
   end
 
   def json_for(target, options = {})

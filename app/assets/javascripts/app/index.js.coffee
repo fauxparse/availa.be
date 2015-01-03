@@ -10,7 +10,7 @@ class App extends Spine.Controller
 
   constructor: ->
     super
-    @stack = new App.Stack el: "section.main"
+    @stack = new App.Sections el: "section.main"
     App.User.fetchCurrent().done @start
 
   start: =>

@@ -36,6 +36,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'simplecov', :require => false
   gem 'zonebie'
+  gem 'fontcustom'
 
   gem 'byebug'
   gem 'web-console', '~> 2.0'

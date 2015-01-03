@@ -1,4 +1,22 @@
-.stack > section {
+.sections > section {
   @include position(absolute, 0rem 0rem 0rem 0rem);
-  overflow-y: auto;
+  overflow: hidden;
+
+  > .pages {
+    @include position(absolute, 0rem null 0rem 0rem);
+    width: 100%;
+    @include transition(left $animation-duration $animation-timing-function);
+
+    > section {
+      @include position(absolute, 0rem null 0rem 0rem);
+      width: 100%;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+
+      &:first-child .top-left-button [rel="back"],
+      &:not(:first-child) .top-left-button [rel="menu"] {
+        display: none;
+      }
+    }
+  }
 }

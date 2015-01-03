@@ -1,3 +1,6 @@
-%label.button{for: "show-navigation"}
-  %i.icon.md.md-menu
+.top-left-button
+  %label.button{rel: "menu", for: "show-navigation"}
+    %i.icon.icon-menu
+  %a.button{rel: "back", href: "#"}
+    %i.icon.icon-arrow-back
 .title{flex: true}

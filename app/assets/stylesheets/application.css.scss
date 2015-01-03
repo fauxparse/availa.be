@@ -2,11 +2,11 @@
 @import "bourbon";
 @import "base/base";
 @import "neat";
-@import "icons/material-design-iconic-font";
 
 @import "mixins/scrims";
 @import "mixins/touch";
 
+@import "icon_font";
 @import "layout";
 @import "app_bar";
 @import "navigation";

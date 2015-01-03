@@ -3,6 +3,11 @@ class App.GroupsController extends Spine.Section
 
   init: ->
     super
+    @append new App.GroupsController.Index
+
+class App.GroupsController.Index extends Spine.Section.Page
+  init: ->
+    super
     @title I18n.t("groups.index.title")
     App.Group.bind "refresh change", @render
 

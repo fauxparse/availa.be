@@ -4,7 +4,7 @@ en:
       title: My groups
     new:
       link: Add a group
-      icon: add
+      icon: group-add
     preferences:
       title: "Settings for %{group}"
       icon: settings
