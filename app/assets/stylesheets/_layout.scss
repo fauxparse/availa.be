@@ -9,6 +9,7 @@
 
     > section {
       @include position(absolute, 0rem null 0rem 0rem);
+      background: $base-background-color;
       width: 100%;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;

@@ -1,0 +1,85 @@
+section.calendar {
+  .app-bar {
+    @include position(absolute, 0rem 0rem null 0rem);
+  }
+
+  .content {
+    @include position(absolute, $app-bar-height 0rem 0rem 0rem);
+    overflow: hidden;
+  }
+
+  .dates {
+    @include position(absolute, 50% 0rem null 0rem);
+  }
+
+  .week {
+    @include align-items(stretch);
+    @include display(flex);
+    @include flex-direction(row);
+    @include justify-content(flex-start);
+
+    @include position(absolute, null 0rem null 0rem);
+
+    &.start-of-month {
+      padding-top: 1.5rem;
+      @include justify-content(flex-end);
+    }
+  }
+
+  .day {
+    width: (100%/7);
+    height: 4rem;
+    border-top: 1px solid $calendar-border-color;
+    position: relative;
+    cursor: pointer;
+    @include user-select(none);
+
+    b {
+      @include type-body-1;
+      display: block;
+      margin: 0.5rem auto;
+      width: 1.5rem;
+      height: 1.5rem;
+      line-height: 1.5rem;
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    &[day="0"] b,
+    &[day="6"] b {
+      color: secondary-color();
+    }
+
+    &.today b {
+      background: $base-accent-color;
+      color: white;
+      border-radius: 50%;
+      font-weight: $bold-font-weight;
+    }
+
+    &[month-start]::before {
+      @include type-body-2;
+      white-space: nowrap;
+      padding: 0 0.5rem;
+      content: attr(month-start);
+      position: absolute;
+      bottom: 100%;
+      line-height: 1.5rem;
+      text-transform: uppercase;
+      border-bottom: 1px solid $calendar-border-color;
+    }
+
+    &[month-start][day="5"]::before,
+    &[month-start][day="6"]::before {
+      left: auto;
+      right: 0;
+      min-width: 100%;
+      box-sizing: border-box;
+    }
+
+    &[month-start][day="5"]::before {
+      right: -100%;
+      min-width: 200%;
+    }
+  }
+}

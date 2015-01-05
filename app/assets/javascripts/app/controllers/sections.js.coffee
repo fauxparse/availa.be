@@ -1,5 +1,6 @@
 #= require ./dashboard
 #= require ./events
+#= require ./groups
 
 class App.Sections extends Spine.Stack
   controllers:
@@ -8,11 +9,11 @@ class App.Sections extends Spine.Stack
     groups: App.GroupsController
 
   routes:
-    "/events": -> @events.active()
-    "/groups/:id/preferences": -> @groups.active()
-    "/groups/:id": -> @groups.active()
-    "/groups": -> @groups.active()
-    "/":       -> @dashboard.active()
+    "/events":                          -> @events.active()
+    "/groups/:id/preferences": (params) -> @groups.preferences(params.id)
+    "/groups/:id":             (params) -> @groups.show(params.id)
+    "/groups":                          -> @groups.index()
+    "/":                                -> @dashboard.active()
 
   constructor: ->
     super

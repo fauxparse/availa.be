@@ -5,7 +5,22 @@ class App.GroupsController extends Spine.Section
     super
     @append new App.GroupsController.Index
 
+  index: ->
+    @active()
+    @manager.controllers[0].active()
+
+  show: (id) ->
+    @index()
+    if group = App.Group.findByAttribute "slug", id
+      page = new App.GroupsController.Index({ group })
+      @push page
+      page.active()
+    else
+      Spine.Route.navigate "/groups", false
+
 class App.GroupsController.Index extends Spine.Section.Page
+  back: "/groups"
+
   init: ->
     super
     @title I18n.t("groups.index.title")
@@ -51,3 +66,8 @@ class GroupPreferencesController extends App.Dialog
   save: (e) ->
     @group.preferences color: @$(".color.active").attr("color")
     @hide()
+
+class App.GroupsController.Show extends Spine.Section.Page
+  init: ->
+    super
+    @title @group.name

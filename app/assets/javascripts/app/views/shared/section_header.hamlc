@@ -1,6 +1,6 @@
 .top-left-button
   %label.button{rel: "menu", for: "show-navigation"}
     %i.icon.icon-menu
-  %a.button{rel: "back", href: "#"}
+  %a.button{rel: "back", href: @back}
     %i.icon.icon-arrow-back
 .title{flex: true}

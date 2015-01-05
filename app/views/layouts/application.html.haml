@@ -26,6 +26,7 @@
     %label.scrim{for: "show-navigation"}
 
     :coffee
-      moment.tz.setDefault "#{current_user.preferences.time_zone}"
+      moment.tz.setDefault "#{Time.zone.tzinfo.name}"
+      moment.defaultFormat = "YYYY-MM-DD"
 
     = yield :scripts

@@ -14,6 +14,6 @@ class App.User extends Spine.Model
           @one "refresh", (records) =>
             @_current = records[0]
             promise.resolve @_current
-          @refresh data
           App.Group.refresh data.groups
+          @refresh data
     promise

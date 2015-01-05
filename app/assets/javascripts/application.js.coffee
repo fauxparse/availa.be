@@ -3,6 +3,8 @@
 #= require jquery2
 #= require jquery_ujs
 #= require transit
+#= require mousewheel
+#= require finger
 
 #= require spine/spine
 #= require spine/ajax
