@@ -10,7 +10,7 @@ class Spine.Section extends Spine.Controller
   append: (controllers...) ->
     for controller in controllers
       controller.el.css(left: "#{@manager.controllers.length * 100}%")
-      @pages.append controller
+      @pages.append controller.el
       @manager.add controller
 
   change: (controller) =>

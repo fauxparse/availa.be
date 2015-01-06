@@ -4,11 +4,11 @@
 
 @font-face {
   font-family: "icons";
-  src: font-url("icons_b1a2db6d5f995967309919a298137afa.eot");
-  src: font-url("icons_b1a2db6d5f995967309919a298137afa.eot?#iefix") format("embedded-opentype"),
-       font-url("icons_b1a2db6d5f995967309919a298137afa.woff") format("woff"),
-       font-url("icons_b1a2db6d5f995967309919a298137afa.ttf") format("truetype"),
-       font-url("icons_b1a2db6d5f995967309919a298137afa.svg#icons") format("svg");
+  src: asset-url("icons_b1a2db6d5f995967309919a298137afa.eot");
+  src: asset-url("icons_b1a2db6d5f995967309919a298137afa.eot?#iefix") format("embedded-opentype"),
+       asset-url("icons_b1a2db6d5f995967309919a298137afa.woff") format("woff"),
+       asset-url("icons_b1a2db6d5f995967309919a298137afa.ttf") format("truetype"),
+       asset-url("icons_b1a2db6d5f995967309919a298137afa.svg#icons") format("svg");
   font-weight: normal;
   font-style: normal;
 }
