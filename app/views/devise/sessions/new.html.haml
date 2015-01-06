@@ -1,0 +1,17 @@
+.login
+  .panel
+    %header
+      %h2= t("login.log_in.title")
+    = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+      .field
+        = f.email_field :email, autofocus: true, required: true, placeholder: User.human_attribute_name(:email)
+      .field
+        = f.password_field :password, autocomplete: "off", required: true, placeholder: User.human_attribute_name(:password)
+      - if devise_mapping.rememberable?
+        .field
+          %label.check-box
+            = f.check_box :remember_me
+            = User.human_attribute_name :remember_me
+      .actions
+        = f.submit t("login.log_in.submit")
+  = render "devise/shared/links"

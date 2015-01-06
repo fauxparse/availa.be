@@ -1,7 +1,7 @@
 !!!
 %html
   %head
-    %title availaBE
+    %title availa.be
     = stylesheet_link_tag "http://fonts.googleapis.com/css?family=Roboto+Slab|Roboto:500,300,300italic,200"
     = stylesheet_link_tag "application", media: "all"
     = javascript_include_tag "application"
@@ -14,8 +14,13 @@
         .title= current_user.try :name
       %section.content
         %ul.list
-          = navigation_item "dashboards.show", "/"
-          = navigation_item "events.calendar", "/events"
+          = navigation_item "dashboards.show", root_path
+          = navigation_item "events.calendar", events_path
+          %li.list-item
+            = link_to destroy_user_session_path, class: "primary-action", method: :delete do
+              = icon t("accounts.log_out.icon")
+              .text
+                .line= t("accounts.log_out.link")
 
         %section.groups
           %h3= t("groups.index.title")

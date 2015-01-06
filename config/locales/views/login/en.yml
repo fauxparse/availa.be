@@ -1,0 +1,11 @@
+en:
+  login:
+    log_in:
+      title: Log in
+      link: Log in
+      icon: unlock
+      submit: Log in
+    log_out:
+      title: Log out
+      link: Log out
+      icon: lock

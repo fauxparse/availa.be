@@ -1,3 +1,10 @@
 %button {
   @include type-button($base-accent-color);
 }
+
+input, textarea {
+  @include placeholder {
+    color: secondary-color();
+    font-weight: $base-font-weight;
+  }
+}

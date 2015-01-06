@@ -1,0 +1,40 @@
+@import "base/normalize";
+@import "bourbon";
+@import "base/base";
+@import "neat";
+
+@import "mixins/scrims";
+@import "mixins/touch";
+
+@import "icon_font";
+@import "forms";
+
+body {
+  margin: 0;
+  padding: 0;
+
+  @include media($medium-screen) {
+    background: #f7f7f7;
+  }
+}
+
+.login {
+  margin: 2rem auto;
+  max-width: 32rem;
+
+  h2 {
+    margin-bottom: 1rem;
+  }
+
+  .panel {
+    margin: 1rem 0;
+    padding: 1.5rem;
+    background: $base-background-color;
+    border-radius: $base-border-radius;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 2px 0px;
+  }
+
+  label {
+    font-weight: $base-font-weight;
+  }
+}
