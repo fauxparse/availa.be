@@ -1,7 +1,9 @@
-class User::Preferences
-  include Mongoid::Document
+class User
+  class Preferences
+    include Mongoid::Document
 
-  embedded_in :user
+    embedded_in :user
 
-  field :time_zone, type: String, default: "UTC"
+    field :time_zone, type: String, default: 'UTC'
+  end
 end

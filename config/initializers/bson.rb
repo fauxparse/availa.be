@@ -1,6 +1,6 @@
 module BSON
   class ObjectId
-    def as_json(*args)
+    def as_json(*)
       to_s
     end
   end

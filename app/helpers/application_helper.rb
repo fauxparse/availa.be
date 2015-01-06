@@ -10,10 +10,12 @@ module ApplicationHelper
   end
 
   def navigation_item(item, link)
-    content_tag :li, class: "list-item" do
-      link_to link, class: "primary-action" do
+    content_tag :li, class: 'list-item' do
+      link_to link, class: 'primary-action' do
         concat icon(t("#{item}.icon"))
-        concat content_tag(:div, class: :text) { content_tag :div, t("#{item}.link"), class: :line }
+        concat content_tag(:div, class: :text) {
+          content_tag :div, t("#{item}.link"), class: :line
+        }
       end
     end
   end

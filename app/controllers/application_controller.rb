@@ -13,25 +13,28 @@ class ApplicationController < ActionController::Base
   # reder the default application view
   rescue_from ActionView::MissingTemplate do |exception|
     if request.format.html?
-      render "dashboards/show"
+      render 'dashboards/show'
     else
       throw exception
     end
   end
 
-  rescue_from CanCan::AccessDenied do |exception|
-    render file: "#{Rails.root}/public/403", formats: [:html], status: 403, layout: false
+  rescue_from CanCan::AccessDenied do
+    render file: "#{Rails.root}/public/403",
+      formats: [:html],
+      status: 403,
+      layout: false
   end
 
-protected
+  protected
+
   def default_serializer_options
     { root: false }
   end
 
   def set_user_time_zone!
-    original_time_zone, Time.zone = Time.zone, current_user.preferences.time_zone
+    original, Time.zone = Time.zone, current_user.preferences.time_zone
     yield
-    Time.zone = original_time_zone
+    Time.zone = original
   end
-
 end

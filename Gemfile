@@ -34,11 +34,13 @@ group :development, :test do
   gem 'mongoid-rspec', '~> 2.0.0.rc1'
   gem 'factory_girl_rails'
   gem 'database_cleaner'
-  gem 'simplecov', :require => false
+  gem 'simplecov', require: false
   gem 'zonebie'
   gem 'fontcustom'
 
   gem 'byebug'
   gem 'web-console', '~> 2.0'
   gem 'spring'
+
+  gem 'rubocop', require: false
 end

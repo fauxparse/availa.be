@@ -5,8 +5,8 @@ module OrderedAssociations
 
   def update_ordering(association, field)
     # put the new objects last
-    old, fresh = self.send(association).partition(&:"#{field}?")
-    old.sort_by! &field
+    old, fresh = send(association).partition(&:"#{field}?")
+    old.sort_by!(&field)
     old.concat(fresh).each_with_index do |record, i|
       record.send :"#{field}=", i
     end

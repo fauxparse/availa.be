@@ -1,6 +1,5 @@
 FactoryGirl.define do
   factory :skill do
-    name "seeker"
+    name 'seeker'
   end
-
 end

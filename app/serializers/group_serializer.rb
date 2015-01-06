@@ -8,7 +8,7 @@ class GroupSerializer < ActiveModel::Serializer
 
     super.tap do |data|
       data[:admin] = membership.admin?
-      data[:preferences] = membership.preferences.as_json.except("_id")
+      data[:preferences] = membership.preferences.as_json.except('_id')
     end
   end
 end

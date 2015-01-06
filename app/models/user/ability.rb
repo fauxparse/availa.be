@@ -1,8 +1,10 @@
-class User::Ability
-  include Mongoid::Document
+class User
+  class Ability
+    include Mongoid::Document
 
-  belongs_to :skill
-  embedded_in :membership, class_name: "User::Membership"
+    belongs_to :skill
+    embedded_in :membership, class_name: 'User::Membership'
 
-  validates :skill_id, presence: true, uniqueness: true
+    validates :skill_id, presence: true, uniqueness: true
+  end
 end

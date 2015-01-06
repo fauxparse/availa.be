@@ -13,9 +13,9 @@ class User
   field :encrypted_password, type: String
   field :remember_created_at, type: Time
 
-  embeds_many :memberships, class_name: "User::Membership"
-  embeds_many :abilities, class_name: "User::Ability"
-  embeds_one :preferences, class_name: "User::Preferences"
+  embeds_many :memberships, class_name: 'User::Membership'
+  embeds_many :abilities, class_name: 'User::Ability'
+  embeds_one :preferences, class_name: 'User::Preferences'
   has_many :events
 
   validates :name, presence: true
@@ -23,12 +23,12 @@ class User
 
   before_validation :build_preferences, unless: :preferences?
 
-  scope :neighbors_of, ->(user) do
+  scope :neighbors_of, lambda { |user|
     where :$or => [
-      { :id => user.id },
+      { id: user.id },
       { :"memberships.group_id".in => user.groups.collect(&:id) }
     ]
-  end
+  }
 
   def groups
     if memberships.any?
@@ -44,7 +44,7 @@ class User
 
   def membership_of(group, admin = false)
     memberships.detect { |m| m.group == group } ||
-    memberships.build(group: group, admin: admin)
+      memberships.build(group: group, admin: admin)
   end
 
   def member_of?(group)
@@ -62,5 +62,4 @@ class User
   def pending
     Event.pending_for_user(self)
   end
-
 end

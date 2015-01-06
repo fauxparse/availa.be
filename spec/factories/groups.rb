@@ -1,6 +1,5 @@
 FactoryGirl.define do
   factory :group do
-    name "Hogwarts"
+    name 'Hogwarts'
   end
-
 end

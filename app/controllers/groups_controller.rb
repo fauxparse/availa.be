@@ -16,13 +16,13 @@ class GroupsController < ApplicationController
 
   def preferences
     @preferences = current_user.membership_of(@group).preferences
-    if request.put? or request.patch?
-      @preferences.update preferences_params
-    end
+    @preferences.update preferences_params if request.put? || request.patch?
+
     respond_with @preferences
   end
 
-protected
+  protected
+
   def preferences_params
     params.require(:preferences).permit(:color)
   end

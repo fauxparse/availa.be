@@ -1,9 +1,13 @@
-class User::Membership::Preferences
-  include Mongoid::Document
+class User
+  class Membership
+    class Preferences
+      include Mongoid::Document
 
-  embedded_in :membership, class_name: "User::Membership"
+      embedded_in :membership, class_name: 'User::Membership'
 
-  delegate :user, to: :membership
+      delegate :user, to: :membership
 
-  field :color, type: String
+      field :color, type: String
+    end
+  end
 end

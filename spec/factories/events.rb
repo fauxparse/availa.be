@@ -1,11 +1,11 @@
 FactoryGirl.define do
   factory :event do
-    name "Quidditch"
+    name 'Quidditch'
     recurrences do
       [
         Event::Recurrence.new(
-          start_date: "2015-01-01",
-          end_date: "2015-12-31",
+          start_date: '2015-01-01',
+          end_date: '2015-12-31',
           start_time: 9.hours,
           end_time: 11.hours,
           weekdays: [6]
@@ -14,5 +14,4 @@ FactoryGirl.define do
     end
     group { FactoryGirl.create(:group) }
   end
-
 end

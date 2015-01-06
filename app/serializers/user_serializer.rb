@@ -14,7 +14,7 @@ class UserSerializer < ActiveModel::Serializer
 
       if current_user?
         data[:email] = object.email
-        data[:preferences] = object.preferences.as_json.except("_id")
+        data[:preferences] = object.preferences.as_json.except('_id')
       end
     end
   end
