@@ -24,7 +24,7 @@ RSpec.describe User, type: :model do
     it 'keeps track of group memberships' do
       user.memberships << User::Membership.new(group: group)
 
-      expect(user.memberships.collect(&:group)).to eq([group])
+      expect(user.memberships.map(&:group)).to eq([group])
     end
 
     it 'cannot join the same group twice' do

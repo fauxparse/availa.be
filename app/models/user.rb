@@ -26,20 +26,20 @@ class User
   scope :neighbors_of, lambda { |user|
     where :$or => [
       { id: user.id },
-      { :"memberships.group_id".in => user.groups.collect(&:id) }
+      { :"memberships.group_id".in => user.groups.map(&:id) }
     ]
   }
 
   def groups
     if memberships.any?
-      Array Group.find(*memberships.collect(&:group_id))
+      Array Group.find(*memberships.map(&:group_id))
     else
       []
     end
   end
 
   def groups=(groups)
-    self.memberships = Array(groups).collect { |g| membership_of(g) }
+    self.memberships = Array(groups).map { |g| membership_of(g) }
   end
 
   def membership_of(group, admin = false)

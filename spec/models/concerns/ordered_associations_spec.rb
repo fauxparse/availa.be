@@ -7,7 +7,7 @@ RSpec.describe OrderedAssociations do
     embeds_many :fruits
 
     def names(sort_field = :position)
-      fruits.sort_by(&sort_field).collect(&:name)
+      fruits.sort_by(&sort_field).map(&:name)
     end
   end
 

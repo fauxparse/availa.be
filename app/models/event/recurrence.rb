@@ -19,7 +19,7 @@ class Event
     end
 
     def times
-      dates.collect do |date|
+      dates.map do |date|
         end_date = end_time < start_time ? date + 1.day : date
         build_date(date, start_time)..build_date(end_date, end_time)
       end

@@ -44,7 +44,7 @@ class Event
   scope :with_user_available, ->(user) { where Event::Criteria.available(user) }
 
   def times
-    recurrences.collect(&:times).flatten.sort_by(&:first)
+    recurrences.map(&:times).flatten.sort_by(&:first)
   end
 
   def starts_at?(time)

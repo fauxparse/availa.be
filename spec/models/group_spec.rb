@@ -18,7 +18,7 @@ RSpec.describe Group, type: :model do
 
   describe '#users' do
     it 'returns a list of users' do
-      users = [:harry, :hermione].collect do |u|
+      users = [:harry, :hermione].map do |u|
         FactoryGirl.create(u, groups: [group])
       end
       dumbledore = FactoryGirl.create(:dumbledore)
@@ -36,7 +36,7 @@ RSpec.describe Group, type: :model do
         FactoryGirl.create u, memberships: [m]
       end
 
-      expect(group.admins.collect(&:name)).to eq(['Dumbledore'])
+      expect(group.admins.map(&:name)).to eq(['Dumbledore'])
     end
   end
 end
