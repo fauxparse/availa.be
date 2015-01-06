@@ -43,4 +43,5 @@ group :development, :test do
   gem 'spring'
 
   gem 'rubocop', require: false
+  gem 'coffeelint'
 end

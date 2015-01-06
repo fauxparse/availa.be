@@ -110,6 +110,10 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.8.0)
+    coffeelint (0.4.0)
+      coffee-script
+      execjs
+      json
     columnize (0.9.0)
     connection_pool (2.1.0)
     database_cleaner (1.3.0)
@@ -319,6 +323,7 @@ DEPENDENCIES
   byebug
   cancancan (~> 1.9)
   coffee-rails (~> 4.1.0)
+  coffeelint
   database_cleaner
   devise!
   factory_girl_rails

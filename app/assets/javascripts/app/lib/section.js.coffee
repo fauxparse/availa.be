@@ -9,7 +9,8 @@ class Spine.Section extends Spine.Controller
 
   append: (controllers...) ->
     for controller in controllers
-      @pages.append controller.el.css(left: "#{@manager.controllers.length * 100}%")
+      controller.el.css(left: "#{@manager.controllers.length * 100}%")
+      @pages.append controller
       @manager.add controller
 
   change: (controller) =>
@@ -32,8 +33,9 @@ class Spine.Section extends Spine.Controller
 
   activate: ->
     super
-    for controller in @manager.controllers when controller.el.hasClass("active")
-      controller.activate()
+    for controller in @manager.controllers
+      if controller.el.hasClass("active")
+        controller.activate()
 
 class Spine.Section.Page extends Spine.Controller
   tag: "section"

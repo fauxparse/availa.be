@@ -13,7 +13,7 @@ class App extends Spine.Controller
     @stack = new App.Sections el: "section.main"
     App.User.fetchCurrent().done @start
 
-  start: =>
+  start: ->
     Spine.Route.setup history: true
 
   inPageNavigation: (e) ->
