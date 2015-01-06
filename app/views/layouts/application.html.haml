@@ -1,7 +1,7 @@
 !!!
 %html
   %head
-    %title Ok
+    %title availaBE
     = stylesheet_link_tag "http://fonts.googleapis.com/css?family=Roboto+Slab|Roboto:500,300,300italic,200"
     = stylesheet_link_tag "application", media: "all"
     = javascript_include_tag "application"
@@ -11,7 +11,7 @@
     %input#show-navigation{type: :checkbox, autocomplete: :off}
     %nav.main-navigation
       %header.app-bar
-        .title= current_user.name
+        .title= current_user.try :name
       %section.content
         %ul.list
           = navigation_item "dashboards.show", "/"
