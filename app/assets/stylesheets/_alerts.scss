@@ -40,7 +40,7 @@ body>footer {
         min-width: 0;
         background: none;
         font-size: 1.5rem;
-        
+
         .icon-clear {
           height: 1.5rem;
           display: block;
@@ -72,6 +72,18 @@ body>footer {
       min-width: 0;
       border-radius: 50%;
       font-size: 1.5rem;
+
+      @include shadow(1);
+      @include transition(box-shadow $animation-duration $animation-timing-function);
+
+      i {
+        display: block;
+        height: 1.5rem;
+      }
+
+      &:hover {
+        @include shadow(2);
+      }
     }
   }
 

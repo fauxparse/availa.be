@@ -65,5 +65,5 @@ $ ->
   App.Alert.container.find(".alert").each ->
     new App.Alert(el: this)
 
-  $(".floating-action-button").on "click", (e) ->
-    new App.Alert(text: "Taxidermy cred Marfa actually squid semiotics bespoke health goth Helvetica.", button: "Derp")
+  # $(".floating-action-button").on "click", (e) ->
+  #   new App.Alert(text: "Taxidermy cred Marfa actually squid semiotics bespoke health goth Helvetica.", button: "Derp")
