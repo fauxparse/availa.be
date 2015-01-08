@@ -1,5 +1,10 @@
 %button {
   @include type-button($base-accent-color);
+
+  i:first-child:last-child {
+    display: block;
+    height: 1em;
+  }
 }
 
 input, textarea {

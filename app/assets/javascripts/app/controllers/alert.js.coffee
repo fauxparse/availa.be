@@ -7,7 +7,6 @@ class App.Alert extends Spine.Controller
 
   init: ->
     @container = App.Alert.container
-    @footer = @container.closest("footer")
 
     unless @el.hasClass("alert")
       @render()
@@ -27,17 +26,15 @@ class App.Alert extends Spine.Controller
     @el.css(opacity: 0).transition(opacity: 1)
     h = @el.outerHeight(true)
     @container.
-      add(@floatingButton()).
-      css(@transform(h)).
-      transition(@transform(0))
-
-  transform: (top, opacity) ->
-    hash = {}
-    hash[$.support.transform] = "translateY(#{top}px)"
-    hash
+      css(transform(h)).
+      transition(transform(0))
+    positionFloatingContent()
 
   floatingButton: ->
-    @container.filter(-> $(this).css("position") != "absolute").nextAll(".floating")
+    if @container.css("position") == "absolute"
+      $([])
+    else
+      $(".floating")
 
   hide: (e) =>
     e?.preventDefault()
@@ -47,23 +44,43 @@ class App.Alert extends Spine.Controller
       css(pointerEvents: "none").
       transition { opacity: 0 }, =>
         h = @el.outerHeight(true)
-        @el.nextAll().transition(@transform(-h))
+        @el.addClass("deleting")
+        @el.nextAll().transition(transform(-h))
+        positionFloatingContent()
 
-        elements = @container.add @floatingButton()
-        elements.transition @transform(h), =>
-          @el.nextAll().css(@transform(0))
-          elements.css(@transform(0))
+        @container.transition transform(h), =>
+          @el.nextAll().css(transform(0))
+          @container.css(transform(0))
           @release()
 
   click: (e) ->
     @trigger "click"
     @hide()
 
+transform = (top, opacity) ->
+  hash = { queue: false }
+  hash[$.support.transform] = "translateY(#{top}px)"
+  hash
+
+positionFloatingContent = ->
+  container = App.Alert.container
+  footers = $(".pages>section>footer")
+
+  if parseInt(container.css("right"), 10) > 0
+    footers.transition transform(0)
+  else
+    h = container.outerHeight()
+    container.find(".deleting").each ->
+      h -= $(this).outerHeight(true)
+    footers.transition transform(-h)
+
 $ ->
-  App.Alert.container = $("footer .alerts")
+  App.Alert.container = $("footer.alerts")
 
   App.Alert.container.find(".alert").each ->
     new App.Alert(el: this)
 
-  # $(".floating-action-button").on "click", (e) ->
+  $(window).on "resize", positionFloatingContent
+
+  # $(document).on "click", ".floating-action-button", (e) ->
   #   new App.Alert(text: "Taxidermy cred Marfa actually squid semiotics bespoke health goth Helvetica.", button: "Derp")

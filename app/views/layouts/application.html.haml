@@ -30,16 +30,12 @@
 
     %label.scrim{for: "show-navigation"}
 
-    %footer
-      .alerts
-        - flash.each do |name, msg|
-          - if msg.is_a?(String)
-            .alert
-              .text= msg
-              %button.clear= icon :clear
-      .floating
-        %button.floating-action-button
-          = icon "add"
+    %footer.alerts
+      - flash.each do |name, msg|
+        - if msg.is_a?(String)
+          .alert
+            .text= msg
+            %button.clear= icon :clear
 
     :coffee
       moment.tz.setDefault "#{Time.zone.tzinfo.name}"

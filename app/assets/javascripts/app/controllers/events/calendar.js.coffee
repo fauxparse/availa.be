@@ -16,6 +16,10 @@ class App.EventsController.Calendar extends Spine.Section.Page
     @title I18n.t("events.calendar.title")
     @dates = $("<div>").addClass("dates").appendTo(@content)
 
+    $("<button>", html: "<i class=\"icon-add\"></i>").
+      addClass("floating-action-button").
+      appendTo(@footer)
+
     @startDate = moment().startOf("week")
     @endDate = @startDate.clone()
     @startY = @endY = @offset = 0

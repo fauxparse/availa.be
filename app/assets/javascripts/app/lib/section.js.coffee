@@ -43,6 +43,7 @@ class Spine.Section.Page extends Spine.Controller
   init: ->
     @header = $("<header>").addClass("app-bar").appendTo(@el)
     @content = $("<section>").addClass("content").appendTo(@el)
+    @footer = $("<footer>").appendTo(@el)
     @renderHeader()
 
   renderHeader: ->

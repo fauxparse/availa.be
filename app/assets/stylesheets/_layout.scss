@@ -18,6 +18,33 @@
       &:not(:first-child) .top-left-button [rel="menu"] {
         display: none;
       }
+
+      > footer {
+        @include position(absolute, null 0rem 0rem 0rem);
+
+        .floating-action-button {
+          position: absolute;
+          right: 2.75rem;
+          bottom: 2.75rem;
+          background: $base-secondary-color;
+          color: white;
+          width: 3.5rem;
+          height: 3.5rem;
+          padding: 1rem;
+          margin: -1.75rem;
+          min-width: 0;
+          border-radius: 50%;
+          font-size: 1.5rem;
+
+          @include shadow(1);
+          @include transition(box-shadow $animation-duration $animation-timing-function);
+
+          &:hover {
+            @include shadow(2);
+          }
+        }
+
+      }
     }
   }
 }
