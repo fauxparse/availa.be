@@ -18,9 +18,9 @@
           = navigation_item "events.calendar", events_path
           %li.list-item
             = link_to destroy_user_session_path, class: "primary-action", method: :delete do
-              = icon t("accounts.log_out.icon")
+              = icon t("login.log_out.icon")
               .text
-                .line= t("accounts.log_out.link")
+                .line= t("login.log_out.link")
 
         %section.groups
           %h3= t("groups.index.title")
