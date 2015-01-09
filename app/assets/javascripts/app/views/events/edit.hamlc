@@ -2,17 +2,12 @@
   %fieldset
     %fieldset
       .field.with-floating-label
-        %input.large#event_name{type: "text", name: "name", value: @event.name, required: true}
+        %input.large#event_name{type: "text", name: "name", value: @event.name(), required: true}
         %label{for: "event_name"}
           Name
     %fieldset
       %legend
         %i.icon-event
-      .weekdays
-        - for [weekday, i] in @weekdays
-          %label.weekday
-            %input{type: "checkbox", name: "weekdays", value: i}
-            %span= weekday
       .dates
         .field
           .date-select
@@ -24,6 +19,11 @@
           .date-select
             %a.dropdown-toggle{href: "#", "data-toggle" => "date"}= @event.start_date().format('ll')
             %input{name: "end_date", rel: "date", value: @event.end_date().format()}
+      .weekdays
+        - for [weekday, i] in @weekdays
+          %label.weekday
+            %input{type: "checkbox", name: "weekdays", value: i, checked: i in @event.weekdays()}
+            %span= weekday
     %fieldset
       %legend
         %i.icon-access-time

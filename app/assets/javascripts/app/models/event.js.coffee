@@ -2,9 +2,12 @@ class App.Event extends Spine.Model
   @configure "Event", "name", "recurrences"
   @extend Spine.Model.Ajax
 
+  name: (value) ->
+    @_name = value if value?
+    @_name || "New event"
+
   recurrences: (value) ->
-    if value
-      @_recurrences = value.slice(0)
+    @_recurrences = Recurrence.fromJSON(value) if value?
     @_recurrences ||= [new Recurrence()]
 
   start_date: (value) ->
@@ -23,26 +26,28 @@ class App.Event extends Spine.Model
     @recurrences()[0].weekdays(value)
 
 class Recurrence extends Spine.Model
-  @configure "Recurrence", "start_date", "end_date", "weekdays", "start_time", "end_time"
+  @configure "Recurrence",
+    "start_date",
+    "end_date",
+    "weekdays",
+    "start_time",
+    "end_time",
+    "time_zone"
 
   start_date: (value) ->
-    if value?
-      @_start_date = @handleDate(value)
+    @_start_date = @handleDate(value) if value?
     @_start_date || moment().startOf("day")
 
   end_date: (value) ->
-    if value?
-      @_end_date = @handleDate(value)
+    @_end_date = @handleDate(value) if value?
     @_end_date || moment().endOf("day")
 
   start_time: (value) ->
-    if value?
-      @_start_time = parseInt(value, 10)
+    @_start_time = parseInt(value, 10) if value?
     @_start_time || 19 * 3600 + 30 * 60
 
   end_time: (value) ->
-    if value?
-      @_end_time = parseInt(value, 10)
+    @_end_time = parseInt(value, 10) if value?
     @_end_time || 21 * 3600
 
   handleDate: (value) ->
@@ -52,6 +57,13 @@ class Recurrence extends Spine.Model
       moment(value)
 
   weekdays: (value) ->
-    if value?
-      @_weekdays = value.slice(0)
+    @_weekdays = value.slice(0) if value?
     @_weekdays || [@start_date().day()]
+
+  time_zone: ->
+    moment.defaultZone.name
+
+  toJSON: ->
+    $.extend {}, super,
+      start_date: @start_date().format(),
+      end_date: @end_date().format(),

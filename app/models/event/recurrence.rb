@@ -7,7 +7,6 @@ class Event
     field :weekdays, type: Array, default: -> { (0..6).to_a }
     field :start_time, type: Integer, default: 0
     field :end_time, type: Integer, default: (24.hours - 1.second)
-    field :all_day, type: Boolean, default: false
     field :time_zone, type: String, default: 'UTC'
 
     embedded_in :event

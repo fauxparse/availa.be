@@ -38,6 +38,7 @@
     font-size: 1.5rem;
     height: 1em;
     width: 1em;
+    min-width: 0;
     position: relative;
     line-height: 1.5rem;
     cursor: pointer;
@@ -47,13 +48,17 @@
     outline: none;
     color: white;
 
-    &:first-child { margin-left: 0rem; }
+    &:first-child { margin-left: 0; }
     &:last-child { margin-right: 0; }
 
     @include tappable-region;
   }
 
-  .top-left-button .button {
-    margin-left: 0rem;
+  .top-left-button {
+    margin-right: 1rem;
+
+    .button {
+      margin-left: 0rem;
+    }
   }
 }

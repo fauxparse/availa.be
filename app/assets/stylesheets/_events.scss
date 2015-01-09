@@ -71,11 +71,7 @@ section.edit-event {
   }
 
   @include media($medium-screen) {
-    background-color: #eee;
-
     form {
-      padding: 1rem;
-
       > fieldset:nth-child(1) {
         @include span-columns(8);
       }

@@ -17,4 +17,4 @@ class App.Events extends App.Section
 
   edit: (id) ->
     @index()
-    @push new App.Events.Edit(event: App.Event.find(id))
+    @push new App.Events.Edit(id: id)
