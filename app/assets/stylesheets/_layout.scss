@@ -42,6 +42,12 @@
           @include shadow(1);
           @include transition(box-shadow $animation-duration $animation-timing-function);
 
+          i {
+            display: block;
+            height: 1em;
+            line-height: 1em;
+          }
+
           &:hover {
             @include shadow(2);
           }

@@ -46,6 +46,7 @@ html, body, input, textarea, select, button {
   line-height: 1.5rem; // 32px
   font-weight: $bold-font-weight;
   color: text-color($color);
+  letter-spacing: -0.03em;
 }
 
 @mixin type-subhead($color: $base-font-color) {
