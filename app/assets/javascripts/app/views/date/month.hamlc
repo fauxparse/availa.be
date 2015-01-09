@@ -1,0 +1,10 @@
+.month
+  %header= @date.format("MMMM YYYY")
+  .weekdays
+    - for day in moment.weekdaysMin().rotate(-@weekStart)
+      %span= day
+  .dates
+    - date = @date.clone().startOf("month")
+    - while date.isSame(@date, "month")
+      %span.date{class: "#{'active' if date.isSame(@date, "day")}", date: date.format(), day: date.day(), column: (date.day() + 7 - @weekStart) % 7 }= date.date()
+      - date.add(1, "day")

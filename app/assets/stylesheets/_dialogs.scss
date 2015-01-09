@@ -1,12 +1,16 @@
 .dialog {
-  @include position(absolute, 150% $dialog-margin null $dialog-margin);
+  @include position(absolute, 50% $dialog-margin null $dialog-margin);
+  @include transform(translateY(-10rem));
   z-index: $dialog-z-index;
   background: $base-background-color;
   border-radius: $dialog-border-radius;
   box-shadow: $dialog-shadow;
   padding-bottom: 0.5rem;
+  opacity: 0;
 
-  @include transition(top $animation-duration $ease-in-back);
+  @include transition-property(transform, opacity);
+  @include transition-duration($animation-duration);
+  @include transition-timing-function($animation-timing-function);
 
   h2 {
     @include type-title;
@@ -36,8 +40,8 @@
   }
 
   &.in {
-    @include transition(top $animation-duration $animation-timing-function);
-    top: 50%;
+    @include transform(translateY(0));
+    opacity: 1;
   }
 
   @include media($medium-screen) {

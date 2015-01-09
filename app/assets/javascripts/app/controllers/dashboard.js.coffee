@@ -1,11 +1,13 @@
-class App.DashboardController extends Spine.Section
+#= require ./section
+
+class App.Dashboard extends App.Section
   className: "dashboard"
 
   init: ->
     super
-    @append new App.DashboardController.Show
+    @append new App.Dashboard.Show
 
-class App.DashboardController.Show extends Spine.Section.Page
+class App.Dashboard.Show extends App.Section.Page
   init: ->
     super
     @title I18n.t("dashboards.show.title")

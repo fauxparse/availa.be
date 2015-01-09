@@ -1,0 +1,12 @@
+%header
+  .weekday= @date.format("dddd")
+  .month= @date.format("MMMM")
+  .date= @date.format("D")
+  .year= @date.format("YYYY")
+  %a.icon-chevron-left{rel: "prev", href: "#"}
+  %a.icon-chevron-right{rel: "next", href: "#"}
+.content
+  .months
+%footer
+  %button{rel: "cancel"}= I18n.t("dialogs.cancel")
+  %button{rel: "ok"}= I18n.t("dialogs.ok")

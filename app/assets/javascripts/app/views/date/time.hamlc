@@ -1,0 +1,23 @@
+%header
+  .time
+    .hours.active= @time.format("h")
+    .colon :
+    .minutes= @time.format("mm")
+    .ampm= @time.format("A")
+.content
+  .clocks
+    .clock.hours.active
+      - for i in [0...12]
+        .dot.hour{class: if @hours % 12 == i then "active" else "", position: i, value: (i + 11) % 12 + 1}= (i + 11) % 12 + 1
+      .hand
+    .clock.minutes
+      - for i in [0...12]
+        - minute = i * 5
+        .dot.minute{class: if @minutes == minute then "active" else "", position: i, value: minute}= if (minute < 10) then "0" + minute else minute
+      .hand
+  .ampm
+    %button{rel: "am"}= moment().hour(0).format("A")
+    %button{rel: "pm"}= moment().hour(12).format("A")
+%footer
+  %button{rel: "cancel"}= I18n.t("dialogs.cancel")
+  %button{rel: "ok"}= I18n.t("dialogs.ok")

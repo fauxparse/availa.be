@@ -1,6 +1,6 @@
 #= require ../events
 
-class App.EventsController.Calendar extends Spine.Section.Page
+class App.Events.Calendar extends App.Section.Page
   rowHeight: 64
   headerHeight: 24
 
@@ -16,8 +16,8 @@ class App.EventsController.Calendar extends Spine.Section.Page
     @title I18n.t("events.calendar.title")
     @dates = $("<div>").addClass("dates").appendTo(@content)
 
-    $("<button>", html: "<i class=\"icon-add\"></i>").
-      addClass("floating-action-button").
+    $("<a>", href: "/events/new", html: "<i class=\"icon-add\"></i>").
+      addClass("button floating-action-button").
       appendTo(@footer)
 
     @startDate = moment().startOf("week")
@@ -98,6 +98,8 @@ class App.EventsController.Calendar extends Spine.Section.Page
     day.append $("<b>", text: date.date())
 
   touchStart: (e) ->
+    e.stopPropagation()
+
     @reference = @yPosition(e)
     @velocity = @amplitude = 0
     @frame = @target = @offset = Math.round(@offset)
@@ -112,6 +114,7 @@ class App.EventsController.Calendar extends Spine.Section.Page
       .on("mouseup", @touchEnd)
 
   touchMove: (e) =>
+    e.preventDefault()
     y = @yPosition(e)
     delta = @reference - y
     if delta > 2 || delta < -2

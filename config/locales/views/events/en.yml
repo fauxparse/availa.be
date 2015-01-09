@@ -4,3 +4,7 @@ en:
       link: Calendar
       icon: event
       title: Calendar
+    new:
+      title: Create a new event
+    edit:
+      title: Edit event details

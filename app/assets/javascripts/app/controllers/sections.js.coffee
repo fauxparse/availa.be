@@ -4,12 +4,14 @@
 
 class App.Sections extends Spine.Stack
   controllers:
-    dashboard: App.DashboardController
-    events: App.EventsController
-    groups: App.GroupsController
+    dashboard: App.Dashboard
+    events: App.Events
+    groups: App.Groups
 
   routes:
-    "/events":                          -> @events.active()
+    "/events/new":                      -> @events.build()
+    "/events/:id":             (params) -> @events.edit(params.id)
+    "/events":                          -> @events.index()
     "/groups/:id/preferences": (params) -> @groups.preferences(params.id)
     "/groups/:id":             (params) -> @groups.show(params.id)
     "/groups":                          -> @groups.index()

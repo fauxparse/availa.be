@@ -1,0 +1,41 @@
+%form
+  %fieldset
+    %fieldset
+      .field.with-floating-label
+        %input.large#event_name{type: "text", name: "name", value: @event.name, required: true}
+        %label{for: "event_name"}
+          Name
+    %fieldset
+      %legend
+        %i.icon-event
+      .weekdays
+        - for [weekday, i] in @weekdays
+          %label.weekday
+            %input{type: "checkbox", name: "weekdays", value: i}
+            %span= weekday
+      .dates
+        .field
+          .date-select
+            %a.dropdown-toggle{href: "#", "data-toggle" => "date"}= @event.start_date().format('ll')
+            %input{name: "start_date", rel: "date", value: @event.start_date().format()}
+        .conjunction
+          to
+        .field
+          .date-select
+            %a.dropdown-toggle{href: "#", "data-toggle" => "date"}= @event.start_date().format('ll')
+            %input{name: "end_date", rel: "date", value: @event.end_date().format()}
+    %fieldset
+      %legend
+        %i.icon-access-time
+      .times
+        .field
+          .time-select
+            %a.dropdown-toggle{href: "#", "data-toggle" => "time"}= moment("2015-01-01").add(@event.start_time(), "seconds").format("LT")
+            %input{name: "start_time", rel: "time", value: @event.start_time()}
+        .conjunction
+          to
+        .field
+          .time-select
+            %a.dropdown-toggle{href: "#", "data-toggle" => "time"}= moment("2015-01-01").add(@event.end_time(), "seconds").format("LT")
+            %input{name: "end_time", rel: "time", value: @event.end_time()}
+  %fieldset

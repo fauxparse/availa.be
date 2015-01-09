@@ -1,4 +1,4 @@
-class Spine.Section extends Spine.Controller
+class App.Section extends Spine.Controller
   tag: "section"
 
   init: ->
@@ -37,10 +37,11 @@ class Spine.Section extends Spine.Controller
       if controller.el.hasClass("active")
         controller.activate()
 
-class Spine.Section.Page extends Spine.Controller
+class App.Section.Page extends Spine.Controller
   tag: "section"
 
   init: ->
+    @el.addClass("page")
     @header = $("<header>").addClass("app-bar").appendTo(@el)
     @content = $("<section>").addClass("content").appendTo(@el)
     @footer = $("<footer>").appendTo(@el)

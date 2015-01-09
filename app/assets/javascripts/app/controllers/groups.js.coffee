@@ -1,9 +1,11 @@
-class App.GroupsController extends Spine.Section
+#= require ./section
+
+class App.Groups extends App.Section
   className: "groups"
 
   init: ->
     super
-    @append new App.GroupsController.Index
+    @append new App.Groups.Index
 
   index: ->
     @active()
@@ -12,13 +14,13 @@ class App.GroupsController extends Spine.Section
   show: (id) ->
     @index()
     if group = App.Group.findByAttribute "slug", id
-      page = new App.GroupsController.Index({ group })
+      page = new App.Groups.Index({ group })
       @push page
       page.active()
     else
       Spine.Route.navigate "/groups", false
 
-class App.GroupsController.Index extends Spine.Section.Page
+class App.Groups.Index extends App.Section.Page
   back: "/groups"
 
   init: ->
@@ -32,7 +34,7 @@ class App.GroupsController.Index extends Spine.Section.Page
     @sidebarList.on "click", "[rel=preferences]", (e) ->
       e.preventDefault()
       group = App.Group.find($(e.target).closest("[group-id]").attr("group-id"))
-      new GroupPreferencesController({ group })
+      new App.GroupPreferences({ group })
 
   render: =>
     @content.html @view("groups/index")(groups: App.Group.sort().all())
@@ -45,7 +47,7 @@ class App.GroupsController.Index extends Spine.Section.Page
   renderItem: (group) ->
     @view("groups/item")({ group })
 
-class GroupPreferencesController extends App.Dialog
+class App.GroupPreferences extends App.Dialog
   events:
     "tap .color": "choose"
     "click .color": "choose"
@@ -67,7 +69,7 @@ class GroupPreferencesController extends App.Dialog
     @group.preferences color: @$(".color.active").attr("color")
     @hide()
 
-class App.GroupsController.Show extends Spine.Section.Page
+class App.Groups.Show extends App.Section.Page
   init: ->
     super
     @title @group.name

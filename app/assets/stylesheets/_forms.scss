@@ -13,3 +13,100 @@ input, textarea {
     font-weight: $base-font-weight;
   }
 }
+
+fieldset {
+  background: $base-background-color;
+  border: none;
+  padding: 0 1rem 1rem;
+
+  fieldset {
+    position: relative;
+    padding: 0 0 0 3.5rem;
+
+    legend {
+      position: absolute;
+      left: 0;
+      top: 0.75rem;
+
+      i {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}
+
+.field {
+  display: block;
+  padding: 0.5rem 0rem;
+  position: relative;
+
+  input:not([type="checkbox"]):not([type="radio"]) {
+    @include type-form-control;
+    display: block;
+    line-height: 1.4375em;
+    height: 2em;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-bottom: 1px solid divider-color();
+    border-radius: 0;
+    outline: none;
+    box-shadow: none;
+    background: transparent;
+
+    @include transition(border ($animation-duration/2) $animation-timing-function);
+
+    &:focus {
+      box-shadow: none;
+      border-bottom-color: $base-accent-color;
+      border-bottom-width: 2px;
+    }
+
+    &:disabled {
+      color: disabled-color();
+      border-bottom: 1px dotted disabled-color();
+    }
+
+    &.large {
+      font-size: 1.5rem;
+      line-height: 1.4em;
+    }
+  }
+
+  &.with-floating-label {
+    padding-top: 2rem;
+
+    label {
+      @include type-form-control;
+      margin: 0;
+      line-height: 2em;
+      position: absolute;
+      left: 0;
+      top: 2rem;
+      color: secondary-color();
+      @include transition-property(transform color);
+      @include transition-duration($animation-duration/2);
+      @include transition-timing-function($animation-timing-function);
+    }
+
+    input:focus ~ label,
+    input:not(:invalid) ~ label {
+      @include transform-origin(left top);
+      @include transform(translateY(-1.25rem) scale(0.75));
+    }
+
+    input:focus ~ label {
+      color: $base-accent-color;
+    }
+
+    input.large ~ label {
+      font-size: 1.5rem;
+    }
+
+    input.large:focus ~ label,
+    input.large:not(:invalid) ~ label {
+      @include transform(translateY(-1.25rem) scale(0.5));
+    }
+  }
+}
