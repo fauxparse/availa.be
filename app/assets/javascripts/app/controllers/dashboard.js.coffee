@@ -5,7 +5,7 @@ class App.Dashboard extends App.Section
 
   init: ->
     super
-    @append new App.Dashboard.Show
+    @push new App.Dashboard.Show
 
 class App.Dashboard.Show extends App.Section.Page
   init: ->

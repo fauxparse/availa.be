@@ -7,6 +7,7 @@
 #= require finger
 
 #= require spine/spine
+#= require spine/relation
 #= require spine/ajax
 #= require spine/route
 #= require spine/manager

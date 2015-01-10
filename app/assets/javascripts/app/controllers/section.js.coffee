@@ -6,36 +6,53 @@ class App.Section extends Spine.Controller
     @pages.bind $.support.transitionEnd, @truncate
     @manager = new Spine.Manager
     @manager.on "change", @change
+    @_index = 0
 
-  append: (controllers...) ->
-    for controller in controllers
+  push: (controller) ->
+    @queue =>
       controller.el.css(left: "#{@manager.controllers.length * 100}%")
       @pages.append controller.el
       @manager.add controller
+      controller.active()
+
+  pop: ->
+    if @manager.controllers.length > 1
+      @manager.controllers[@manager.controllers.length - 1].active()
+      @queue @truncate
 
   change: (controller) =>
+    @active()
     index = controller.el.prevAll("section").length
-    @pages.css left: "#{index * -100}%"
+    if @_index == index
+      @truncate()
+    else
+      @_index = index
+      @pages.css transform: "translateX(#{@_index * -100}%)"
 
-  push: (controller) ->
-    @append controller
-    controller.active()
-
-  pop: (e) =>
-    e?.preventDefault()
-    @manager.controllers.pop().release()
+  queue: (callback) ->
+    @el.queue =>
+      callback()
+      @el.dequeue()
 
   truncate: (e) =>
-    if e.target == @pages[0]
-      count = Math.max(@pages.children(".active").prevAll().length, 0) + 1
-      while @manager.controllers.length > count
-        @pop()
+    if !e?.target? || e.target == @pages[0]
+      index = Math.max(@pages.children(".active").prevAll().length, 0) + 1
+      count = @manager.controllers.length - index
+      for controller in @manager.controllers.splice(index, count)
+        controller.release()
 
-  activate: ->
-    super
+  find: (constructor, match) ->
+    for controller in @manager.controllers
+      return controller if (controller.constructor == constructor) && (!match? || match(controller))
+    undefined
+
+  empty: ->
+    !@manager.controllers.length
+
+  activeController: ->
     for controller in @manager.controllers
       if controller.el.hasClass("active")
-        controller.activate()
+        return controller
 
 class App.Section.Page extends Spine.Controller
   tag: "section"

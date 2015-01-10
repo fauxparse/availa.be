@@ -6,12 +6,14 @@ Rails.application.routes.draw do
   end
 
   resources :groups do
+    resources :events
+
     get 'preferences', on: :member
     put 'preferences', on: :member
     patch 'preferences', on: :member
   end
 
-  resources :events
+  get 'calendar', to: 'events#calendar'
 
   root to: 'dashboards#show'
 end

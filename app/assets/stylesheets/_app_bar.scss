@@ -48,15 +48,10 @@
     outline: none;
     color: white;
 
-    &:first-child { margin-left: 0; }
-    &:last-child { margin-right: 0; }
-
     @include tappable-region;
   }
 
   .top-left-button {
-    margin-right: 1rem;
-
     .button {
       margin-left: 0rem;
     }

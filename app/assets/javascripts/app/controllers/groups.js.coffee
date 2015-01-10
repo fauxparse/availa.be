@@ -5,47 +5,44 @@ class App.Groups extends App.Section
 
   init: ->
     super
-    @append new App.Groups.Index
+    @push new App.Groups.Index
 
   index: ->
     @active()
     @manager.controllers[0].active()
 
-  show: (id) ->
-    @index()
-    if group = App.Group.findByAttribute "slug", id
-      page = new App.Groups.Index({ group })
-      @push page
-      page.active()
-    else
-      Spine.Route.navigate "/groups", false
+  show: (params) ->
+    @queue =>
+      if group = App.Group.findByAttribute("slug", params.id)
+        if current = @find(App.Groups.Show, (controller) -> controller.group.id == group.id)
+          current.active()
+        else
+          @index()
+          @push new App.Groups.Show({ group })
+      else
+        Spine.Route.navigate "/groups", false
 
-class App.Groups.Index extends App.Section.Page
-  back: "/groups"
+  events: (params) ->
+    @queue =>
+      if group = App.Group.findByAttribute("slug", params.group_id)
+        if current = @find(App.Events.Index, (controller) -> controller.group.id == group.id)
+          current.active()
+        else
+          @show id: params.group_id
+          @push new App.Events.Index(group: group, back: group.url())
+      else
+        Spine.Route.navigate "/groups", false
 
-  init: ->
-    super
-    @title I18n.t("groups.index.title")
-    App.Group.bind "refresh change", @render
-
-    @sidebarList = $(".main-navigation .groups-list")
-    App.Group.bind "refresh change", @renderSidebarList
-
-    @sidebarList.on "click", "[rel=preferences]", (e) ->
-      e.preventDefault()
-      group = App.Group.find($(e.target).closest("[group-id]").attr("group-id"))
-      new App.GroupPreferences({ group })
-
-  render: =>
-    @content.html @view("groups/index")(groups: App.Group.sort().all())
-
-  renderSidebarList: =>
-    @sidebarList.empty()
-    for group in App.Group.sort().all()
-      @sidebarList.append @renderItem(group)
-
-  renderItem: (group) ->
-    @view("groups/item")({ group })
+  newEvent: (params) ->
+    @queue =>
+      if group = App.Group.findByAttribute("slug", params.group_id)
+        if current = @find(App.Events.Edit, (controller) -> controller.group.isNew())
+          current.active()
+        else
+          @events params
+          @push new App.Events.Edit(event: new App.Event(group_id: group.id), back: group.url())
+      else
+        Spine.Route.navigate "/groups", false
 
 class App.GroupPreferences extends App.Dialog
   events:
@@ -68,8 +65,3 @@ class App.GroupPreferences extends App.Dialog
   save: (e) ->
     @group.preferences color: @$(".color.active").attr("color")
     @hide()
-
-class App.Groups.Show extends App.Section.Page
-  init: ->
-    super
-    @title @group.name

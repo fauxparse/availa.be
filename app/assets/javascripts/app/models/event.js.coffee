@@ -1,5 +1,6 @@
 class App.Event extends Spine.Model
   @configure "Event", "name", "recurrences"
+  @belongsTo "group", "App.Group"
   @extend Spine.Model.Ajax
 
   name: (value) ->

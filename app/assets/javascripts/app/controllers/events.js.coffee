@@ -7,14 +7,18 @@ class App.Events extends App.Section
     super
     @push new App.Events.Calendar
 
-  index: ->
+  index: (params)->
     @active()
     @change @manager.controllers[0]
 
-  build: ->
-    @index()
-    @push new App.Events.Edit(event: new App.Event)
+  build: (params) ->
+    @index(params)
+    group = App.Group.findByAttribute "slug", params.group_id
+    if group.admin
+      @push new App.Events.Edit(event: new App.Event(group_id: group.id))
 
-  edit: (id) ->
-    @index()
-    @push new App.Events.Edit(id: id)
+  edit: (params) ->
+    @index(params)
+    group = App.Group.findByAttribute "slug", params.group_id
+    if group.admin
+      @push new App.Events.Edit(id: id)

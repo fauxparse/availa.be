@@ -1,10 +1,12 @@
 class App.Group extends Spine.Model
-  @configure "Group", "name", "slug", "preferences"
+  @configure "Group", "name", "slug", "admin", "preferences"
   @extend Spine.Model.Ajax
 
   toString: -> @name
 
-  url: -> App.Group.url() + "/" + @slug
+  url: -> App.Group.url() + "/" + @toParam()
+
+  toParam: -> @slug
 
   load: (attrs) ->
     @_loading = true

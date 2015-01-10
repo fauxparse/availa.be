@@ -9,13 +9,14 @@ class App.Sections extends Spine.Stack
     groups: App.Groups
 
   routes:
-    "/events/new":                      -> @events.build()
-    "/events/:id":             (params) -> @events.edit(params.id)
-    "/events":                          -> @events.index()
-    "/groups/:id/preferences": (params) -> @groups.preferences(params.id)
-    "/groups/:id":             (params) -> @groups.show(params.id)
-    "/groups":                          -> @groups.index()
-    "/":                                -> @dashboard.active()
+    "/calendar":                             -> @events.calendar()
+    "/groups/:group_id/events/new": (params) -> @groups.newEvent(params)
+    "/groups/:group_id/events/:id": (params) -> @events.show(params)
+    "/groups/:group_id/events":     (params) -> @groups.events(params)
+    "/groups/:id/preferences":      (params) -> @groups.preferences(params)
+    "/groups/:id":                  (params) -> @groups.show(params)
+    "/groups":                               -> @groups.index()
+    "/":                                     -> @dashboard.active()
 
   constructor: ->
     super

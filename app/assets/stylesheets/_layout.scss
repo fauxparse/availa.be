@@ -11,7 +11,7 @@
   > .pages {
     @include position(absolute, 0rem null 0rem 0rem);
     width: 100%;
-    @include transition(left $animation-duration $animation-timing-function);
+    @include transition(transform $animation-duration $animation-timing-function);
 
     > section {
       @include position(absolute, 0rem null 0rem 0rem);

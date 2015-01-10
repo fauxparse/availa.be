@@ -16,7 +16,7 @@
       %section.content
         %ul.list
           = navigation_item "dashboards.show", root_path
-          = navigation_item "events.calendar", events_path
+          = navigation_item "events.calendar", calendar_path
           %li.list-item
             = link_to destroy_user_session_path, class: "primary-action", method: :delete do
               = icon t("login.log_out.icon")
