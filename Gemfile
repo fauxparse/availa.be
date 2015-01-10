@@ -21,7 +21,7 @@ gem 'devise', github: 'plataformatec/devise'
 gem 'bcrypt', '~> 3.1.7'
 gem 'stringex'
 
-gem 'cancancan', '~> 1.9'
+gem 'pundit'
 
 gem 'unicorn'
 
@@ -42,7 +42,7 @@ group :development, :test do
   gem 'web-console', '~> 2.0'
   gem 'spring'
   gem 'quiet_assets'
-  
+
   gem 'rubocop', require: false
   gem 'coffeelint'
 end

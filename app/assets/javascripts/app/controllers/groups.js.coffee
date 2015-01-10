@@ -40,6 +40,7 @@ class App.Groups extends App.Section
           current.active()
         else
           @events params
+          console.log "B"
           @push new App.Events.Edit(event: new App.Event(group_id: group.id), back: group.url())
       else
         Spine.Route.navigate "/groups", false

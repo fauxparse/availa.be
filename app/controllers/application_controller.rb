@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
+  include Pundit
+
   protect_from_forgery with: :exception
 
   respond_to :html, :json
@@ -17,13 +17,6 @@ class ApplicationController < ActionController::Base
     else
       throw exception
     end
-  end
-
-  rescue_from CanCan::AccessDenied do
-    render file: "#{Rails.root}/public/403",
-      formats: [:html],
-      status: 403,
-      layout: false
   end
 
   protected

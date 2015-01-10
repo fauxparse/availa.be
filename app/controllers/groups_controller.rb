@@ -1,21 +1,26 @@
 class GroupsController < ApplicationController
-  load_resource find_by: :slug
-  authorize_resource
+  after_action :verify_authorized, except: :index
+  after_action :verify_policy_scoped, only: :index
 
   def index
-    respond_with current_user.groups
+    respond_with policy_scope(Group)
   end
 
   def show
-    respond_with @group
+    authorize group
+    respond_with group
   end
 
   def new
-    respond_with @group
+    @group = Group.new
+    authorize group
+    respond_with group
   end
 
   def preferences
-    @preferences = current_user.membership_of(@group).preferences
+    authorize group, :update?
+
+    @preferences = current_user.membership_of(group).preferences
     @preferences.update preferences_params if request.put? || request.patch?
 
     respond_with @preferences
@@ -25,5 +30,9 @@ class GroupsController < ApplicationController
 
   def preferences_params
     params.require(:preferences).permit(:color)
+  end
+
+  def group
+    @group ||= Group.find_by slug: params[:id]
   end
 end
