@@ -12,38 +12,34 @@ class App.Groups extends App.Section
     @manager.controllers[0].active()
 
   show: (params) ->
-    @queue =>
-      if group = App.Group.findByAttribute("slug", params.id)
-        if current = @find(App.Groups.Show, (controller) -> controller.group.id == group.id)
-          current.active()
-        else
-          @index()
-          @push new App.Groups.Show({ group })
+    if group = App.Group.findByAttribute("slug", params.id)
+      if current = @find(App.Groups.Show, (controller) -> controller.group.id == group.id)
+        current.active()
       else
-        Spine.Route.navigate "/groups", false
+        @index()
+        @push new App.Groups.Show({ group })
+    else
+      Spine.Route.navigate "/groups", false
 
   events: (params) ->
-    @queue =>
-      if group = App.Group.findByAttribute("slug", params.group_id)
-        if current = @find(App.Events.Index, (controller) -> controller.group.id == group.id)
-          current.active()
-        else
-          @show id: params.group_id
-          @push new App.Events.Index(group: group, back: group.url())
+    if group = App.Group.findByAttribute("slug", params.group_id)
+      if current = @find(App.Events.Index, (controller) -> controller.group.id == group.id)
+        current.active()
       else
-        Spine.Route.navigate "/groups", false
+        @show id: params.group_id
+        @push new App.Events.Index(group: group, back: group.url())
+    else
+      Spine.Route.navigate "/groups", false
 
   newEvent: (params) ->
-    @queue =>
-      if group = App.Group.findByAttribute("slug", params.group_id)
-        if current = @find(App.Events.Edit, (controller) -> controller.group.isNew())
-          current.active()
-        else
-          @events params
-          console.log "B"
-          @push new App.Events.Edit(event: new App.Event(group_id: group.id), back: group.url())
+    if group = App.Group.findByAttribute("slug", params.group_id)
+      if current = @find(App.Events.Edit, (controller) -> controller.group.isNew())
+        current.active()
       else
-        Spine.Route.navigate "/groups", false
+        @events params
+        @push new App.Events.Edit(event: new App.Event(group_id: group.id), back: group.url())
+    else
+      Spine.Route.navigate "/groups", false
 
 class App.GroupPreferences extends App.Dialog
   events:
