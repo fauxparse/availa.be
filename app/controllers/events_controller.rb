@@ -6,19 +6,19 @@ class EventsController < ApplicationController
   after_action :verify_policy_scoped, only: :index
 
   def index
-    respond_with policy_scope(Event)
+    @events = policy_scope(group)
+    respond_with @events.upcoming
   end
 
   def new
-    @event = group.events.build(group_id: params[:group_id])
+    @event = group.events.build
     authorize event
   end
 
   def create
-    @event = group.events.build(group_id: params[:group_id])
+    @event = group.events.build(event_params)
     authorize event
-    @event.save
-    respond_with event
+    respond_with event.saved
   end
 
   def show
@@ -31,10 +31,23 @@ class EventsController < ApplicationController
     respond_with event
   end
 
+  def update
+    authorize event
+    respond_with event.updated_with(event_params)
+  end
+
+  def destroy
+    respond_with event.destroyed
+  end
+
   protected
 
   def group
-    @group ||= Group.find_by(slug: params[:group_id])
+    @group ||= if params[:group_id].present?
+      Group.find_by(slug: params[:group_id])
+    else
+      nil
+    end
   end
 
   def event
@@ -54,7 +67,11 @@ class EventsController < ApplicationController
           { :weekdays => [] },
           :time_zone
         ]
-      ).
-      merge(group: Group.first)
+      )
+  end
+
+  def policy_scope(group)
+    @_policy_scoped = true
+    @policy || EventPolicy::Scope.new(pundit_user, group).resolve
   end
 end

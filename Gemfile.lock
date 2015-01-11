@@ -1,4 +1,10 @@
 GIT
+  remote: git://github.com/fauxparse/active_model-shaz.git
+  revision: 536434ac99e81390f581ea16f404a96172ad54a9
+  specs:
+    active_model-shaz (0.0.1)
+
+GIT
   remote: git://github.com/mongoid/mongoid.git
   revision: a4365d7ecfa8221bfcf36a4e7ce7993142fc5940
   specs:
@@ -319,6 +325,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_model-shaz!
   active_model_serializers!
   bcrypt (~> 3.1.7)
   bitters

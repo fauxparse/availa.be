@@ -16,6 +16,7 @@
 #= require md5
 #= require moment/moment
 #= require moment/moment-timezone
+#= require moment/moment-range
 
 #= require i18n
 #= require i18n/translations

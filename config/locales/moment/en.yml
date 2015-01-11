@@ -1,0 +1,7 @@
+en:
+  moment:
+    range:
+      same_day: "%{sd} %{sm}, %{sy}"
+      same_month: "%{sd}–%{ed} %{sm}, %{sy}"
+      same_year: "%{sd} %{sm}–%{ed} %{em}, %{sy}"
+      else: "%{sd} %{sm}, %{sy}–%{ed} %{em}, %{ey}"

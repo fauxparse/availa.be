@@ -1,3 +1,3 @@
 class EventSerializer < ActiveModel::Serializer
-  attributes :id, :name, :recurrences
+  attributes :id, :group_id, :name, :recurrences
 end

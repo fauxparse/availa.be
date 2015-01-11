@@ -4,6 +4,7 @@ class App.Events.Edit extends App.Section.Page
   back: "/events"
 
   events:
+    "input [name=name]": "nameChanged"
     "change [rel=date]": "dateChanged"
     "tap header [rel=ok]": "save"
 
@@ -42,6 +43,9 @@ class App.Events.Edit extends App.Section.Page
     else
       "edit"
 
+  nameChanged: (e) ->
+    @event.name $(e.target).val()
+
   dateChanged: (e) ->
     input = $(e.target)
     @event[input.attr("name")] input.val()
@@ -70,4 +74,8 @@ class App.Events.Edit extends App.Section.Page
     @event.weekdays days
 
   save: (e) ->
-    @event.save()
+    url = if @event.isNew()
+      @event.group().url() + App.Events.url()
+    else
+      @event.url()
+    @event.save(url: url)

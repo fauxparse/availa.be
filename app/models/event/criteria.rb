@@ -1,5 +1,9 @@
 class Event
   module Criteria
+    def self.upcoming
+      { :ends_at.gt => Time.now }
+    end
+
     def self.in_range(start_time, end_time)
       {
         :starts_at.lte => end_time,

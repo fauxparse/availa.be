@@ -3,6 +3,11 @@ class App.Event extends Spine.Model
   @belongsTo "group", "App.Group"
   @extend Spine.Model.Ajax
 
+  url: ->
+    components = [@group().url(), "/events", @id].
+      concat([].slice.call(arguments, 0))
+    (c for c in components when c).join("/").replace(/\/\//g, "/")
+
   name: (value) ->
     @_name = value if value?
     @_name || "New event"
@@ -25,6 +30,16 @@ class App.Event extends Spine.Model
 
   weekdays: (value) ->
     @recurrences()[0].weekdays(value)
+
+  dateRange: ->
+    @recurrences()[0].dateRange()
+
+  @comparator: (a, b) ->
+    a.start_time() - b.start_time()
+
+  @fetchGroup: (group) ->
+    $.getJSON(group.url() + @url()).done (data) =>
+      @refresh data
 
 class Recurrence extends Spine.Model
   @configure "Recurrence",
@@ -67,4 +82,7 @@ class Recurrence extends Spine.Model
   toJSON: ->
     $.extend {}, super,
       start_date: @start_date().format(),
-      end_date: @end_date().format(),
+      end_date: @end_date().format()
+
+  dateRange: ->
+    moment().range(@start_date(), @end_date())

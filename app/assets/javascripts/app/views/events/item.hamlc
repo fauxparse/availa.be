@@ -1,0 +1,7 @@
+%li.list-item.event
+  %a.primary-action{href: @event.url()}
+    .avatar{style: "background-color: #{@event.group().color()}"}
+      %i.icon-event
+    .text
+      .line= @event.name()
+      .line= @event.dateRange().toString()

@@ -4,6 +4,9 @@ en:
       link: Calendar
       icon: event
       title: Calendar
+    index:
+      link: Events
+      title: Events for %{group}
     new:
       title: Create a new event
     edit:

@@ -1,1 +1,3 @@
-%a{href: "#{@group.url()}/events"} Events
+%ul.list.upcoming-events
+
+%a{href: "#{@group.url()}/events"}= I18n.t("events.index.link", group: @group)

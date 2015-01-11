@@ -10,6 +10,7 @@ class App.Section extends Spine.Controller
 
   push: (controller) ->
     @queue =>
+      controller.parent = this
       controller.el.css(left: "#{@manager.controllers.length * 100}%")
       @pages.append controller.el
       @manager.add controller
@@ -69,3 +70,8 @@ class App.Section.Page extends Spine.Controller
 
   title: (title) ->
     @header.find(".title").text(title)
+
+  html: (element) ->
+    @content.html(element.el or element)
+    @refreshElements()
+    @content

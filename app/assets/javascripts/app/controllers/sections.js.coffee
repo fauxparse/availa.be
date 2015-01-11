@@ -11,7 +11,7 @@ class App.Sections extends Spine.Stack
   routes:
     "/calendar":                             -> @events.calendar()
     "/groups/:group_id/events/new": (params) -> @groups.newEvent(params)
-    "/groups/:group_id/events/:id": (params) -> @events.show(params)
+    "/groups/:group_id/events/:id": (params) -> @groups.showEvent(params)
     "/groups/:group_id/events":     (params) -> @groups.events(params)
     "/groups/:id/preferences":      (params) -> @groups.preferences(params)
     "/groups/:id":                  (params) -> @groups.show(params)

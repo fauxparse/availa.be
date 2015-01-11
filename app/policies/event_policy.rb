@@ -1,7 +1,15 @@
 class EventPolicy < ApplicationPolicy
-  class Scope < Struct.new(:user, :scope)
+  class Scope < Struct.new(:user, :group)
     def resolve
-      scope
+      if group.present?
+        if user.admin_of?(group)
+          group.events
+        else
+          Event.for_user(user)
+        end
+      else
+        Event.for_user(user)
+      end
     end
   end
 

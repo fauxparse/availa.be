@@ -14,6 +14,8 @@ Rails.application.routes.draw do
       patch 'preferences', on: :member
     end
 
+    resources :events, except: [:new, :create]
+
     get 'calendar', to: 'events#calendar'
 
     root to: 'dashboards#show'

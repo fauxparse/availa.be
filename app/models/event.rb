@@ -35,6 +35,7 @@ class Event
     sparse: true
   )
 
+  scope :upcoming, -> { where Event::Criteria::upcoming }
   scope :in_range, lambda { |start_time, end_time|
     where Event::Criteria.in_range(start_time, end_time)
   }

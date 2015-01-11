@@ -19,7 +19,7 @@ class App.Groups extends App.Section
         @index()
         @push new App.Groups.Show({ group })
     else
-      Spine.Route.navigate "/groups", false
+      Spine.Route.navigate "/groups"
 
   events: (params) ->
     if group = App.Group.findByAttribute("slug", params.group_id)
@@ -29,17 +29,32 @@ class App.Groups extends App.Section
         @show id: params.group_id
         @push new App.Events.Index(group: group, back: group.url())
     else
-      Spine.Route.navigate "/groups", false
+      Spine.Route.navigate "/groups"
 
   newEvent: (params) ->
     if group = App.Group.findByAttribute("slug", params.group_id)
-      if current = @find(App.Events.Edit, (controller) -> controller.group.isNew())
+      if current = @find(App.Events.Edit, (controller) -> controller.event.isNew())
         current.active()
       else
         @events params
-        @push new App.Events.Edit(event: new App.Event(group_id: group.id), back: group.url())
+        event = new App.Event(group_id: group.id)
+        @push new App.Events.Edit(event: event, back: group.url() + "/events")
     else
-      Spine.Route.navigate "/groups", false
+      Spine.Route.navigate "/groups"
+
+  showEvent: (params) ->
+    if group = App.Group.findByAttribute("slug", params.group_id)
+      if event = App.Event.find(params.id) and event.group_id == group.id
+        if current = @find(App.Events.Edit, (controller) -> controller.event.eql(event))
+          current.active()
+        else
+          @events params
+          @push new App.Events.Show(event: event, back: group.url() + "/events")
+      else
+        # TODO: load event via AJAX
+        Spine.Route.navigate group.url()
+    else
+      Spine.Route.navigate "/groups"
 
 class App.GroupPreferences extends App.Dialog
   events:
