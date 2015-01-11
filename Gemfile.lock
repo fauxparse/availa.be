@@ -1,6 +1,6 @@
 GIT
-  remote: git://github.com/fauxparse/active_model-shaz.git
-  revision: 536434ac99e81390f581ea16f404a96172ad54a9
+  remote: git://github.com/kristianmandrup/active_model-shaz.git
+  revision: d29d4925204983d0391644870ff9628a95801570
   specs:
     active_model-shaz (0.0.1)
 

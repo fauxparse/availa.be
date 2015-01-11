@@ -16,7 +16,7 @@ gem 'i18n-js', git: 'https://github.com/fnando/i18n-js.git'
 gem 'mongoid', github: 'mongoid/mongoid'
 gem 'mongoid_paranoia'
 gem 'active_model_serializers', github: 'rails-api/active_model_serializers', branch: '0-8-stable'
-gem 'active_model-shaz', github: 'fauxparse/active_model-shaz'
+gem 'active_model-shaz', github: 'kristianmandrup/active_model-shaz'
 
 gem 'devise', github: 'plataformatec/devise'
 gem 'bcrypt', '~> 3.1.7'
