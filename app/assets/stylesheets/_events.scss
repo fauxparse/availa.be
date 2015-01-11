@@ -366,3 +366,27 @@ section.edit-event {
     }
   }
 }
+
+.show-event {
+  > header {
+    height: auto;
+
+    .title {
+      padding-top: 6rem;
+
+      h1, h2 {
+        @include ellipsis;
+        display: block;
+      }
+
+      h1 {
+        @include type-title(white);
+      }
+
+      h2 {
+        @include type-subhead(white);
+        color: secondary-color(white);
+      }
+    }
+  }
+}

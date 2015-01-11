@@ -51,6 +51,11 @@
     @include tappable-region;
   }
 
+  > button:last-child,
+  > .button:last-child {
+    margin-right: 0;
+  }
+
   .top-left-button {
     .button {
       margin-left: 0rem;

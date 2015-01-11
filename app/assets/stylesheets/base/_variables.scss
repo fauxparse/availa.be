@@ -33,12 +33,12 @@ $base-background-color: white;
 
 // Font Colors
 $base-font-color: text-color();
-$base-accent-color: $pink;
-$light-accent-color: $pink-100;
-$dark-accent-color: $pink-700;
-$base-secondary-color: $light-blue-A200;
-$light-secondary-color: $light-blue-A100;
-$dark-secondary-color: $light-blue-A400;
+$base-accent-color: $light-blue;
+$light-accent-color: $light-blue-100;
+$dark-accent-color: $light-blue-700;
+$base-secondary-color: $pink-A200;
+$light-secondary-color: $pink-A100;
+$dark-secondary-color: $pink-A400;
 
 // Link Colors
 $base-link-color: $base-accent-color;

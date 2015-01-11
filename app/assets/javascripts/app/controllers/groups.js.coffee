@@ -44,12 +44,26 @@ class App.Groups extends App.Section
 
   showEvent: (params) ->
     if group = App.Group.findByAttribute("slug", params.group_id)
-      if event = App.Event.find(params.id) and event.group_id == group.id
-        if current = @find(App.Events.Edit, (controller) -> controller.event.eql(event))
+      if (event = App.Event.find(params.id)) && event.group_id == group.id
+        if current = @find(App.Events.Show, (controller) -> controller.event.eql(event))
           current.active()
         else
           @events params
           @push new App.Events.Show(event: event, back: group.url() + "/events")
+      else
+        # TODO: load event via AJAX
+        Spine.Route.navigate group.url()
+    else
+      Spine.Route.navigate "/groups"
+
+  editEvent: (params) ->
+    if group = App.Group.findByAttribute("slug", params.group_id)
+      if (event = App.Event.find(params.id)) && event.group_id == group.id
+        if current = @find(App.Events.Edit, (controller) -> controller.event.eql(event))
+          current.active()
+        else
+          @events params
+          @push new App.Events.Edit(event: event, back: group.url() + "/events")
       else
         # TODO: load event via AJAX
         Spine.Route.navigate group.url()

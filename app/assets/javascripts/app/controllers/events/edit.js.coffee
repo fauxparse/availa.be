@@ -6,26 +6,15 @@ class App.Events.Edit extends App.Section.Page
   events:
     "input [name=name]": "nameChanged"
     "change [rel=date]": "dateChanged"
+    "change [rel=time]": "dateChanged"
+    "change [name=weekdays]": "weekdaysChanged"
     "tap header [rel=ok]": "save"
 
   init: ->
     super
     @el.addClass "edit-event"
     @title I18n.t("events.#{@action()}.title")
-
-    if @event?.isNew()
-      @render()
-    else
-      App.Event.on("refresh", @loaded)
-      @id ||= @event?.id
-      App.Event.fetch(id: @id, cache: false)
-
-  loaded: (events) =>
-    for event in events when event.id == @id
-      App.Event.off "refresh", @loaded
-      @event = event
-      @render()
-      break
+    @render()
 
   render: =>
     weekdays = ([w, i] for w, i in moment.weekdaysMin()).
@@ -50,6 +39,16 @@ class App.Events.Edit extends App.Section.Page
     input = $(e.target)
     @event[input.attr("name")] input.val()
     @checkWeekdays()
+
+  timeChanged: (e) ->
+    input = $(e.target)
+    @event[input.attr("name")] input.val()
+
+  weekdaysChanged: (e) ->
+    values = @$("[name=weekdays]:checked").
+      map(-> parseInt($(this).val(), 10)).
+      get()
+    @event.weekdays values
 
   checkWeekdays: (e) ->
     d = @event.start_date().clone()

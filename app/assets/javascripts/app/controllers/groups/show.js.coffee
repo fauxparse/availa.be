@@ -23,6 +23,7 @@ class App.Groups.Show extends App.Section.Page
       App.Event.off("refresh change", @refreshEvents)
 
   render: =>
+    @header.css(backgroundColor: @group.color())
     @html @view("groups/show")(group: @group)
     @refreshEvents()
 
@@ -54,7 +55,6 @@ class App.Groups.Show extends App.Section.Page
   newEvent: (e) ->
     e.preventDefault()
     event = new App.Event(group_id: @group.id)
-    @edit event
     controller = new App.Events.Edit(event: event, back: @group.url())
-    Spine.Route.navigate group.url() + "/events/new", false
+    Spine.Route.navigate @group.url() + "/events/new", false
     @parent.push controller

@@ -17,7 +17,7 @@
           to
         .field
           .date-select
-            %a.dropdown-toggle{href: "#", "data-toggle" => "date"}= @event.start_date().format('ll')
+            %a.dropdown-toggle{href: "#", "data-toggle" => "date"}= @event.end_date().format('ll')
             %input{name: "end_date", rel: "date", value: @event.end_date().format()}
       .weekdays
         - for [weekday, i] in @weekdays
