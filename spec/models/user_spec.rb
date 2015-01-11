@@ -126,7 +126,9 @@ RSpec.describe User, type: :model do
 
   context 'assigned to an event' do
     before do
-      role.update assignments: [Event::Assignment.new(user: user)]
+      event.instances.first.update(
+        assignments: [Event::Assignment.new(user_ids: [user.id], role: role)]
+      )
     end
 
     it 'finds the event' do

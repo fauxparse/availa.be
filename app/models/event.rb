@@ -15,6 +15,7 @@ class Event
   embeds_many :recurrences, class_name: 'Event::Recurrence'
   embeds_many :roles, class_name: 'Event::Role', order: :position.asc
   embeds_many :availability, class_name: 'Event::Availability'
+  embeds_many :instances, class_name: 'Event::Instance'
 
   keep_ordered :roles
 
@@ -22,6 +23,7 @@ class Event
 
   validates_presence_of :name, :group_id
 
+  before_validation :update_instances
   before_save :cache_start_and_end_times
 
   index(
@@ -58,6 +60,16 @@ class Event
   end
 
   protected
+
+  def update_instances
+    valid_times = times.map(&:first)
+    instances.reject! { |instance| !valid_times.include? instance.time }
+    existing = instances.map(&:time)
+    (valid_times - existing).each do |time|
+      instances.build time: time
+    end
+    instances.sort!
+  end
 
   def cache_start_and_end_times
     all_times = times

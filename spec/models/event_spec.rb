@@ -29,6 +29,12 @@ RSpec.describe Event, type: :model do
       end
     end
 
+    describe '#instances' do
+      it 'keeps the instances up to date' do
+        expect(event.instances.length).to eq(52)
+      end
+    end
+
     describe '#cache_start_and_end_times' do
       it 'caches start time' do
         expect(event.starts_at).to eq(Time.zone.local(2015, 1, 3, 9))

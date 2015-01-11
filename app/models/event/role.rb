@@ -10,17 +10,11 @@ class Event
 
     belongs_to :skill
     embedded_in :event
-    embeds_many :assignments, class_name: 'Event::Assignment'
 
     validates_numericality_of :minimum, greater_than_or_equal_to: 0
     validates_numericality_of :maximum,
       greater_than_or_equal_to: 0,
       if: :maximum?
-    validates_each :count, if: :maximum? do |record, attr, value|
-      if value > record.maximum
-        record.errors.add(attr, "can’t be more than #{record.maximum}")
-      end
-    end
 
     alias_attribute :to_s, :name
 
@@ -41,18 +35,6 @@ class Event
 
     def unlimited?
       !maximum?
-    end
-
-    def count
-      assignments.length
-    end
-
-    def satisfied?
-      count >= minimum
-    end
-
-    def full?
-      maximum? && (count >= maximum)
     end
   end
 end

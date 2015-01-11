@@ -31,14 +31,14 @@ class Event
         :starts_at.gte => Time.now,
         :"roles.skill_id".in => user.abilities.collect(&:skill_id),
         :$nor => [
-          { 'roles.assignments.user_id' => user.id },
+          { 'instances.assignments.user_ids' => user.id },
           { 'availability.user_id' => user.id }
         ]
       }
     end
 
     def self.assigned_to(user)
-      { 'roles.assignments.user_id' => user.id }
+      { 'instances.assignments.user_ids' => user.id }
     end
 
     def self.available(user)
