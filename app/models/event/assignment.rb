@@ -25,9 +25,7 @@ class Event
     end
 
     def assign(user)
-      unless user_ids.include?(user.id)
-        user_ids << user.id
-      end
+      user_ids << user.id unless user_ids.include?(user.id)
     end
 
     def assigned?(user)

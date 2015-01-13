@@ -17,7 +17,7 @@ class Skill
   alias_attribute :to_s, :name
 
   def name
-    super || I18n.translate("mongoid.defaults.skill.name")
+    super || I18n.translate('mongoid.defaults.skill.name')
   end
 
   def plural

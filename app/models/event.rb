@@ -37,7 +37,7 @@ class Event
     sparse: true
   )
 
-  scope :upcoming, -> { where Event::Criteria::upcoming }
+  scope :upcoming, -> { where Event::Criteria.upcoming }
   scope :in_range, lambda { |start_time, end_time|
     where Event::Criteria.in_range(start_time, end_time)
   }
@@ -64,11 +64,15 @@ class Event
   def update_instances
     valid_times = times.map(&:first)
     instances.reject! { |instance| !valid_times.include? instance.time }
+    add_missing_instances valid_times
+    instances.sort!
+  end
+
+  def add_missing_instances(valid_times)
     existing = instances.map(&:time)
     (valid_times - existing).each do |time|
       instances.build time: time
     end
-    instances.sort!
   end
 
   def cache_start_and_end_times

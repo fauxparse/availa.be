@@ -43,11 +43,8 @@ class EventsController < ApplicationController
   protected
 
   def group
-    @group ||= if params[:group_id].present?
-      Group.find_by(slug: params[:group_id])
-    else
-      nil
-    end
+    @group ||=
+      (Group.find_by(slug: params[:group_id]) if params[:group_id].present?)
   end
 
   def event
@@ -55,28 +52,36 @@ class EventsController < ApplicationController
   end
 
   def event_params
-    params.
-      require(:event).
-      permit(
+    params
+      .require(:event)
+      .permit(
         :name,
-        :recurrences => [
-          :start_date,
-          :end_date,
-          :start_time,
-          :end_time,
-          { :weekdays => [] },
-          :time_zone
-        ],
-        :roles => [
-          :id,
-          :minimum,
-          :maximum,
-          :name,
-          :plural,
-          :skill_id,
-          :position
-        ]
+        recurrences: recurrences_fields,
+        roles: roles_fields
       )
+  end
+
+  def recurrences_fields
+    [
+      :start_date,
+      :end_date,
+      :start_time,
+      :end_time,
+      { weekdays: [] },
+      :time_zone
+    ]
+  end
+
+  def roles_fields
+    [
+      :id,
+      :minimum,
+      :maximum,
+      :name,
+      :plural,
+      :skill_id,
+      :position
+    ]
   end
 
   def policy_scope(group)

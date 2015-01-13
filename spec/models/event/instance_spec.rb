@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Event::Instance, :type => :model do
+RSpec.describe Event::Instance, type: :model do
   subject(:instance) { event.instances.first }
   let(:role) { event.roles.build skill: skill }
   let(:group) { FactoryGirl.create :group }
@@ -12,6 +12,4 @@ RSpec.describe Event::Instance, :type => :model do
   end
 
   it { is_expected.to validate_uniqueness_of(:time) }
-
-
 end

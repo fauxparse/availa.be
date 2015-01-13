@@ -12,5 +12,4 @@ class RoleSerializer < ActiveModel::Serializer
   def maximum
     object.send :read_attribute, :maximum
   end
-
 end

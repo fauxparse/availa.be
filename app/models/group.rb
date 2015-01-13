@@ -24,6 +24,6 @@ class Group
   protected
 
   def create_default_skill
-    skills.create name: "participant"
+    skills.create name: I18n.translate('mongoid.defaults.skill.name')
   end
 end
