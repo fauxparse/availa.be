@@ -13,7 +13,9 @@ class App.Groups extends App.Section
 
   show: (params) ->
     if group = App.Group.findByAttribute("slug", params.id)
-      if current = @find(App.Groups.Show, (controller) -> controller.group.id == group.id)
+      current = @find App.Groups.Show, (controller) ->
+        controller.group.id == group.id
+      if current
         current.active()
       else
         @index()
@@ -23,7 +25,9 @@ class App.Groups extends App.Section
 
   events: (params) ->
     if group = App.Group.findByAttribute("slug", params.group_id)
-      if current = @find(App.Events.Index, (controller) -> controller.group.id == group.id)
+      current = @find App.Events.Index, (controller) ->
+        controller.group.id == group.id
+      if current
         current.active()
       else
         @show id: params.group_id
@@ -33,7 +37,9 @@ class App.Groups extends App.Section
 
   newEvent: (params) ->
     if group = App.Group.findByAttribute("slug", params.group_id)
-      if current = @find(App.Events.Edit, (controller) -> controller.event.isNew())
+      current = @find App.Events.Edit, (controller) ->
+        controller.event.isNew()
+      if current
         current.active()
       else
         @events params
@@ -45,7 +51,9 @@ class App.Groups extends App.Section
   showEvent: (params) ->
     if group = App.Group.findByAttribute("slug", params.group_id)
       if (event = App.Event.find(params.id)) && event.group_id == group.id
-        if current = @find(App.Events.Show, (controller) -> controller.event.eql(event))
+        current = @find App.Events.Show, (controller) ->
+          controller.event.eql(event)
+        if current
           current.active()
         else
           @events params
@@ -59,7 +67,9 @@ class App.Groups extends App.Section
   editEvent: (params) ->
     if group = App.Group.findByAttribute("slug", params.group_id)
       if (event = App.Event.find(params.id)) && event.group_id == group.id
-        if current = @find(App.Events.Edit, (controller) -> controller.event.eql(event))
+        current = @find App.Events.Edit, (controller) ->
+          controller.event.eql(event)
+        if current
           current.active()
         else
           @events params

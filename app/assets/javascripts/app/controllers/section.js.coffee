@@ -43,8 +43,8 @@ class App.Section extends Spine.Controller
         controller.release()
 
   find: (constructor, match) ->
-    for controller in @manager.controllers
-      return controller if (controller.constructor == constructor) && (!match? || match(controller))
+    for c in @manager.controllers
+      return c if (c.constructor == constructor) && (!match? || match(c))
     undefined
 
   empty: ->

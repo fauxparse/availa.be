@@ -26,7 +26,9 @@ class App.DateEditor extends App.Dialog
     @months.append @renderMonth(@date)
 
   renderMonth: (date = @date) ->
-    $(@view("date/month")({ date: date, weekStart: moment().startOf("week").day() }))
+    $(@view("date/month")({
+      date: date, weekStart: moment().startOf("week").day()
+    }))
 
   updateHeader: (date = @date) ->
     @header.
@@ -53,7 +55,8 @@ class App.DateEditor extends App.Dialog
     @date = next
     @updateHeader()
 
-    @$(".content .month").transition({ transform: "translateX(#{d * -100}%)" }, -> $(this).remove())
+    css = { transform: "translateX(#{d * -100}%)" }
+    @$(".content .month").transition css, -> $(this).remove()
     @renderMonth().
       appendTo(@months).
       css(transform: "translateX(#{d * 100}%)").
@@ -101,7 +104,11 @@ class App.TimeEditor extends App.Dialog
     @el.addClass("select-time")
 
   render: ->
-    @html @view("date/time")(hours: @hours(), minutes: @minutes(), time: @moment())
+    data =
+      hours: @hours()
+      minutes: @minutes()
+      time: @moment()
+    @html @view("date/time")(data)
 
   moment: ->
     moment new Date(2015, 0, 1, @hours(), @minutes())
@@ -132,8 +139,14 @@ class App.TimeEditor extends App.Dialog
     @$("header .hours").text moment.format("h")
     @$("header .minutes").text moment.format("mm")
     @$("header .ampm").text moment.format("A")
-    @$(".hours .dot[value=#{(@hours() + 11) % 12 + 1}]").addClass("active").siblings(".active").removeClass("active")
-    @$(".minutes .dot[value=#{@minutes()}]").addClass("active").siblings(".active").removeClass("active")
+    @$(".hours .dot[value=#{(@hours() + 11) % 12 + 1}]").
+      addClass("active").
+      siblings(".active").
+      removeClass("active")
+    @$(".minutes .dot[value=#{@minutes()}]").
+      addClass("active").
+      siblings(".active").
+      removeClass("active")
     @$(".ampm [rel=am]").toggleClass("active", !@pm())
     @$(".ampm [rel=pm]").toggleClass("active", @pm())
 
@@ -150,7 +163,9 @@ class App.TimeEditor extends App.Dialog
     e.preventDefault()
     @clock = $(e.target).closest(".clock")
     offset = @clock.offset()
-    @center = { x: offset.left + @clock.width() / 2, y: offset.top + @clock.height() / 2 }
+    @center =
+      x: offset.left + @clock.width() / 2
+      y: offset.top + @clock.height() / 2
 
     $(document).
       on("mousemove", @mouseMove).
@@ -184,7 +199,10 @@ class App.TimeEditor extends App.Dialog
 
   getPosition: (e) ->
     if e.originalEvent.targetTouches?.length
-      { x: e.originalEvent.targetTouches[0].pageX, y: e.originalEvent.targetTouches[0].pageY }
+      {
+        x: e.originalEvent.targetTouches[0].pageX
+        y: e.originalEvent.targetTouches[0].pageY
+      }
     else
       { x: e.pageX, y: e.pageY }
 

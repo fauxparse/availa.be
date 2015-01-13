@@ -40,18 +40,17 @@ class App.Alert extends Spine.Controller
     e?.preventDefault()
     clearTimeout @timer
 
-    @el.
-      css(pointerEvents: "none").
-      transition { opacity: 0 }, =>
-        h = @el.outerHeight(true)
-        @el.addClass("deleting")
-        @el.nextAll().transition(transform(-h))
-        positionFloatingContent()
+    @el.css(pointerEvents: "none")
+    @el.transition { opacity: 0 }, =>
+      h = @el.outerHeight(true)
+      @el.addClass("deleting")
+      @el.nextAll().transition(transform(-h))
+      positionFloatingContent()
 
-        @container.transition transform(h), =>
-          @el.nextAll().css(transform(0))
-          @container.css(transform(0))
-          @release()
+      @container.transition transform(h), =>
+        @el.nextAll().css(transform(0))
+        @container.css(transform(0))
+        @release()
 
   click: (e) ->
     @trigger "click"
@@ -81,6 +80,3 @@ $ ->
     new App.Alert(el: this)
 
   $(window).on "resize", positionFloatingContent
-
-  # $(document).on "click", ".floating-action-button", (e) ->
-  #   new App.Alert(text: "Taxidermy cred Marfa actually squid semiotics bespoke health goth Helvetica.", button: "Derp")

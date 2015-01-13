@@ -34,10 +34,11 @@ class SortableList extends Spine.Controller
     y = @eventPosition(e) - @drag.origin + @scrollParent().scrollTop()
     @drag.item.data(y: @drag.item.data("offset") + y)
 
+    css = { transform: "translateY(#{y}px)" }
     if animate
-      @drag.item.transition({ transform: "translateY(#{y}px)" }, @SCROLL_TIMER, "linear")
+      @drag.item.transition css, @SCROLL_TIMER, "linear"
     else
-      @drag.item.css(transform: "translateY(#{y}px)")
+      @drag.item.css css
 
     @sortItems()
 
@@ -61,7 +62,7 @@ class SortableList extends Spine.Controller
       e.pageY
 
   sortItems: ->
-    @drag.items.sort (a, b) =>
+    @drag.items.sort (a, b) ->
       a.data("y") - b.data("y")
     y = 0
     for item in @drag.items
@@ -107,8 +108,10 @@ class SortableList extends Spine.Controller
         if excludeStaticParent && parent.css("position") == "static"
           false
         else
-          /(auto|scroll)/.test(parent.css("overflow") + parent.css("overflow-y"))
+          css = parent.css("overflow") + parent.css("overflow-y")
+          /(auto|scroll)/.test(css)
       .eq(0)
+
       offset = @_scrollParent.offset()
       @_scrollUpper = offset.top
       @_scrollLower = offset.top + @_scrollParent.height()

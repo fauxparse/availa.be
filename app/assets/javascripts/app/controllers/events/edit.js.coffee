@@ -50,7 +50,7 @@ class App.Events.Edit extends App.Section.Page
 
   skillsChanged: =>
     skills = @event.group().skills().all().sort(App.Skill.comparator)
-    @$("[rel=skill] .dropdown-menu").each (i, el) =>
+    @$("[rel=skill] .dropdown-menu").each (i, el) ->
       menu = $(el)
       menu.find(".divider").prevAll("li").remove()
       for skill in skills.reverse()
@@ -94,7 +94,7 @@ class App.Events.Edit extends App.Section.Page
       d.add(1, "day")
       i++
 
-    @$(".weekdays input").each (i, el) =>
+    @$(".weekdays input").each (i, el) ->
       el = $(el)
       day = parseInt(el.val(), 10)
       if valid[day]

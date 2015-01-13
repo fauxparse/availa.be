@@ -1,3 +1,5 @@
+# coffeelint: disable=max_line_length
+
 backdrop = ".dropdown-backdrop"
 toggle   = "[data-toggle=\"dropdown\"]"
 
