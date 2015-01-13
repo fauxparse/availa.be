@@ -11,11 +11,19 @@ class Group
 
   alias_attribute :to_s, :name
 
+  after_create :create_default_skill
+
   def users
     User.where(:"memberships.group_id" => id)
   end
 
   def admins
     users.where(:"memberships.admin" => true)
+  end
+
+  protected
+
+  def create_default_skill
+    skills.create name: "participant"
   end
 end

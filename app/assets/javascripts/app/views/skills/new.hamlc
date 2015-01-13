@@ -1,0 +1,11 @@
+.dialog-content
+  .field.with-floating-label
+    %input#skill_name{name: "name", required: "true", value: @skill.name()}
+    %label{for: "skill_name"}= I18n.t("mongoid.attributes.skill.name")
+    .error-message= I18n.t("mongoid.errors.skill.name.taken")
+  .field.with-floating-label
+    %input#skill_plural{name: "plural", required: "true", value: @skill.plural()}
+    %label{for: "skill_plural"}= I18n.t("mongoid.attributes.skill.plural")
+%footer.dialog-footer
+  %button{rel: "cancel"}= I18n.t("dialogs.cancel")
+  %button{rel: "ok"}= I18n.t("dialogs.ok")

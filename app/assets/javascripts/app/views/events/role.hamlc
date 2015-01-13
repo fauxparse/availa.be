@@ -1,0 +1,30 @@
+%li.role.sortable
+  - if @role.id?
+    %input{type: "hidden", name: "id", value: @role.id}
+  .field
+    .dropdown{rel: "limits"}
+      %button.dropdown-toggle{"data-toggle" => "dropdown"}= @role.range()
+      .dropdown-menu.role-limits{role: "menu"}
+        %form
+          .limits= @role.range()
+          .slider
+    .text &times;
+    .dropdown{rel: "skill"}
+      %button.dropdown-toggle{"data-toggle" => "dropdown"}= @role.skill().plural()
+      %ul.dropdown-menu{role: "menu"}
+        - for skill in @group.skills().all()
+          %li
+            %a{href: "#", skill: skill.id}= skill.plural()
+        - if @group.admin
+          %li.divider
+          %li
+            %a{href: "#", rel: "add-skill"}= I18n.t("events.edit.skills.add")
+  .field
+    .text= I18n.t("events.edit.roles.as")
+    %input{name: "name", type: "text", value: @role._name, placeholder: @role.skill().name()}
+    .text /
+    %input{name: "plural", type: "text", value: @role._plural, placeholder: @role.skill().plural()}
+  %button{rel: "delete"}
+    %i.icon-clear
+  %button{rel: "reorder"}
+    %i.icon-reorder

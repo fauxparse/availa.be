@@ -11,3 +11,8 @@ en:
       title: Create a new event
     edit:
       title: Edit event details
+      roles:
+        as: as
+        add: Add a role
+      skills:
+        add: New skill…

@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
     resources :groups do
       resources :events
+      resources :skills
 
       get 'preferences', on: :member
       put 'preferences', on: :member
@@ -15,6 +16,7 @@ Rails.application.routes.draw do
     end
 
     resources :events, except: [:new, :create]
+    resources :skills, only: [:show]
 
     get 'calendar', to: 'events#calendar'
 

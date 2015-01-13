@@ -1,0 +1,4 @@
+en:
+  role:
+    range:
+      n_or_more: "%{minimum} or more"

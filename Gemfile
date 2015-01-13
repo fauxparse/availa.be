@@ -21,6 +21,7 @@ gem 'active_model-shaz', github: 'kristianmandrup/active_model-shaz'
 gem 'devise', github: 'plataformatec/devise'
 gem 'bcrypt', '~> 3.1.7'
 gem 'stringex'
+gem 'auto_strip_attributes', '~> 2.0'
 
 gem 'pundit'
 

@@ -5,6 +5,7 @@
 #= require transit
 #= require mousewheel
 #= require finger
+#= require jquery.nouislider
 
 #= require spine/spine
 #= require spine/relation

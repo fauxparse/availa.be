@@ -2,6 +2,8 @@ class App.Group extends Spine.Model
   @configure "Group", "name", "slug", "admin", "preferences"
   @extend Spine.Model.Ajax
 
+  @hasMany "skills", "App.Skill"
+
   toString: -> @name
 
   url: -> App.Group.url() + "/" + @toParam()

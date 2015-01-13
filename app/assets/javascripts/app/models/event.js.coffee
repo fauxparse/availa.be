@@ -1,5 +1,5 @@
 class App.Event extends Spine.Model
-  @configure "Event", "name", "recurrences"
+  @configure "Event", "name", "recurrences", "roles"
   @belongsTo "group", "App.Group"
   @extend Spine.Model.Ajax
 
@@ -15,6 +15,21 @@ class App.Event extends Spine.Model
   recurrences: (value) ->
     @_recurrences = Recurrence.fromJSON(value) if value?
     @_recurrences ||= [new Recurrence()]
+
+  roles: (value) ->
+    if value?
+      @_roles = Role.fromJSON(value)
+      for role, i in @_roles
+        role.position i
+    @_roles ||= [new Role(skill_id: @group().skills().first()?.id)]
+
+  addRole: (skill) ->
+    @roles().push new Role(skill_id: skill.id, position: @roles().length)
+
+  deleteRoleAt: (index) ->
+    @roles().splice(index, 1)
+    for role, i in @roles()
+      role.position i
 
   start_date: (value) ->
     @recurrences()[0].start_date(value)
@@ -86,3 +101,49 @@ class Recurrence extends Spine.Model
 
   dateRange: ->
     moment().range(@start_date(), @end_date())
+
+class Role extends Spine.Model
+  @configure "Role", "name", "plural", "minimum", "maximum", "position"
+  @belongsTo "skill", "App.Skill"
+
+  name: (value) ->
+    @_name = value if arguments.length
+    @_name || @skill().name()
+
+  plural: (value) ->
+    @_plural = value if arguments.length
+    @_plural || @skill().plural()
+
+  minimum: (value) ->
+    @_minimum = parseInt(value, 10) if value?
+    @_minimum || 0
+
+  maximum: (value) ->
+    if arguments.length
+      @_maximum = if value?
+        parseInt(value, 10)
+      else
+        undefined
+    @_maximum
+
+  position: (value) ->
+    @_position = parseInt(value, 10) if value?
+    @_position || 0
+
+  range: ->
+    if !@maximum()?
+      I18n.t("role.range.n_or_more", minimum: @minimum())
+    else if @minimum() == @maximum()
+      @minimum()
+    else
+      "#{@minimum()}–#{@maximum()}"
+
+  toJSON: ->
+    data = super
+    delete data.maximum unless @_maximum?
+    delete data.name unless @_name?
+    delete data.plural unless @_plural?
+    data
+
+  @comparator: (a, b) ->
+    a.position() - b.position()

@@ -38,4 +38,9 @@
           .time-select
             %a.dropdown-toggle{href: "#", "data-toggle" => "time"}= moment("2015-01-01").add(@event.end_time(), "seconds").format("LT")
             %input{name: "end_time", rel: "time", value: @event.end_time()}
+    %fieldset
+      %legend
+        %i.icon-person
+      .roles.sortable-list
+      %button{rel: "add-role"}= I18n.t("events.edit.roles.add")
   %fieldset

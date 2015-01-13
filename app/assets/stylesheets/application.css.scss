@@ -1,3 +1,5 @@
+//= require jquery.nouislider
+
 @import "base/normalize";
 @import "bourbon";
 @import "base/base";
@@ -16,6 +18,7 @@
 @import "lists";
 @import "dialogs";
 @import "dropdowns";
+@import "datetime";
 @import "forms";
 @import "alerts";
 

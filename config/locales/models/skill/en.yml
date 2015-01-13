@@ -1,0 +1,14 @@
+en:
+  mongoid:
+    defaults:
+      skill:
+        name: participant
+    attributes:
+      skill:
+        name: Skill name
+        plural: Plural
+    errors:
+      skill:
+        name:
+          taken: This skill already exists. Pick another name?
+          empty: Please enter a name for this skill.

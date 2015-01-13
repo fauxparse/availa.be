@@ -68,6 +68,10 @@ fieldset {
       border-bottom: 1px dotted disabled-color();
     }
 
+    &[invalid] {
+      border-bottom-color: $error-color;
+    }
+
     &.large {
       font-size: 1.5rem;
       line-height: 1.4em;
@@ -100,6 +104,11 @@ fieldset {
       color: $base-accent-color;
     }
 
+    input[invalid]:focus ~ label,
+    input[invalid]:not(:invalid) ~ label {
+      color: $error-color;
+    }
+
     input.large ~ label {
       font-size: 1.5rem;
     }
@@ -109,4 +118,96 @@ fieldset {
       @include transform(translateY(-1.25rem) scale(0.5));
     }
   }
+
+  .error-message {
+    @include type-caption;
+    margin: 0.5rem 0;
+    color: $error-color;
+
+    &::before {
+      font-family: icons;
+      content: $font-icons-error;
+      margin-right: 0.25rem;
+    }
+  }
+}
+
+.noUi-target {
+  border-radius: 0;
+  border: none;
+  background: disabled-color();
+  box-shadow: none;
+
+  .noUi-connect {
+    background-color: $base-accent-color;
+    box-shadow: none;
+  }
+
+  .noUi-background {
+    background: white;
+    box-shadow: none;
+    &::after {
+      content: "";
+      @include position(absolute, 0rem 0rem 0rem 0rem);
+      background: disabled-color();
+    }
+  }
+
+  .noUi-handle {
+    width: 0.75rem;
+    height: 0.75rem;
+    background: $base-accent-color;
+    border-radius: 50%;
+    border: none;
+    left: -0.3125rem;
+    top: -0.3125rem;
+    box-shadow: none;
+    cursor: pointer;
+
+    @include transition(transform 0.2s ease);
+
+    &.noUi-active {
+      @include transform(scale(1.5));
+    }
+
+    &::before {
+      display: none;
+    }
+
+    &::after {
+      background: transparent;
+    }
+
+    @include tappable-region;
+  }
+
+  &[disabled] {
+    .noUi-connect {
+      background: transparent;
+    }
+
+    .noUi-handle {
+      background: white;
+      padding: 2px;
+
+      &::before {
+        content: "";
+        display: block;
+        position: static;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background: disabled-color();
+      }
+    }
+  }
+
+  &.noUi-horizontal {
+    height: 2px;
+  }
+
+  &.noUi-vertical {
+    height: 2px;
+  }
+
 }

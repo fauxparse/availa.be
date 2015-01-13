@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  wrap_parameters include: [:name, :recurrences]
+  wrap_parameters include: [:name, :recurrences, :roles]
   before_action :authenticate_user!
 
   after_action :verify_authorized, except: :index
@@ -66,6 +66,15 @@ class EventsController < ApplicationController
           :end_time,
           { :weekdays => [] },
           :time_zone
+        ],
+        :roles => [
+          :id,
+          :minimum,
+          :maximum,
+          :name,
+          :plural,
+          :skill_id,
+          :position
         ]
       )
   end

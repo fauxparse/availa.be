@@ -56,6 +56,9 @@ $dropdown-caret-color:           secondary-color() !default;
 
 .dropdown-toggle {
   display: block;
+  width: 100%;
+  position: relative;
+  text-align: left;
   @include type-form-control;
   height: 2rem;
   line-height: 2rem;
@@ -63,6 +66,7 @@ $dropdown-caret-color:           secondary-color() !default;
 
   &:hover, &:focus {
     color: text-color();
+    background: none;
   }
 
   &::after {
@@ -109,9 +113,11 @@ $dropdown-caret-color:           secondary-color() !default;
   }
 
   // Dividers (basically an hr) within the dropdown
-  // .divider {
-  //   @include nav-divider($dropdown-divider-bg);
-  // }
+  .divider {
+    height: 1px;
+    border-top: 1px solid divider-color();
+    margin: 0.5rem 0;
+  }
 
   // Links within the dropdown menu
   > li > a {

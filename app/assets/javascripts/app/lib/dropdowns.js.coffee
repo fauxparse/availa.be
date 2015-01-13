@@ -3,7 +3,7 @@ toggle   = "[data-toggle=\"dropdown\"]"
 
 class Dropdown
   constructor: (element) ->
-    $(element).on "click.bs.dropdown", @toggle
+    $(element).on "click.dropdown", @toggle
 
   toggle: (e) ->
     $this = $(this)
@@ -17,7 +17,7 @@ class Dropdown
 
     unless isActive
       relatedTarget = { relatedTarget: this }
-      $parent.trigger(e = $.Event("show.bs.dropdown", relatedTarget))
+      $parent.trigger(e = $.Event("show.dropdown", relatedTarget))
 
       if "ontouchstart" in document.documentElement and !$parent.closest(".navbar-nav").length
         # if mobile we use a backdrop because click events don’t delegate
@@ -29,11 +29,11 @@ class Dropdown
         .trigger("focus")
         .attr("aria-expanded", "true")
 
-      $parent
-        .toggleClass("open")
-        .trigger("shown.bs.dropdown", relatedTarget)
+      $parent.toggleClass("open")
 
       Dropdown::positionMenu($parent)
+
+      $parent.trigger("shown.dropdown", relatedTarget)
 
     false
 
@@ -101,7 +101,7 @@ class Dropdown
   relayClick: (e) ->
     $target = $(e.target)
     if origin = $target.data("origin")
-      event = $.Event("click", target: origin)
+      event = $.Event("click", target: origin, relatedTarget: e.target)
       $(origin).trigger(event)
 
 setOriginData = (source, target) ->
@@ -121,14 +121,14 @@ clearMenus = (e) ->
 
     return unless $parent.hasClass("open")
 
-    $parent.trigger(e = $.Event("hide.bs.dropdown", relatedTarget))
+    $parent.trigger(e = $.Event("hide.dropdown", relatedTarget))
 
     return if e.isDefaultPrevented()
 
     $this.attr("aria-expanded", "false")
     $parent
       .removeClass("open")
-      .trigger("hidden.bs.dropdown", relatedTarget)
+      .trigger("hidden.dropdown", relatedTarget)
     $parent.data("menu").remove()
     $parent.removeData("menu")
 
@@ -174,8 +174,9 @@ $.fn.dropdown.noConflict = ->
   this
 
 $(document)
-  .on("click.bs.dropdown.data-api", clearMenus)
-  .on("click.bs.dropdown.data-api", ".dropdown form", (e) -> e.stopPropagation())
-  .on("click.bs.dropdown.data-api", toggle, Dropdown::toggle)
-  .on("click.bs.dropdown.data-api", ".dropdown-menu *", Dropdown::relayClick)
-  .on("keydown.bs.dropdown.data-api", toggle + ", [role=\"menu\"], [role=\"listbox\"]", Dropdown::keydown)
+  .on("click.dropdown.data-api", clearMenus)
+  .on("click.dropdown.data-api", ".dropdown-menu form", (e) -> e.stopPropagation())
+  .on("click.dropdown.data-api", ".dropdown-menu .slider", (e) -> e.stopPropagation())
+  .on("click.dropdown.data-api", toggle, Dropdown::toggle)
+  .on("click.dropdown.data-api", ".dropdown-menu *", Dropdown::relayClick)
+  .on("keydown.dropdown.data-api", toggle + ", [role=\"menu\"], [role=\"listbox\"]", Dropdown::keydown)

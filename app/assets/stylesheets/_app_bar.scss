@@ -24,10 +24,6 @@
       margin-left: 0;
     }
 
-    section.main &:first-child {
-      margin-left: $keyline;
-    }
-
     &:last-child {
       margin-right: 0;
     }
@@ -59,6 +55,7 @@
   .top-left-button {
     .button {
       margin-left: 0rem;
+      margin-right: 1rem;
     }
   }
 }

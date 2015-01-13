@@ -1,7 +1,7 @@
 class GroupPolicy < ApplicationPolicy
   class Scope < Struct.new(:user, :scope)
     def resolve
-      scope.where :id.in => user.memberships.map(&:id)
+      scope.where :id.in => user.memberships.map(&:group_id)
     end
   end
 

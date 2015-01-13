@@ -70,6 +70,19 @@ section.edit-event {
     }
   }
 
+  .roles {
+    margin-bottom: 1rem;
+
+    .role:first-child:last-child {
+      padding-right: 0;
+      > button { display: none; }
+    }
+  }
+
+  [rel="add-role"] {
+    margin-left: 0;
+  }
+
   @include media($medium-screen) {
     form {
       > fieldset:nth-child(1) {
@@ -83,286 +96,56 @@ section.edit-event {
   }
 }
 
-.date-select,
-.time-select {
-  @extend .dropdown;
+.role {
+  list-style: none;
+  margin: 0 -1rem;
+  padding: 0.5rem 5rem 0.5rem 1rem;
+  position: relative;
+  background: $base-background-color;
 
-  & > input {
-    display: none !important;
-  }
-}
+  .text {
+    line-height: 2rem;
+    vertical-align: middle;
+    padding: 0 1rem;
 
-.select-date,
-.select-time {
-  left: 50%;
-  right: auto;
-  width: 17.75rem;
-  margin-left: -8.875rem;
-
-  > header {
-    @include border-top-radius($base-border-radius);
-    background: $base-accent-color;
-    color: white;
-    text-align: center;
-    position: relative;
-  }
-}
-
-.select-date {
-  > header {
-    padding-bottom: 0.5rem;
-
-    .weekday {
-      @include border-top-radius($base-border-radius);
-      font-size: 0.875rem;
-      line-height: 1.5rem;
-      vertical-align: middle;
-      background: $dark-accent-color;
-    }
-
-    .month {
-      text-transform: uppercase;
-      margin-top: 0.5rem;
-      font-size: 1.25rem;
-    }
-
-    .date {
-      font-size: 2.5rem;
-    }
-
-    .year {
-      font-size: 1.25rem;
-      color: secondary-color(white);
-    }
-
-    [rel="prev"],
-    [rel="next"] {
-      color: secondary-color(white);
-      font-size: 1.5rem;
-      position: absolute;
-      top: 50%;
-      width: 1em;
-      height: 1em;
-      @include tappable-region;
-    }
-
-    [rel="prev"] { left: 1rem; }
-    [rel="next"] { right: 1rem; }
+    &:first-child { padding-left: 0; }
+    &:last-child { padding-right: 0; }
   }
 
-  .months {
-    height: 7 * 3 * 0.75rem + 2.875rem;
-    overflow: hidden;
-
-    .month {
-      font-size: 0.75rem;
-      padding: 1rem 0;
-      float: left;
-      width: 100%;
-      margin-right: -100%;
-
-      header {
-        text-align: center;
-        font-weight: $bold-font-weight;
-        font-size: 0.875rem;
-      }
-    }
-  }
-
-  .weekdays,
-  .dates {
-    margin: 0 1rem;
-
-    > * {
-      position: relative;
-      float: left;
-      width: (100% / 7);
-      text-align: center;
-      line-height: 1em;
-      padding: 1em;
-      @include user-select(none);
-    }
-  }
-
-  .weekdays {
-    color: secondary-color();
-  }
-
-  .dates {
-    > :first-child {
-      @for $i from 1 through 6 {
-        &[column="#{$i}"] { margin-left: ($i * 100% / 7); }
-      }
-    }
-
-    .active {
-      color: white;
-
-      &:before {
-        content: "";
-        position: absolute;
-        z-index: -1;
-        left: 50%;
-        top: 50%;
-        margin: -1.5em;
-        width: 3em;
-        height: 3em;
-        border-radius: 50%;
-        background: $base-accent-color;
-      }
-    }
-  }
-}
-
-.select-time {
-  > header {
-    padding: 1rem 0;
-
-    .time {
-      color: secondary-color(white);
-      position: relative;
-
-      @include align-items(stretch);
-      @include display(flex);
-      @include flex-direction(row);
-      @include justify-content(flex-start);
-
-      .hours {
-        @include flex(1);
-        text-align: right;
-        cursor: pointer;
-      }
-
-      .minutes {
-        @include flex(1);
-        text-align: left;
-        cursor: pointer;
-      }
-
-      .hours,
-      .minutes,
-      .colon {
-        font-size: 4rem;
-        line-height: 1em;
-      }
-
-      .ampm {
-        @include position(absolute, null null 0.5rem 50%);
-        margin-left: 5rem;
-        font-size: 1rem;
-        line-height: 1em;
-      }
-
-      .active {
-        color: text-color(white);
-      }
-    }
-  }
-
-  .content {
-    padding: 1rem;
-  }
-
-  .clock {
-    $radius: 7rem;
-    $dot-size: 2rem;
-
-    display: none;
-    cursor: pointer;
-    @include user-select(none);
-
-    &.active {
-      display: block;
-      position: relative;
-      margin: 1rem auto 0;
-      width: ($radius * 2);
-      height: ($radius * 2);
-      font-size: 0.875rem;
-
-      &:before {
-        content: "";
-        background: divider-color();
-        @include position(absolute, 0rem 0rem 0rem 0rem);
-        border-radius: 50%;
-      }
-
-      .dot {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        width: $dot-size;
-        height: $dot-size;
-        margin: ($dot-size / -2);
-        line-height: $dot-size;
-        vertical-align: middle;
-        text-align: center;
-        border-radius: 50%;
-        // @include tappable-region;
-        pointer-events: none;
-
-        &.active {
-          background: $base-accent-color;
-          color: white;
-        }
-      }
-
-      .hand {
-        @include position(absolute, null null 50% 50%);
-        background: $base-accent-color();
-        width: 2px;
-        margin: 0 -1px;
-        height: (200%/3);
-        pointer-events: none;
-        @include transform-origin(50% 100%);
-
-        &::after {
-          content: "";
-          @include position(absolute, null null 0rem 50%);
-          background: black;
-          width: 0.5rem;
-          height: 0.5rem;
-          border-radius: 50%;
-          margin: -0.25rem;
-        }
-      }
-
-      @for $i from 0 through 11 {
-        $angle: (pi() / 6 * $i);
-
-        .dot[position="#{$i}"] {
-          @debug cos($angle);
-          @include transform(translate($radius * 0.8 * sin($angle), $radius * -0.8 * cos($angle)));
-
-          &.active ~ .hand {
-            @include transform(scale(0.5) rotate($i * 30deg));
-          }
-        }
-      }
-
-    }
-  }
-
-  .content .ampm {
+  .field {
+    @include align-items(stretch);
     @include display(flex);
     @include flex-direction(row);
-    @include justify-content(space-between);
-    margin: 0 0.875rem 1rem;
+    @include justify-content(flex-start);
+    padding: 0;
+  }
 
-    button {
-      padding: 1rem 0;
-      margin: 0;
-      width: 3rem;
-      height: 3rem;
-      line-height: 1rem;
-      text-align: center;
-      border-radius: 50%;
-      color: text-color();
-      min-width: 0;
+  input[type="text"],
+  .dropdown {
+    @include flex(1);
+  }
 
-      &.active {
-        background: $base-accent-color;
-        color: white;
-      }
+  button {
+    text-transform: none;
+    padding: 0;
+    min-width: 0;
+    margin: 0;
+    background: none;
+  }
+
+  > button {
+    height: 1.5rem;
+    position: absolute;
+    top: 0.75rem;
+    right: 1rem;
+
+    &[rel="delete"] {
+      right: 3rem;
+    }
+
+    i {
+      font-size: 1.5rem;
+      color: secondary-color();
     }
   }
 }
@@ -387,6 +170,30 @@ section.edit-event {
         @include type-subhead(white);
         color: secondary-color(white);
       }
+    }
+  }
+}
+
+.new-skill {
+  .field input {
+    width: 100%;
+
+    &:not([invalid]) ~ .error-message {
+      visibility: hidden;
+    }
+  }
+}
+
+.role-limits {
+  padding: 0;
+
+  form {
+    padding: 0.5rem 1rem 1.5rem;
+
+    .limits {
+      line-height: 2rem;
+      vertical-align: middle;
+      margin-bottom: 0.5rem;
     }
   }
 }
