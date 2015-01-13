@@ -1,30 +1,44 @@
 class SortableList extends Spine.Controller
+  SCROLL_SENSITIVITY: 40
+  SCROLL_TIMER: 100
+  SCROLL_AMOUNT: 20
+
   down: (e) =>
     e.preventDefault()
-    top = @el.offset().top
+    top = @el.offset().top - @el.scrollTop()
+
     @$(".sortable").each (i, el) ->
       $el = $(el)
-      offset = $el.offset().top
       h = $el.outerHeight(true)
-      y = offset - top
+      y = $el.offset().top - top
       $el.data height: h, offset: y, y: y
+
+    item = $(e.target).closest(".sortable").addClass("sorting")
+
     @drag =
       offset: top
-      item: $(e.target).closest(".sortable").addClass("sorting")
+      item: item
       items: ($(item) for item in @$(".sortable").get())
-      origin: @eventPosition(e)
+      origin: @eventPosition(e) + @scrollParent().scrollTop()
+
     $(document).
       on("mousemove touchmove", @move).
       on("mouseup touchend", @up)
 
     @move(e)
 
-  move: (e) =>
-    # TODO: auto-scroll parent region
-    y = @eventPosition(e) - @drag.origin
-    @drag.item.
-      css(transform: "translateY(#{y}px)").
-      data(y: @drag.item.data("offset") + y)
+  move: (e, animate = false) =>
+    @checkScrollBounds(e)
+
+    e.preventDefault()
+    y = @eventPosition(e) - @drag.origin + @scrollParent().scrollTop()
+    @drag.item.data(y: @drag.item.data("offset") + y)
+
+    if animate
+      @drag.item.transition({ transform: "translateY(#{y}px)" }, @SCROLL_TIMER, "linear")
+    else
+      @drag.item.css(transform: "translateY(#{y}px)")
+
     @sortItems()
 
   up: (e) =>
@@ -36,6 +50,9 @@ class SortableList extends Spine.Controller
       off("mousemove touchmove", @move).
       off("mouseup touchend", @up)
     @el.trigger("sorted")
+
+    delete @drag
+    delete @_scrollParent
 
   eventPosition: (e) ->
     if e.originalEvent.targetTouches?.length
@@ -54,6 +71,48 @@ class SortableList extends Spine.Controller
           data(y: y).
           css(transform: "translateY(#{dy}px)")
       y += item.data("height")
+
+  checkScrollBounds: (e) ->
+    y = @eventPosition(e)
+
+    if y - @SCROLL_SENSITIVITY < @_scrollUpper
+      unless @_direction == -1
+        clearInterval @_scroller
+        @_scroller = setInterval @autoscroll(-@SCROLL_AMOUNT, e), @SCROLL_TIMER
+        @_direction = -1
+    else if y + @SCROLL_SENSITIVITY > @_scrollLower
+      unless @_direction == 1
+        clearInterval @_scroller
+        @_scroller = setInterval @autoscroll(@SCROLL_AMOUNT, e), @SCROLL_TIMER
+        @_direction = 1
+    else
+      clearInterval @_scroller if @_direction
+      @_direction = 0
+
+  autoscroll: (direction, event) ->
+    =>
+      y = if direction < 0
+        Math.max(@scrollParent().scrollTop() + direction, 0)
+      else
+        max = @scrollParent()[0].scrollHeight - (@_scrollLower - @_scrollUpper)
+        Math.min(@scrollParent().scrollTop() + direction, max)
+      @scrollParent().animate { scrollTop: y }, @SCROLL_TIMER, "linear"
+      @move event, true
+
+  scrollParent: ->
+    unless @_scrollParent
+      excludeStaticParent = @el.css("position") == "absolute"
+      @_scrollParent = @el.add(@el.parents()).filter ->
+        parent = $(this)
+        if excludeStaticParent && parent.css("position") == "static"
+          false
+        else
+          /(auto|scroll)/.test(parent.css("overflow") + parent.css("overflow-y"))
+      .eq(0)
+      offset = @_scrollParent.offset()
+      @_scrollUpper = offset.top
+      @_scrollLower = offset.top + @_scrollParent.height()
+    @_scrollParent
 
 $(document)
   .on "mousedown touchstart", ".sortable-list [rel=reorder]", (e) ->
