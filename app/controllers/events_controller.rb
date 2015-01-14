@@ -2,7 +2,7 @@ class EventsController < ApplicationController
   wrap_parameters include: [:name, :recurrences, :roles]
   before_action :authenticate_user!
 
-  after_action :verify_authorized, except: :index
+  after_action :verify_authorized, except: [:index, :calendar]
   after_action :verify_policy_scoped, only: :index
 
   def index
@@ -38,6 +38,9 @@ class EventsController < ApplicationController
 
   def destroy
     respond_with event.destroyed
+  end
+
+  def calendar
   end
 
   protected

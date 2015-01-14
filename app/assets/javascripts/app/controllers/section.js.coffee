@@ -47,6 +47,17 @@ class App.Section extends Spine.Controller
       return c if (c.constructor == constructor) && (!match? || match(c))
     undefined
 
+  findOrPush: (constructor, params, prerequisite = nil) ->
+    for controller in @manager.controllers
+      if controller.constructor == constructor
+        controller.active()
+        controller.load params
+        return controller
+    prerequisite?()
+    controller = new constructor
+    @push controller
+    controller.load params
+
   empty: ->
     !@manager.controllers.length
 
@@ -75,3 +86,6 @@ class App.Section.Page extends Spine.Controller
     @content.html(element.el or element)
     @refreshElements()
     @content
+
+  load: (params) ->
+    

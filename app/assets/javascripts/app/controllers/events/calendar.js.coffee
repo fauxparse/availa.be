@@ -27,13 +27,11 @@ class App.Events.Calendar extends App.Section.Page
     $(window).on "resize", @resize
     @on "release", => $(window).off "resize", @resize
 
+  activate: ->
+    super
     setTimeout =>
       @resize()
     , 100
-
-  activate: ->
-    super
-    @resize()
 
   resize: =>
     @height = @el.height()

@@ -21,14 +21,36 @@ class App.Events.Edit extends App.Section.Page
   init: ->
     super
     @el.addClass "edit-event"
-    @title I18n.t("events.#{@action()}.title")
+    App.Event.on "refresh", @eventsRefreshed
     App.Skill.on "change", @skillsChanged
-    @render()
 
     @on "release", =>
+      App.Event.off "refresh", @eventsRefreshed
       App.Skill.off "change", @skillsChanged
 
+  load: (params) ->
+    params.back ||= "/groups/#{params.group_id}/events/#{params.id}"
+    @$("header [rel=back]").attr href: params.back
+
+    if params.id
+      @event_id = params.id
+      url = "/groups/#{params.group_id}/events/#{params.id}"
+      App.Event.fetch({ id: @event_id }, { url })
+    else
+      @title I18n.t("events.new.title")
+      @event = new App.Event(group_id: params.group_id)
+      @render()
+
+  eventsRefreshed: (events) =>
+    events = [events] unless $.isArray(events)
+    for event in events
+      if event.id == @event_id
+        @event = event
+        @render()
+        break
+
   render: =>
+    @title I18n.t("events.edit.title", @event.name()) unless @event.isNew()
     weekdays = ([w, i] for w, i in moment.weekdaysMin()).
       rotate(-moment().startOf("week").day())
     @html @view("events/edit")(event: @event, weekdays: weekdays)
