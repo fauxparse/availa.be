@@ -40,5 +40,8 @@ class App.Group extends Spine.Model
         data: JSON.stringify(preferences: @preferences())
     , 250
 
+  @find: (id) ->
+    super || @findByAttribute("slug", id)
+
   @comparator: (a, b) ->
     a.name.toLocaleLowerCase().localeCompare b.name.toLowerCase()

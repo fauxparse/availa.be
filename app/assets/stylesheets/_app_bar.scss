@@ -45,7 +45,28 @@
     color: white;
 
     @include tappable-region;
+
+    .loading-spinner {
+      display: none;
+      @include loading-spinner-colors(white, $base-accent-color);
+
+      ~ i {
+        float: left;
+        overflow: hidden;
+        width: 1em;
+        @include transition(width 0.5s ease-in);
+      }
+
+      .loading > & {
+        display: block;
+        ~ i {
+          width: 0;
+          @include transition(none);
+        }
+      }
+    }
   }
+
 
   > button:last-child,
   > .button:last-child {

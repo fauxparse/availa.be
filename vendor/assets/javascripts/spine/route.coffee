@@ -92,7 +92,7 @@ class Route extends Spine.Module
 
     path = args.join('/')
     return if @path is path
-    @path = path
+    @path = path.replace(/\/$/, "")
 
     if options.trigger
       @trigger('navigate', @path)
@@ -141,7 +141,7 @@ class Route extends Spine.Module
     else
       path = window.location.hash
       path = path.replace(hashStrip, '')
-    path
+    path.replace(/\/$/, "")
 
   @getHost: ->
     "#{window.location.protocol}//#{window.location.host}"

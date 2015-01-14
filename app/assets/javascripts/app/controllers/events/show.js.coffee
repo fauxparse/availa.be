@@ -6,39 +6,50 @@ class App.Events.Show extends App.Section.Page
   init: ->
     super
     @el.addClass("show-event")
-    App.Event.on "refresh", @eventsRefreshed
     @on "release", =>
-      App.Event.off "refresh", @eventsRefreshed
       @event?.off "change", @render
 
   load: (params) ->
     @event?.off "change", @render
     @event_id = params.id
+    @group = App.Group.find(params.group_id)
+
+    @_loaded = false
+    @event = App.Event.find(@event_id) ||
+      new App.Event(id: @event_id, group_id: @group.id)
+    @render()
+
+    if @event_id
+      @el.addClass "loading"
+      url = @event.url()
+      App.Event.on "ajaxSuccess", @loaded
+      App.Event.fetch { id: @event_id }, { url }
+
+    @render()
 
     params.back ||= "/groups/#{params.group_id}"
     @$("header [rel=back]").attr href: params.back
 
-    url = "/groups/#{params.group_id}/events/#{params.id}"
-    App.Event.fetch({ id: @event_id }, { url })
-
-  eventsRefreshed: (events) =>
-    events = [events] unless $.isArray(events)
-    for event in events
-      if event.id == @event_id
-        @event = event
-        @event.on "change", @render
-        @render()
-        break
+  loaded: (event) =>
+    if App.Event.exists(@event_id)
+      @event = App.Event.find @event_id
+      @event.on "change", @render
+      @el.removeClass "loading"
+      App.Event.off "ajaxSuccess", @loaded
+      @_loaded = true
 
   render: =>
     @header.
       css(backgroundColor: @event.group().color()).
-      find(".title").empty().
-      append($("<h1>", text: @event.name())).
-      append($("<h2>", text: @event.dateRange().toString())).
-      end().
       find("[rel=edit]").attr(href: @event.url("edit")).end()
-    @html @view("events/show")(event: @event)
+    unless @event.isNew()
+      @header.
+        find(".title").empty().
+        append($("<h1>", text: @event.name())).
+        append($("<h2>", text: @event.dateRange().toString())).
+        end()
+    @content.empty()
+    @html @view("events/show")(event: @event) if @_loaded
 
   renderHeader: =>
     super

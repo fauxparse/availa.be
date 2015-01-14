@@ -74,6 +74,7 @@ class App.Section.Page extends Spine.Controller
     @header = $("<header>").addClass("app-bar").appendTo(@el)
     @content = $("<section>").addClass("content").appendTo(@el)
     @footer = $("<footer>").appendTo(@el)
+    @loading = $("<div>", class: "loading-spinner").appendTo(@el)
     @renderHeader()
 
   renderHeader: ->
@@ -88,4 +89,3 @@ class App.Section.Page extends Spine.Controller
     @content
 
   load: (params) ->
-    

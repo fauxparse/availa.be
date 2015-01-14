@@ -1,10 +1,12 @@
 #= require ../events
+#= require ./show
 
-class App.Events.Edit extends App.Section.Page
+class App.Events.Edit extends App.Events.Show
   back: "/events"
 
   elements:
     ".roles": "roles"
+    "header [rel=save]": "saveButton"
 
   events:
     "input [name=name]": "nameChanged"
@@ -16,50 +18,51 @@ class App.Events.Edit extends App.Section.Page
     "sorted .roles": "rolesSorted"
     "shown.dropdown [rel=limits]": "limitsShown"
     "click .role [rel=skill] .dropdown-menu": "skillMenuClicked"
-    "tap header [rel=ok]": "save"
+    "tap header [rel=save]": "save"
 
   init: ->
     super
-    @el.addClass "edit-event"
-    App.Event.on "refresh", @eventsRefreshed
+    @el.
+      removeClass("show-event").
+      addClass("edit-event")
     App.Skill.on "change", @skillsChanged
 
     @on "release", =>
-      App.Event.off "refresh", @eventsRefreshed
       App.Skill.off "change", @skillsChanged
 
   load: (params) ->
     params.back ||= "/groups/#{params.group_id}/events/#{params.id}"
-    @$("header [rel=back]").attr href: params.back
+
+    unless params.id
+      @title I18n.t("events.new.title")
+      @event = new App.Event(group_id: params.group_id)
+
+    super
 
     if params.id
       @event_id = params.id
+      @el.addClass "loading"
       url = "/groups/#{params.group_id}/events/#{params.id}"
-      App.Event.fetch({ id: @event_id }, { url })
+      App.Event.fetch { id: @event_id }, { url }
     else
-      @title I18n.t("events.new.title")
-      @event = new App.Event(group_id: params.group_id)
+      @_loaded = true
       @render()
-
-  eventsRefreshed: (events) =>
-    events = [events] unless $.isArray(events)
-    for event in events
-      if event.id == @event_id
-        @event = event
-        @render()
-        break
 
   render: =>
     @title I18n.t("events.edit.title", @event.name()) unless @event.isNew()
-    weekdays = ([w, i] for w, i in moment.weekdaysMin()).
-      rotate(-moment().startOf("week").day())
-    @html @view("events/edit")(event: @event, weekdays: weekdays)
-    @checkWeekdays()
-    @renderRoles()
+    @content.empty()
+    if @_loaded
+      weekdays = ([w, i] for w, i in moment.weekdaysMin()).
+        rotate(-moment().startOf("week").day())
+      @html @view("events/edit")(event: @event, weekdays: weekdays)
+      @checkWeekdays()
+      @renderRoles()
 
   renderHeader: ->
-    super
-    $("<button>", rel: "ok").append($("<i>", class: "icon-done")).
+    @header.html @view("shared/section_header")(back: @back || "/")
+    $("<button>", rel: "save").
+      append($("<div>", class: "loading-spinner")).
+      append($("<i>", class: "icon-done")).
       appendTo(@header)
 
   renderRoles: ->
@@ -189,11 +192,21 @@ class App.Events.Edit extends App.Section.Page
           find("[name=plural]").attr(placeholder: skill.plural()).end()
 
   save: (e) ->
+    @el.addClass "loading"
+    @saveButton.attr disabled: true
+
     url = if @event.isNew()
       @event.group().url() + App.Events.url()
     else
       @event.url()
-    @event.save(url: url)
+
+    @event.on "ajaxSuccess", @saved
+    @event.save url: url
+
+  saved: =>
+    @event.off "ajaxSuccess", @saved
+    @el.removeClass "loading"
+    @saveButton.removeAttr "disabled"
 
 class NewSkill extends App.Dialog
   elements:
