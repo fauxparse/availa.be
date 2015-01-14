@@ -27,8 +27,8 @@ class App.Events.Show extends App.Section.Page
 
     @render()
 
-    params.back ||= "/groups/#{params.group_id}"
-    @$("header [rel=back]").attr href: params.back
+    @back = params.back || "/groups/#{params.group_id}"
+    @$("header [rel=back]").attr href: @back
 
   loaded: (event) =>
     if App.Event.exists(@event_id)

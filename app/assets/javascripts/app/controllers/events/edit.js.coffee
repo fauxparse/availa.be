@@ -31,13 +31,14 @@ class App.Events.Edit extends App.Events.Show
       App.Skill.off "change", @skillsChanged
 
   load: (params) ->
-    params.back ||= "/groups/#{params.group_id}/events/#{params.id}"
-
     unless params.id
       @title I18n.t("events.new.title")
       @event = new App.Event(group_id: params.group_id)
 
     super
+
+    @back = params.back || "/groups/#{params.group_id}/events/#{params.id}"
+    @$("header [rel=back]").attr href: @back
 
     if params.id
       @event_id = params.id

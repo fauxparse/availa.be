@@ -47,7 +47,7 @@ class App.Section extends Spine.Controller
       return c if (c.constructor == constructor) && (!match? || match(c))
     undefined
 
-  findOrPush: (constructor, params, prerequisite = nil) ->
+  load: (constructor, params, prerequisite = nil) ->
     for controller in @manager.controllers
       if controller.constructor == constructor
         controller.active()

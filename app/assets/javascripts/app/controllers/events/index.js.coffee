@@ -11,8 +11,8 @@ class App.Events.Index extends App.Section.Page
     #   appendTo(@footer)
 
   load: (params) ->
-    params.back ||= "/groups/#{params.group_id}"
-    @$("header [rel=back]").attr href: params.back
+    @back = params.back || "/groups/#{params.group_id}"
+    @$("header [rel=back]").attr href: @back
 
     @group = App.Group.findByAttribute "slug", params.group_id
     @title I18n.t("events.index.title", group: @group)

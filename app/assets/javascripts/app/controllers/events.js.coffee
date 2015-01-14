@@ -12,4 +12,4 @@ class App.Events extends App.Section
     @change @manager.controllers[0]
 
   calendar: (params) =>
-    @findOrPush App.Events.Calendar, params, @index
+    @load App.Events.Calendar, params, @index

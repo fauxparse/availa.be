@@ -19,26 +19,26 @@ class App.Groups extends App.Section
 
   show: (params) =>
     @withGroup params.id, =>
-      @findOrPush App.Groups.Show, { group_id: params.id }, @index
+      @load App.Groups.Show, { group_id: params.id }, @index
 
   events: (params) =>
     @withGroup params.group_id, =>
-      @findOrPush App.Events.Index, params, => @show(id: params.group_id)
+      @load App.Events.Index, params, => @show(id: params.group_id)
 
   newEvent: (params) =>
     @withGroup params.group_id, (group) =>
-      params.back = group.url() + "/events"
-      @findOrPush App.Events.Edit, params, => @events(params)
+      params = $.extend {}, params, back: group.url() + "/events"
+      @load App.Events.Edit, params, => @events(params)
 
   showEvent: (params) =>
     @withGroup params.group_id, (group) =>
-      params.back = group.url() + "/events"
-      @findOrPush App.Events.Show, params, => @events(params)
+      params = $.extend {}, params, back: group.url() + "/events"
+      @load App.Events.Show, params, => @events(params)
 
   editEvent: (params) =>
     @withGroup params.group_id, (group) =>
-      params.back = group.url() + "/events"
-      @findOrPush App.Events.Edit, params, => @events(params)
+      params = $.extend {}, params, back: group.url() + "/events/#{params.id}"
+      @load App.Events.Edit, params, => @showEvent(params)
 
 class App.GroupPreferences extends App.Dialog
   events:
