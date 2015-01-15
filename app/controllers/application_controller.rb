@@ -30,4 +30,8 @@ class ApplicationController < ActionController::Base
     yield
     Time.zone = original
   end
+
+  def self.responder
+    ResponderWithPutContent
+  end
 end

@@ -30,7 +30,7 @@ class App.Events.Show extends App.Section.Page
     @back = params.back || "/groups/#{params.group_id}"
     @$("header [rel=back]").attr href: @back
 
-  loaded: (event) =>
+  loaded: =>
     if App.Event.exists(@event_id)
       @event = App.Event.find @event_id
       @event.on "change", @render

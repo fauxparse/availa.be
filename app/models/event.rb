@@ -15,7 +15,7 @@ class Event
   embeds_many :recurrences, class_name: 'Event::Recurrence'
   embeds_many :roles, class_name: 'Event::Role', order: :position.asc
   embeds_many :availability, class_name: 'Event::Availability'
-  embeds_many :instances, class_name: 'Event::Instance'
+  embeds_many :instances, class_name: 'Event::Instance', order: :time.asc
 
   keep_ordered :roles
 
@@ -63,15 +63,17 @@ class Event
 
   def update_instances
     valid_times = times.map(&:first)
-    instances.reject! { |instance| !valid_times.include? instance.time }
+    instances.
+      select { |instance| !valid_times.include? instance.time }.
+      map(&:destroy)
     add_missing_instances valid_times
     instances.sort!
   end
 
   def add_missing_instances(valid_times)
     existing = instances.map(&:time)
-    (valid_times - existing).each do |time|
-      instances.build time: time
+    valid_times.each do |time|
+      instances.build time: time unless existing.include?(time)
     end
   end
 
