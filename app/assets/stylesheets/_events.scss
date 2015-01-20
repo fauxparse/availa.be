@@ -150,30 +150,6 @@ section.edit-event {
   }
 }
 
-.show-event {
-  > header {
-    height: auto;
-
-    .title {
-      padding-top: 6rem;
-
-      h1, h2 {
-        @include ellipsis;
-        display: block;
-      }
-
-      h1 {
-        @include type-title(white);
-      }
-
-      h2 {
-        @include type-subhead(white);
-        color: secondary-color(white);
-      }
-    }
-  }
-}
-
 .new-skill {
   .field input {
     width: 100%;
@@ -197,3 +173,320 @@ section.edit-event {
     }
   }
 }
+
+section .show-event {
+  > header {
+    height: auto;
+
+    .title {
+      padding-top: 6rem;
+
+      h1, h2 {
+        @include ellipsis;
+        display: block;
+      }
+
+      h1 {
+        @include type-title(white);
+      }
+
+      h2 {
+        @include type-subhead(white);
+        color: secondary-color(white);
+      }
+    }
+  }
+
+  .instances {
+    .primary-action {
+      cursor: pointer;
+    }
+  }
+}
+
+.event-instance {
+  position: absolute;
+  left: 0;
+  right: 0;
+  opacity: 0;
+
+  .container {
+    @include position(absolute, 0rem 0rem 0rem 0rem);
+    background: $base-background-color;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+
+    > section {
+      display: none;
+
+      &.active {
+        display: block;
+      }
+    }
+  }
+
+  $header-size: 7rem;
+
+  .container > header {
+    position: relative;
+    background-color: $base-background-color;
+    z-index: 1;
+    padding: 1rem 1rem 0rem $keyline;
+    border-bottom: 1px solid divider-color();
+    height: $header-size;
+    @include transition(box-shadow 0.25s ease, border-color 0.25s ease);
+
+    &.floating {
+      border-bottom-color: transparent;
+      @include shadow(1);
+    }
+
+    button {
+      font-size: 1.5rem;
+      width: 1em;
+      height: 1em;
+      color: secondary-color();
+      background: transparent;
+      padding: 0;
+      min-width: 0;
+
+      &[rel="back"] {
+        @include position(absolute, 1rem null null 1rem);
+      }
+    }
+
+    h1, h2 {
+      @include ellipsis;
+      display: block;
+    }
+
+    h1 {
+      @include type-title;
+    }
+
+    h2 {
+      @include type-subhead;
+      color: secondary-color();
+    }
+
+    .tabs {
+      margin-left: -$keyline;
+      margin-right: -1rem;
+      a {
+        text-align: center;
+      }
+    }
+  }
+
+  .availability {
+    header {
+      border-bottom: 1px solid divider-color();
+      padding: 0;
+      @include align-items(stretch);
+      @include display(flex);
+      @include flex-direction(row);
+      @include justify-content(flex-start);
+
+      .field {
+        @include flex(1);
+        padding: 0;
+        margin-bottom: -1px;
+        margin-right: 1rem;
+
+        i {
+          position: absolute;
+          left: 1rem;
+          top: 50%;
+          margin: -0.5em 0;
+          font-size: 1.5rem;
+          pointer-events: none;
+          color: secondary-color();
+          @include transition(color 0.5s ease);
+        }
+      }
+
+      [type="search"] {
+        margin: 0;
+        padding: 0.5rem 0.5rem 0.5rem 4rem;
+        height: 3rem;
+
+        &:not(:focus) {
+          border-bottom-color: transparent;
+        }
+
+        &:focus ~ i {
+          color: text-color();
+        }
+      }
+
+      .dropdown {
+        height: 3rem;
+        border: none;
+        padding-right: 1rem;
+
+        .dropdown-toggle {
+          height: 3rem;
+          line-height: 3rem;
+        }
+      }
+    }
+
+    .list {
+      @include display(flex);
+      @include flex-direction(row);
+      @include flex-wrap(wrap);
+      @include user-select(none);
+    }
+
+    .list-item {
+      @include flex(1);
+      min-width: 12rem;
+      opacity: $secondary-alpha;
+      display: none;
+
+      .text .line {
+        color: $black;
+      }
+
+      .avatar {
+        cursor: pointer;
+        @include tappable-region;
+
+        i {
+          display: none;
+        }
+
+      }
+
+      .avatar {
+        @include transition(background-color 0.5s ease);
+      }
+
+      .avatar .letter {
+        @include transition(color 0.5s ease);
+      }
+
+      &:not(.available) {
+        .avatar {
+          border-width: 0.125rem;
+          border-style: solid;
+          background: white !important;
+
+          .letter {
+            color: inherit;
+            margin: -0.125rem;
+          }
+        }
+      }
+
+      &.available {
+        opacity: 1;
+
+        &:not(.hidden) {
+          display: block;
+        }
+
+        .text .line {
+          color: text-color();
+        }
+
+        .avatar {
+          .letter {
+            color: secondary-color(white) !important;
+          }
+        }
+      }
+
+      &.unavailable {
+        opacity: $disabled-alpha;
+
+        .avatar {
+          .letter {
+            display: none;
+          }
+
+          i {
+            color: inherit;
+            display: block;
+            margin: -0.125rem;
+          }
+        }
+      }
+    }
+
+    li:empty {
+      @include flex(1);
+      min-width: 12rem;
+      height: 0;
+    }
+
+    &.show-all {
+      .list-item:not(.hidden) {
+        display: block;
+      }
+    }
+  }
+}
+
+// .member {
+//   height: 3rem;
+//   opacity: $disabled-alpha;
+//
+//   .avatar {
+//     @include tappable-region;
+//   }
+//
+//   .primary-action {
+//     .text {
+//       .line {
+//         margin: 1rem 0;
+//         font-weight: $base-font-weight;
+//         color: text-color();
+//       }
+//     }
+//   }
+//
+//   &:not(.available):not(.assigned) .icon::before { content: ""; }
+//
+//   &.available, &.assigned {
+//     opacity: 1;
+//   }
+//
+//   &.assigned {
+//     .text .line {
+//       font-weight: $bold-font-weight;
+//     }
+//
+//     .icon {
+//       color: white;
+//       background: $green;
+//       margin: -1rem -0.25rem;
+//       padding: 0.25rem;
+//       width: 2rem;
+//       height: 2rem;
+//       border-radius: 50%;
+//     }
+//   }
+// }
+//
+// .avatar.drag-helper {
+//   position: absolute;
+//   z-index: 1000;
+//   width: 2.5rem;
+//   height: 2.5rem;
+//   overflow: hidden;
+//   border-radius: 50%;
+//   pointer-events: none;
+//   @include shadow(2);
+//
+//   img {
+//     display: block;
+//     width: 100%;
+//     height: auto;
+//   }
+//
+//   &.dragging {
+//     @include transform(scale(2.0));
+//     @include transition(transform 0.25s $ease-out-back);
+//   }
+// }

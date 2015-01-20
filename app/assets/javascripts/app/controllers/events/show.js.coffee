@@ -3,6 +3,9 @@
 class App.Events.Show extends App.Section.Page
   back: "/events"
 
+  events:
+    "tap .instances .primary-action": "showInstance"
+
   init: ->
     super
     @el.addClass("show-event")
@@ -58,3 +61,10 @@ class App.Events.Show extends App.Section.Page
       append($("<i>", class: "icon-settings")).
       appendTo(@header)
     @refreshElements()
+
+  showInstance: (e) ->
+    e.preventDefault()
+    source = $(e.target).closest("li")
+    instance = @event.instances().find source.attr("time")
+    controller = new App.Events.Instance { instance }
+    controller.showFrom source

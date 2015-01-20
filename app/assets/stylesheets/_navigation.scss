@@ -81,6 +81,6 @@ nav.main-navigation {
   display: none;
 }
 
-.stack > *:not(.active) {
-  display: none
+.stack > section:not(.active) {
+  display: none;
 }

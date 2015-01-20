@@ -1,0 +1,23 @@
+%header
+  .field
+    %input{type: "search"}
+    %i.icon-search
+  .dropdown{rel: "mode"}
+    %button.dropdown-toggle{"data-toggle" => "dropdown"}= I18n.t("events.instance.availability.available")
+    %ul.dropdown-menu{role: "menu"}
+      - for mode in ["available", "all"]
+        %li
+          %a{href: "#", rel: mode}= I18n.t("events.instance.availability.#{mode}")
+
+%ul.list
+  - for member in @group.members().all()
+    - color = Color.of(member.id)
+    %li.list-item{"member-id" => member.id}
+      .primary-action
+        .avatar{style: "background-color: #{color}; border-color: #{color}; color: #{color};"}
+          .letter= member.name().substr(0,1).toLocaleUpperCase()
+          %i.icon-clear
+        .text
+          .line= member.name()
+  - for i in [0..7]
+    %li

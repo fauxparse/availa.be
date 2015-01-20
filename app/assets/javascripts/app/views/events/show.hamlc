@@ -1,0 +1,9 @@
+%ul.list.instances
+  - for instance in @event.instances().all()
+    %li.list-item{ time: instance.time().toISOString() }
+      .primary-action
+        .avatar
+          %i.icon-event
+        .text
+          .line= instance.time().format("LLLL")
+          .line= "Boop"

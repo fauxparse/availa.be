@@ -16,3 +16,9 @@ en:
         add: Add a role
       skills:
         add: New skill…
+    instance:
+      active: People
+      available: Availability
+      availability:
+        available: Available only
+        all: All users

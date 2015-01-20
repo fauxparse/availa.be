@@ -63,6 +63,7 @@ $dropdown-caret-color:           secondary-color() !default;
   height: 2rem;
   line-height: 2rem;
   padding-right: 2rem;
+  text-transform: none;
 
   &:hover, &:focus {
     color: text-color();

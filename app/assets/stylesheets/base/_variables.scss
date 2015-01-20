@@ -6,7 +6,7 @@ $serif: "Roboto Slab", $georgia;
 $base-font-family: $sans-serif;
 $header-font-family: $serif;
 $base-font-weight: 400;
-$bold-font-weight: 600;
+$bold-font-weight: 500;
 $light-font-weight: 200;
 $header-font-weight: 400;
 
@@ -30,6 +30,7 @@ $base-z-index: 0;
 
 // Background Color
 $base-background-color: white;
+$container-background-color: $grey-200;
 
 // Font Colors
 $base-font-color: text-color();

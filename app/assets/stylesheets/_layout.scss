@@ -39,6 +39,10 @@
         opacity: 1;
       }
 
+      &:not(.loading) > .loading-spinner {
+        @include animation(none);
+      }
+
       > footer {
         @include position(absolute, null 0rem 0rem 0rem);
         z-index: 10;

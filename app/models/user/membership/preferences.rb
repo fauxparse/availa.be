@@ -7,6 +7,7 @@ class User
 
       delegate :user, to: :membership
 
+      field :name, type: String
       field :color, type: String
     end
   end

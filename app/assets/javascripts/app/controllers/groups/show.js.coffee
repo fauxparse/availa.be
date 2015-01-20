@@ -15,11 +15,20 @@ class App.Groups.Show extends App.Section.Page
       App.Event.off("refresh change", @refreshEvents)
 
   load: (params) ->
+    @el.addClass("loading")
     @group = App.Group.findByAttribute "slug", params.group_id
     @title @group.name
     @render()
     @group.on("change", @render)
+    App.Group.on "ajaxSuccess", @loaded
+    App.Group.fetch { id: @group.id }, { url: @group.url() }
     App.Event.fetchGroup(@group)
+
+  loaded: =>
+    @group = App.Group.find @group.id
+    @el.removeClass "loading"
+    App.Group.off "ajaxSuccess", @loaded
+    @_loaded = true
 
   render: =>
     @header.css(backgroundColor: @group.color())

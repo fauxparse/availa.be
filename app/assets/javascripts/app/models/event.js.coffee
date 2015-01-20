@@ -1,5 +1,6 @@
 class App.Event extends Spine.Model
-  @configure "Event", "name", "recurrences", "roles"
+  @configure "Event",
+    "name", "recurrences", "roles", "instances", "availability"
   @belongsTo "group", "App.Group"
   @extend Spine.Model.Ajax
 
@@ -48,6 +49,11 @@ class App.Event extends Spine.Model
 
   dateRange: ->
     @recurrences()[0].dateRange()
+
+  instances: (instances) ->
+    if instances?
+      @_instances = new Instances(instances, this)
+    @_instances ||= new Instances([], this)
 
   @comparator: (a, b) ->
     a.start_time() - b.start_time()
@@ -147,3 +153,36 @@ class Role extends Spine.Model
 
   @comparator: (a, b) ->
     a.position() - b.position()
+
+class Instance extends Spine.Model
+  @configure "Instance", "time", "assignments"
+
+  time: (time) ->
+    if time?
+      unless moment.isMoment(time)
+        time = moment(time)
+      @_time = time
+    @_time
+
+  event: -> @_event
+
+  @factory: (attrs, event) ->
+    instance = @fromJSON(attrs)
+    instance._event = event
+    instance
+
+  @comparator: (a, b) ->
+    a.time() - b.time()
+
+class Instances
+  constructor: (instances, event) ->
+    @_event = event
+    @_instances = (Instance.factory(instance, event) for instance in instances)
+    @_instances.sort Instance.comparator
+
+  all: -> @_instances
+
+  find: (time) ->
+    time = moment(time) unless moment.isMoment(time)
+    for instance in @_instances
+      return instance if time.isSame instance.time(), "minute"

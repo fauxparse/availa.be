@@ -1,0 +1,15 @@
+.container
+  %header
+    %button{rel: "back"}
+      %i.icon-clear
+    .title
+      %h1= @instance.event().name()
+      %h2= @instance.time().format("LLLL")
+    %ul.tabs
+      %li.active
+        %a{href: "#", rel: "assignments"}
+          = I18n.t("events.instance.active")
+      %li
+        %a{href: "#", rel: "availability"}
+          = I18n.t("events.instance.available")
+  %section.assignments.active

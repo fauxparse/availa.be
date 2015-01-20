@@ -6,13 +6,13 @@ class @Color
     @shades = shades
 
   default: ->
-    @shades.A200
+    @shades['400']
 
   light: ->
-    @shades.A100
+    @shades['200']
 
   dark: ->
-    @shades.A400
+    @shades['600']
 
   shade: (name) ->
     @shades[name]
@@ -211,21 +211,21 @@ Color.init
     "A200": "#EEFF41"
     "A400": "#C6FF00"
     "A700": "#AEEA00"
-  "yellow":
-    "50": "#FFFDE7"
-    "100": "#FFF9C4"
-    "200": "#FFF59D"
-    "300": "#FFF176"
-    "400": "#FFEE58"
-    "500": "#FFEB3B"
-    "600": "#FDD835"
-    "700": "#FBC02D"
-    "800": "#F9A825"
-    "900": "#F57F17"
-    "A100": "#FFFF8D"
-    "A200": "#FFFF00"
-    "A400": "#FFEA00"
-    "A700": "#FFD600"
+  # "yellow":
+  #   "50": "#FFFDE7"
+  #   "100": "#FFF9C4"
+  #   "200": "#FFF59D"
+  #   "300": "#FFF176"
+  #   "400": "#FFEE58"
+  #   "500": "#FFEB3B"
+  #   "600": "#FDD835"
+  #   "700": "#FBC02D"
+  #   "800": "#F9A825"
+  #   "900": "#F57F17"
+  #   "A100": "#FFFF8D"
+  #   "A200": "#FFFF00"
+  #   "A400": "#FFEA00"
+  #   "A700": "#FFD600"
   "amber":
     "50": "#FFF8E1"
     "100": "#FFECB3"
