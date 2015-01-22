@@ -4,11 +4,11 @@
 
 @font-face {
   font-family: "icons";
-  src: font-url("icons_ebb30046fdc75613d239b1144710c6a0.eot");
-  src: font-url("icons_ebb30046fdc75613d239b1144710c6a0.eot?#iefix") format("embedded-opentype"),
-       font-url("icons_ebb30046fdc75613d239b1144710c6a0.woff") format("woff"),
-       font-url("icons_ebb30046fdc75613d239b1144710c6a0.ttf") format("truetype"),
-       font-url("icons_ebb30046fdc75613d239b1144710c6a0.svg#icons") format("svg");
+  src: font-url("icons_8591d24a1ebb502943e4219619172115.eot");
+  src: font-url("icons_8591d24a1ebb502943e4219619172115.eot?#iefix") format("embedded-opentype"),
+       font-url("icons_8591d24a1ebb502943e4219619172115.woff") format("woff"),
+       font-url("icons_8591d24a1ebb502943e4219619172115.ttf") format("truetype"),
+       font-url("icons_8591d24a1ebb502943e4219619172115.svg#icons") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -16,7 +16,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: "icons";
-    src: font-url("icons_ebb30046fdc75613d239b1144710c6a0.svg#icons") format("svg");
+    src: font-url("icons_8591d24a1ebb502943e4219619172115.svg#icons") format("svg");
   }
 }
 
@@ -33,6 +33,7 @@
 .icon-chevron-right:before,
 .icon-clear:before,
 .icon-done:before,
+.icon-empty:before,
 .icon-error:before,
 .icon-event:before,
 .icon-group:before,
@@ -40,10 +41,13 @@
 .icon-inbox:before,
 .icon-lock:before,
 .icon-menu:before,
+.icon-more-horiz:before,
+.icon-more-vert:before,
 .icon-person:before,
 .icon-reorder:before,
 .icon-search:before,
-.icon-settings:before {
+.icon-settings:before,
+.icon-warning:before {
     display: inline-block;
   font-family: "icons";
   font-style: normal;
@@ -68,6 +72,7 @@
 .icon-chevron-right:before { content: "\f186"; }
 .icon-clear:before { content: "\f188"; }
 .icon-done:before { content: "\f32b"; }
+.icon-empty:before { content: "\f330"; }
 .icon-error:before { content: "\f325"; }
 .icon-event:before { content: "\f1d1"; }
 .icon-group:before { content: "\f232"; }
@@ -75,10 +80,13 @@
 .icon-inbox:before { content: "\f326"; }
 .icon-lock:before { content: "\f327"; }
 .icon-menu:before { content: "\f2aa"; }
+.icon-more-horiz:before { content: "\f32e"; }
+.icon-more-vert:before { content: "\f32f"; }
 .icon-person:before { content: "\f2ed"; }
 .icon-reorder:before { content: "\f324"; }
 .icon-search:before { content: "\f32d"; }
 .icon-settings:before { content: "\f32c"; }
+.icon-warning:before { content: "\f331"; }
 
 $font-icons-access-time: "\f103";
 $font-icons-add: "\f10b";
@@ -90,6 +98,7 @@ $font-icons-chevron-left: "\f185";
 $font-icons-chevron-right: "\f186";
 $font-icons-clear: "\f188";
 $font-icons-done: "\f32b";
+$font-icons-empty: "\f330";
 $font-icons-error: "\f325";
 $font-icons-event: "\f1d1";
 $font-icons-group: "\f232";
@@ -97,7 +106,10 @@ $font-icons-group-add: "\f328";
 $font-icons-inbox: "\f326";
 $font-icons-lock: "\f327";
 $font-icons-menu: "\f2aa";
+$font-icons-more-horiz: "\f32e";
+$font-icons-more-vert: "\f32f";
 $font-icons-person: "\f2ed";
 $font-icons-reorder: "\f324";
 $font-icons-search: "\f32d";
 $font-icons-settings: "\f32c";
+$font-icons-warning: "\f331";

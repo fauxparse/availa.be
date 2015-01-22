@@ -1,13 +1,13 @@
 {
   "checksum": {
-    "previous": "ebb30046fdc75613d239b1144710c6a047dcd9c0d27ed1c53726bbfe909bea69",
-    "current": "ebb30046fdc75613d239b1144710c6a047dcd9c0d27ed1c53726bbfe909bea69"
+    "previous": "8591d24a1ebb502943e4219619172115a9a508c306ffc212373fec1303e7deb1",
+    "current": "8591d24a1ebb502943e4219619172115a9a508c306ffc212373fec1303e7deb1"
   },
   "fonts": [
-    "app/assets/fonts/icons_ebb30046fdc75613d239b1144710c6a0.ttf",
-    "app/assets/fonts/icons_ebb30046fdc75613d239b1144710c6a0.svg",
-    "app/assets/fonts/icons_ebb30046fdc75613d239b1144710c6a0.woff",
-    "app/assets/fonts/icons_ebb30046fdc75613d239b1144710c6a0.eot"
+    "app/assets/fonts/icons_8591d24a1ebb502943e4219619172115.ttf",
+    "app/assets/fonts/icons_8591d24a1ebb502943e4219619172115.svg",
+    "app/assets/fonts/icons_8591d24a1ebb502943e4219619172115.woff",
+    "app/assets/fonts/icons_8591d24a1ebb502943e4219619172115.eot"
   ],
   "glyphs": {
     "access-time": {
@@ -50,6 +50,10 @@
       "codepoint": 62251,
       "source": "app/assets/icons/svg/done.svg"
     },
+    "empty": {
+      "codepoint": 62256,
+      "source": "app/assets/icons/svg/empty.svg"
+    },
     "error": {
       "codepoint": 62245,
       "source": "app/assets/icons/svg/error.svg"
@@ -78,6 +82,14 @@
       "codepoint": 62122,
       "source": "app/assets/icons/svg/menu.svg"
     },
+    "more-horiz": {
+      "codepoint": 62254,
+      "source": "app/assets/icons/svg/more-horiz.svg"
+    },
+    "more-vert": {
+      "codepoint": 62255,
+      "source": "app/assets/icons/svg/more-vert.svg"
+    },
     "person": {
       "codepoint": 62189,
       "source": "app/assets/icons/svg/person.svg"
@@ -93,6 +105,10 @@
     "settings": {
       "codepoint": 62252,
       "source": "app/assets/icons/svg/settings.svg"
+    },
+    "warning": {
+      "codepoint": 62257,
+      "source": "app/assets/icons/svg/warning.svg"
     }
   },
   "options": {

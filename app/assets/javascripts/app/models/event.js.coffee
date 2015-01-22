@@ -32,6 +32,25 @@ class App.Event extends Spine.Model
     for role, i in @roles()
       role.position i
 
+  availability: (value) ->
+    if value?
+      @_availability = value
+    @_availability ||= {}
+
+  setAvailability: (member, time, state) ->
+    availability = (@availability()[member.id] ||= {})
+    time = time.toISOString() if moment.isMoment(time)
+    if state?
+      availability[time] = state
+    else
+      delete availability[time]
+      if $.isEmptyObject(availability)
+        delete @_availability[member.id]
+
+  availabilityFor: (member, time) ->
+    time = time.toISOString() if moment.isMoment(time)
+    @availability()[member.id]?[time]
+
   start_date: (value) ->
     @recurrences()[0].start_date(value)
 
@@ -151,6 +170,8 @@ class Role extends Spine.Model
     delete data.plural unless @_plural?
     data
 
+  toString: -> @name()
+
   @comparator: (a, b) ->
     a.position() - b.position()
 
@@ -165,6 +186,48 @@ class Instance extends Spine.Model
     @_time
 
   event: -> @_event
+
+  available: ->
+    members = []
+    for own memberId, times of @event().availability()
+      for own time, available of times
+        if moment(time).isSame(@time(), "minute")
+          members.push @event().group().members().find(memberId)
+    members
+
+  availability: ->
+    availability = {}
+    members = @available()
+    for role in @event().roles()
+      availability[role.id] = (m for m in members when m.suitable(role))
+    availability
+
+  setAvailability: (member, state) ->
+    @event().setAvailability member, @time(), state
+    @trigger "change"
+
+  assignments: (assignments) ->
+    if assignments?
+      @_assignments = assignments
+    @_assignments ||= {}
+
+  assignmentsForRole: (role) ->
+    @assignments()[role.id ? role] ||= []
+
+  assign: (member, role) ->
+    unless @assigned(member, role)
+      @assignmentsForRole(role).push(member.id || member)
+      @trigger "change"
+
+  unassign: (member, role) ->
+    if @assigned(member, role)
+      members = @assignmentsForRole(role)
+      while (index = members.index(member.id ? member)) > -1
+        members.splice(index, 1)
+      @trigger "change"
+
+  assigned: (member, role) ->
+    @assignmentsForRole(role).indexOf(member.id || member) > -1
 
   @factory: (attrs, event) ->
     instance = @fromJSON(attrs)

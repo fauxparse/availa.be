@@ -17,8 +17,12 @@ en:
       skills:
         add: New skill…
     instance:
-      active: People
+      active: Assigned
       available: Availability
+      assignments:
+        empty: "No potential %{plural}"
+        add: "Add/edit %{plural}"
+        done: "Finished editing"
       availability:
         available: Available only
         all: All users

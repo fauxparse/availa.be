@@ -68,6 +68,10 @@ class Member extends Spine.Model
   skills: ->
     (skill for skill in group.skills().all() when skill.id in @skill_ids)
 
+  suitable: (role) ->
+    # TODO: match with user's skills for this group
+    true
+
   match: (regexp) ->
     regexp.test @_name
 
@@ -84,6 +88,10 @@ class Members
     @_group = group
     @_members = (Member.factory(member, group) for member in members)
 
+    @_membersById = {}
+    for member in @_members
+      @_membersById[member.id] = member
+
     @_members.sort Member.comparator
 
   group: -> @_group
@@ -91,8 +99,7 @@ class Members
   all: -> @_members
 
   find: (id) ->
-    for member in @_members
-      return member if member.id == id
+    @_membersById[id]
 
   matching: (str) ->
     str = RegExp.quote str.normalize()

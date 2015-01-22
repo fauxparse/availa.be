@@ -26,7 +26,7 @@ class App.Events.Show extends App.Section.Page
       @el.addClass "loading"
       url = @event.url()
       App.Event.on "ajaxSuccess", @loaded
-      App.Event.fetch { id: @event_id }, { url }
+      App.Event.fetch { id: @event_id }, { url: url, cache: false }
 
     @render()
 

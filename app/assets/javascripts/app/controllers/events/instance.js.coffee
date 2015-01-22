@@ -14,14 +14,29 @@ class App.Events.Instance extends Spine.Controller
     @group = @instance.event().group()
 
     @html @view("events/instance")(instance: @instance, group: @group)
-    (new Availability(instance: @instance, group: @group)).appendTo @container
+
+    @controllers =
+      assignments: Assignments
+      availability: Availability
+
+    for own key, klass of @controllers
+      (@[key] = new klass(instance: @instance, group: @group))
+        .appendTo @container
     @container.on "scroll", @scroll
+
+    @$(".assignments")
+      .add(@$("[rel=assignments]").parent())
+      .addClass("active")
 
     $(window).on "resize", @resize
 
     @on "release", =>
       $(window).off "resize", @resize
 
+  release: =>
+    for own key of @controllers
+      @[key].release()
+    super
 
   showFrom: (source) ->
     @_source = source
@@ -45,10 +60,10 @@ class App.Events.Instance extends Spine.Controller
 
   hide: (e) ->
     e?.preventDefault()
-    @el.
-      transition({ y: 0, height: @_source.outerHeight() }).
-      transition(opacity: 0).
-      queue(@hidden)
+    @el
+      .transition({ y: 0, height: @_source.outerHeight() })
+      .transition(opacity: 0)
+      .queue(@hidden)
 
   hidden: =>
     @trigger "hidden"
@@ -60,14 +75,51 @@ class App.Events.Instance extends Spine.Controller
 
   scroll: =>
     top = Math.max(@container.scrollTop() - @_scrollOffset, 0)
-    @header.
-      toggleClass("floating", !!top).
-      css(transform: "translateY(#{top}px)")
+    @header
+      .toggleClass("floating", !!top)
+      .css(transform: "translateY(#{top}px)")
 
   switchTabs: (e) ->
     tab = $(e.target).closest("a").attr("rel")
     @$(".#{tab}").addClass("active").siblings().removeClass("active")
 
+class Assignments extends Spine.Controller
+  tag: "section"
+
+  events:
+    "tap .toggle": "toggle"
+    "tap .show-all .avatar": "toggleAssignment"
+
+  init: ->
+    @el.addClass("assignments")
+    @html @view("events/assignments")(instance: @instance, group: @group)
+    @update()
+    @instance.on "change", @update
+
+  release: =>
+    @instance.off "change", @update
+    super
+
+  update: =>
+    @$(".member").removeClass("available")
+    for own roleId, members of @instance.availability()
+      for member in members
+        @$("[role-id=#{roleId}] [member-id=#{member.id}]").addClass("available")
+      @$("[role-id=#{roleId}]").toggleClass("empty", !members.length)
+
+    @$(".member").removeClass("assigned")
+    for own roleId, memberIds of @instance.assignments()
+      for id in memberIds
+        @$("[role-id=#{roleId}] [member-id=#{id}]").addClass("assigned")
+
+  toggle: (e) ->
+    @$(e.target).closest("section").toggleClass("show-all")
+
+  toggleAssignment: (e) ->
+    li = $(e.target).closest("li")
+    member = @group.members().find li.attr("member-id")
+    roleId = li.closest("section").attr("role-id")
+    @instance.assign member, roleId
 
 class Availability extends Spine.Controller
   tag: "section"
@@ -80,6 +132,8 @@ class Availability extends Spine.Controller
     "tap .avatar": "toggleAvailability"
     "click [rel=mode] .dropdown-menu": "changeView"
     "input [type=search]": "filter"
+    "mousedown .avatar": "down"
+    "touchstart .avatar": "down"
 
   init: ->
     @el.addClass("availability")
@@ -88,12 +142,16 @@ class Availability extends Spine.Controller
   toggleAvailability: (e) ->
     if @el.hasClass("show-all")
       li = $(e.target).closest("li")
+      member = @group.members().find(li.attr("member-id"))
       if li.hasClass("available")
         li.addClass("unavailable").removeClass("available")
+        @instance.setAvailability member, false
       else if li.hasClass("unavailable")
         li.removeClass("unavailable")
+        @instance.setAvailability member, undefined
       else
         li.addClass("available")
+        @instance.setAvailability member, true
 
   changeView: (e) ->
     mode = $(e.target).attr("rel")
@@ -112,63 +170,129 @@ class Availability extends Spine.Controller
     else
       @$(".list-item").removeClass("hidden")
 
-  # down: (e) =>
-  #   source = $(e.target).closest(".avatar")
-  #   offset = source.offset()
-  #   origin = @eventPosition(e)
-  #
-  #   @drag =
-  #     origin: origin
-  #     item: source
-  #     timer: setTimeout (=> @move(e, true)), 500
-  #     offset:
-  #       x: origin.x - offset.left
-  #       y: origin.y - offset.top
-  #   $(document).
-  #     on("mousemove", @move).
-  #     on("touchmove", @move).
-  #     on("mouseup", @up).
-  #     on("touchend", @up)
-  #
-  # move: (e, force = false) =>
-  #   clearTimeout @drag.timer
-  #   position = @eventPosition(e)
-  #   unless @drag.dragging
-  #     dx = position.x - @drag.origin.x
-  #     dy = position.y - @drag.origin.y
-  #     if force || Math.sqrt(dx * dx + dy * dy) > 5
-  #       @drag.dragging = true
-  #       @drag.helper = @drag.item.clone().appendTo("body").
-  #         addClass("drag-helper").
-  #         css(transformOrigin: "#{@drag.offset.x}px #{@drag.offset.y}px")
-  #       setTimeout =>
-  #         @drag.helper.addClass("dragging")
-  #       , 100
-  #
-  #   if @drag.dragging
-  #     e.preventDefault()
-  #     @drag.helper.css
-  #       left: position.x - @drag.offset.x
-  #       top: position.y - @drag.offset.y
-  #
-  # up: (e) =>
-  #   if @drag.dragging
-  #     e.preventDefault()
-  #     @drag.helper.
-  #       transition({ transform: "scale(0)" }, 125, "ease-in").
-  #       queue =>
-  #         @drag.helper.remove()
-  #
-  #   clearTimeout @drag.timer
-  #   $(document).
-  #     off("mousemove", @move).
-  #     off("touchmove", @move).
-  #     off("mouseup", @up).
-  #     off("touchend", @up)
-  #
-  # eventPosition: (e) ->
-  #   position = if e.originalEvent.targetTouches?.length
-  #     e.originalEvent.targetTouches[0]
-  #   else
-  #     e
-  #   { x: position.pageX, y: position.pageY }
+  down: (e) ->
+    @_touchTimer = setTimeout (=> @openMenu(e)), $.Finger.pressDuration
+    $(document).on "mouseup touchend", @up
+
+  up: =>
+    clearTimeout @_touchTimer
+    $(document).off "mouseup touchend", @up
+
+  openMenu: (e) ->
+    avatar = $(e.target).closest(".avatar")
+    offset = avatar.offset()
+    menu =
+      x: offset.left + avatar.width() / 2
+      y: offset.top + avatar.height() / 2
+      items: @instance.event().roles()
+
+    if menu.x < @el.width() / 3
+      menu.end = 180
+    else
+      menu.start = 180
+      menu.direction = -1
+    if menu.items.length > 4
+      menu.items.splice(3, menu.items.length, "...")
+
+    member = @group.members()
+      .find(avatar.closest("[member-id]").attr("member-id"))
+
+    new RadialMenu(menu)
+      .on "render", (role, div, index) ->
+        if role == "..."
+          div.html "<i class=\"icon-more-horiz\"></i>"
+      .on "select", (role) =>
+        unless role == "..."
+          @instance.assign member, role
+
+class RadialMenu extends Spine.Controller
+  init: ->
+    @start ||= 0
+    @end ||= 360
+    @size ||= 100
+    @radius ||= @size
+    @direction ||= 1
+
+    @el
+      .addClass("radial-menu")
+      .appendTo("body")
+      .css(left: @x, top: @y)
+
+    @delay @open
+
+    $(document)
+      .on("mousemove touchmove", @move)
+      .on("mouseup touchend", @close)
+
+  open: =>
+    theta = (@end - @start) * Math.PI / 360 / @items.length
+    max = 2 * @radius * Math.sin(theta)
+    @scale = Math.min(1.0, max / @size)
+
+    for item, index in @items
+      theta = (index + 0.5) * (@end - @start) / @items.length
+      if @direction < 0
+        theta = @end - theta
+      else
+        theta = @start + theta
+      theta *= Math.PI / 180
+      r = @radius
+      div = @render(item, index).appendTo(@el)
+      @trigger "render", item, div, index
+      div.transition({
+        x: r * Math.sin(theta),
+        y: -r * Math.cos(theta),
+        scale: @scale * 0.95,
+        opacity: 0.875
+      }, {
+        duration: 250,
+        easing: 'easeOutBack',
+        delay: index * 50
+      })
+
+  close: =>
+    $(document)
+      .off("mousemove touchmove", @move)
+      .off("mouseup touchend", @close)
+    @el.children().not(".over")
+      .transition { x: 0, y: 0, scale: 0.1, opacity: 0 },
+        duration: 250,
+        easing: "out"
+    @el.children(".over")
+      .transition({ scale: 5, opacity: 0 }, { duration: 250, easing: "in" })
+      .each (i, el) =>
+        @trigger "select", $(el).data("item")
+    setTimeout @release, 500
+
+  render: (item, index) ->
+    div = $("<div>")
+      .addClass("radial-menu-item")
+      .data("item", item)
+      .append($("<span>", text: item.toString()))
+      .css(width: @size, height: @size, margin: @size / -2)
+
+  move: (e) =>
+    e.preventDefault()
+    position = if e.originalEvent.targetTouches?.length
+      e.originalEvent.targetTouches[0]
+    else
+      e
+    item = @getItemAt(position.pageX, position.pageY)
+    if item
+      if !item.hasClass("over")
+        item.addClass("over").siblings(".over").removeClass("over")
+    else
+      @$(".over").removeClass("over")
+
+  getItemAt: (x, y) ->
+    for element in @el.children().get()
+      element = $(element)
+      [w, h] = [element.width(), element.height()]
+      offset = element.offset()
+      if offset.left <= x < (offset.left + w)
+        if offset.top <= y < (offset.top + h)
+          dx = x - (offset.left + w / 2)
+          dy = y - (offset.top + h / 2)
+          if Math.sqrt(dx * dx + dy * dy) < (w / 2) * 0.95
+            return element
+    undefined

@@ -215,6 +215,7 @@ section .show-event {
     background: $base-background-color;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    cursor: default;
 
     > section {
       display: none;
@@ -278,6 +279,150 @@ section .show-event {
     }
   }
 
+  .list-item {
+    .text .line {
+      font-size: 1rem;
+      font-weight: $base-font-weight;
+      color: $black;
+    }
+
+    .avatar {
+      cursor: pointer;
+      @include tappable-region;
+
+      i {
+        display: none;
+      }
+    }
+
+    .avatar {
+      @include transition(background-color 0.5s ease);
+    }
+
+    .avatar .letter {
+      @include transition(color 0.5s ease);
+    }
+  }
+
+  .assignments .list-item:not(.assigned),
+  .availability .list-item:not(.available) {
+    opacity: $secondary-alpha;
+
+    .avatar {
+      border-width: 0.125rem;
+      border-style: solid;
+      background: white !important;
+
+      .letter {
+        color: inherit;
+        margin: -0.125rem;
+      }
+    }
+  }
+
+  .assignments {
+    section {
+      padding: 0 0 1rem;
+
+      &:not(:first-child) {
+        border-top: 1px solid divider-color();
+      }
+
+      h3 {
+        @include type-body-2;
+        color: secondary-color();
+        padding: 1rem;
+        text-transform: capitalize;
+
+        small {
+          font-size: 100%;
+          color: disabled-color();
+          font-weight: $base-font-weight;
+        }
+      }
+
+      .list-item {
+        width: 100%;
+        overflow: hidden;
+        height: 0;
+        @include transition(height $animation-duration $animation-timing-function);
+        @include transition-delay($animation-duration);
+
+        .primary-action {
+          @include transition-property(transform opacity);
+          @include transition-duration($animation-duration);
+          @include transition-timing-function($animation-timing-function);
+          @include transform(rotateX(90deg));
+          @include perspective(10);
+          opacity: 0;
+        }
+      }
+
+      .list-item.assigned,
+      .list-item.toggle,
+      &.show-all.empty .list-item.empty,
+      &.show-all .list-item.available,
+      &.show-all .list-item.assigned {
+        height: 3rem;
+        @include transition(height $animation-duration $animation-timing-function);
+
+        .primary-action {
+          opacity: 1;
+          @include transform(rotateX(0deg));
+          @include transition-delay($animation-duration/2);
+        }
+      }
+
+      .toggle,
+      .empty {
+        opacity: 1;
+
+        .icon {
+          left: 1.5rem;
+        }
+
+        .line {
+          font-size: 0.875rem;
+        }
+      }
+
+      .toggle {
+        .icon {
+          @include transition(transform $animation-duration $animation-timing-function);
+          color: secondary-color();
+        }
+
+        .line {
+          color: secondary-color();
+        }
+      }
+
+      &.show-all .toggle-open,
+      &:not(.show-all) .toggle-closed {
+        display: none;
+      }
+
+      .empty {
+        .icon, .line {
+          color: disabled-color();
+        }
+      }
+
+      &.show-all {
+        .list-item.available,
+        .list-item.assigned {
+          height: 3rem;
+        }
+
+        .toggle {
+          .icon {
+            @include transform(rotate(225deg));
+          }
+        }
+      }
+    }
+  }
+
   .availability {
     header {
       border-bottom: 1px solid divider-color();
@@ -336,48 +481,18 @@ section .show-event {
       @include flex-direction(row);
       @include flex-wrap(wrap);
       @include user-select(none);
+
+      li:empty {
+        @include flex(1);
+        min-width: 12rem;
+        height: 0;
+      }
     }
 
     .list-item {
       @include flex(1);
       min-width: 12rem;
-      opacity: $secondary-alpha;
       display: none;
-
-      .text .line {
-        color: $black;
-      }
-
-      .avatar {
-        cursor: pointer;
-        @include tappable-region;
-
-        i {
-          display: none;
-        }
-
-      }
-
-      .avatar {
-        @include transition(background-color 0.5s ease);
-      }
-
-      .avatar .letter {
-        @include transition(color 0.5s ease);
-      }
-
-      &:not(.available) {
-        .avatar {
-          border-width: 0.125rem;
-          border-style: solid;
-          background: white !important;
-
-          .letter {
-            color: inherit;
-            margin: -0.125rem;
-          }
-        }
-      }
 
       &.available {
         opacity: 1;
@@ -414,12 +529,6 @@ section .show-event {
       }
     }
 
-    li:empty {
-      @include flex(1);
-      min-width: 12rem;
-      height: 0;
-    }
-
     &.show-all {
       .list-item:not(.hidden) {
         display: block;
@@ -428,65 +537,36 @@ section .show-event {
   }
 }
 
-// .member {
-//   height: 3rem;
-//   opacity: $disabled-alpha;
-//
-//   .avatar {
-//     @include tappable-region;
-//   }
-//
-//   .primary-action {
-//     .text {
-//       .line {
-//         margin: 1rem 0;
-//         font-weight: $base-font-weight;
-//         color: text-color();
-//       }
-//     }
-//   }
-//
-//   &:not(.available):not(.assigned) .icon::before { content: ""; }
-//
-//   &.available, &.assigned {
-//     opacity: 1;
-//   }
-//
-//   &.assigned {
-//     .text .line {
-//       font-weight: $bold-font-weight;
-//     }
-//
-//     .icon {
-//       color: white;
-//       background: $green;
-//       margin: -1rem -0.25rem;
-//       padding: 0.25rem;
-//       width: 2rem;
-//       height: 2rem;
-//       border-radius: 50%;
-//     }
-//   }
-// }
-//
-// .avatar.drag-helper {
-//   position: absolute;
-//   z-index: 1000;
-//   width: 2.5rem;
-//   height: 2.5rem;
-//   overflow: hidden;
-//   border-radius: 50%;
-//   pointer-events: none;
-//   @include shadow(2);
-//
-//   img {
-//     display: block;
-//     width: 100%;
-//     height: auto;
-//   }
-//
-//   &.dragging {
-//     @include transform(scale(2.0));
-//     @include transition(transform 0.25s $ease-out-back);
-//   }
-// }
+.radial-menu {
+  position: absolute;
+}
+
+.radial-menu-item {
+  position: absolute;
+  border-radius: 50%;
+  background: text-color();
+  color: text-color(white);
+  padding-top: 50%;
+  @include user-select(none);
+  @include transform(scale(0.1));
+  opacity: 0;
+  pointer-events: none;
+  @include shadow(2);
+
+  span {
+    @include ellipsis;
+    @include position(absolute, 50% 0rem null 0rem);
+    margin: -0.5em 0;
+    text-align: center;
+  }
+
+  i {
+    @include position(absolute, 50% null null 50%);
+    font-size: 2rem;
+    margin: -0.5em;
+  }
+
+  &.over {
+    background: $base-accent-color;
+  }
+}
