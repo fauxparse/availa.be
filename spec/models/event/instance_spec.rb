@@ -12,4 +12,12 @@ RSpec.describe Event::Instance, type: :model do
   end
 
   it { is_expected.to validate_uniqueness_of(:time) }
+
+  describe '#availability=' do
+    it 'takes a hash' do
+      instance.update availability: Hash[harry.id, true]
+
+      expect(harry).to be_available_for(event)
+    end
+  end
 end

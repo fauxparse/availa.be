@@ -16,12 +16,16 @@ class Event
 
     def self.user(user)
       {
-        :group_id.in => user.memberships.collect(&:group_id),
-        :$or => [
-          owner(user),
-          pending(user),
-          assigned_to(user),
-          available(user)
+        :$and => [
+          { :group_id.in => user.memberships.collect(&:group_id) },
+          {
+            :$or => [
+              owner(user),
+              pending(user),
+              assigned_to(user),
+              available(user)
+            ]
+          }
         ]
       }
     end
@@ -31,8 +35,8 @@ class Event
         :starts_at.gte => Time.now,
         :"roles.skill_id".in => user.abilities.collect(&:skill_id),
         :$nor => [
-          { 'instances.assignments.user_ids' => user.id },
-          { 'availability.user_id' => user.id }
+          assigned_to(user),
+          { 'instances.availability.user_id' => user.id }
         ]
       }
     end
@@ -42,7 +46,14 @@ class Event
     end
 
     def self.available(user)
-      { 'availability.user_id' => user.id }
+      {
+        'instances.availability' => {
+          '$elemMatch' => {
+            user_id: user.id,
+            available: true
+          }
+        }
+      }
     end
 
     def self.owner(user)

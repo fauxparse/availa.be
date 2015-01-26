@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  wrap_parameters include: [:name, :recurrences, :roles]
+  wrap_parameters include: [:name, :recurrences, :roles, :instances]
   before_action :authenticate_user!
 
   after_action :verify_authorized, except: [:index, :calendar]
@@ -33,6 +33,7 @@ class EventsController < ApplicationController
 
   def update
     authorize event
+
     respond_with event.updated_with(event_params)
   end
 
@@ -59,12 +60,13 @@ class EventsController < ApplicationController
       .require(:event)
       .permit(
         :name,
-        recurrences: recurrences_fields,
-        roles: roles_fields
+        recurrences: recurrences_params,
+        roles: roles_params,
+        instances: instances_params
       )
   end
 
-  def recurrences_fields
+  def recurrences_params
     [
       :start_date,
       :end_date,
@@ -75,7 +77,7 @@ class EventsController < ApplicationController
     ]
   end
 
-  def roles_fields
+  def roles_params
     [
       :id,
       :minimum,
@@ -85,6 +87,27 @@ class EventsController < ApplicationController
       :skill_id,
       :position
     ]
+  end
+
+  def instances_params
+    [
+      :id,
+      :time,
+      { :assignments => role_keys },
+      { :availability => id_keys }
+    ]
+  end
+
+  def role_keys
+    event.roles.reduce({}) { |h, r| h[r.id.to_s] = []; h }
+  end
+
+  def id_keys
+    @_id_keys ||= if event.group?
+      event.group.users.map { |u| u.id.to_s }
+    else
+      []
+    end
   end
 
   def policy_scope(group)

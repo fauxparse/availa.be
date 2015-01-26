@@ -31,6 +31,8 @@ gem 'bourbon', '~> 4.1'
 gem 'neat'
 gem 'bitters'
 
+gem 'colorize'
+
 group :development, :test do
   gem 'rspec-rails', '~> 3.0'
   gem 'mongoid-rspec', '~> 2.0.0.rc1'

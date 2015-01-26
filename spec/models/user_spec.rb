@@ -126,9 +126,7 @@ RSpec.describe User, type: :model do
 
   context 'assigned to an event' do
     before do
-      event.instances.first.update(
-        assignments: [Event::Assignment.new(user_ids: [user.id], role: role)]
-      )
+      event.instances.first.assignments.create role: role, user_ids: [user.id]
     end
 
     it 'finds the event' do
@@ -164,7 +162,8 @@ RSpec.describe User, type: :model do
 
     context 'when user has given availability' do
       before do
-        event.availability_for(user).update(available: false)
+        instance = event.instances.first
+        instance.availability.for_user(user).update(available: false)
       end
 
       it 'does not include the event' do

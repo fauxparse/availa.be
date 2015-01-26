@@ -14,14 +14,20 @@ class Event
   belongs_to :creator, class_name: 'User', inverse_of: 'events'
   embeds_many :recurrences, class_name: 'Event::Recurrence'
   embeds_many :roles, class_name: 'Event::Role', order: :position.asc
-  embeds_many :availability, class_name: 'Event::Availability'
-  embeds_many :instances, class_name: 'Event::Instance', order: :time.asc
+  embeds_many :instances, class_name: 'Event::Instance', order: :time.asc do
+    def for_time(time)
+      time = time.to_time
+      detect { |instance| instance.time == time } ||
+        build(time: time)
+    end
+  end
 
   keep_ordered :roles
 
   alias_attribute :to_s, :name
 
   validates_presence_of :name, :group_id
+  validates_associated :instances
 
   before_validation :update_instances
   before_save :cache_start_and_end_times
@@ -54,9 +60,16 @@ class Event
     times.any? { |instance| instance.first == time }
   end
 
-  def availability_for(user)
-    availability.detect { |record| record.user == user } ||
-      availability.build(user: user, available: false)
+  def patch(hash)
+    hash.each_pair do |time, patch|
+      instances.for_time(time).patch patch
+    end
+  end
+
+  def patched(hash)
+    patch(hash)
+    save
+    self
   end
 
   protected
@@ -82,4 +95,5 @@ class Event
     self.starts_at = all_times.first.try(:first)
     self.ends_at = all_times.last.try(:last)
   end
+
 end

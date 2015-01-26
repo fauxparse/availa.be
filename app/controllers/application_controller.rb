@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
     Time.zone = original
   end
 
-  def self.responder
-    ResponderWithPutContent
-  end
+  # def self.responder
+  #   ResponderWithPutContent
+  # end
 end

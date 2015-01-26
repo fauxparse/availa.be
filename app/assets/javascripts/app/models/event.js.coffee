@@ -1,13 +1,14 @@
 class App.Event extends Spine.Model
   @configure "Event",
-    "name", "recurrences", "roles", "instances", "availability"
+    "name", "recurrences", "roles", "instances"
   @belongsTo "group", "App.Group"
   @extend Spine.Model.Ajax
 
-  url: ->
-    components = [@group().url(), "/events", @id].
-      concat([].slice.call(arguments, 0))
-    (c for c in components when c).join("/").replace(/\/\//g, "/")
+  @url: ->
+    "/events"
+
+  scope: ->
+    @group().url()
 
   name: (value) ->
     @_name = value if value?
@@ -32,25 +33,6 @@ class App.Event extends Spine.Model
     for role, i in @roles()
       role.position i
 
-  availability: (value) ->
-    if value?
-      @_availability = value
-    @_availability ||= {}
-
-  setAvailability: (member, time, state) ->
-    availability = (@availability()[member.id] ||= {})
-    time = time.toISOString() if moment.isMoment(time)
-    if state?
-      availability[time] = state
-    else
-      delete availability[time]
-      if $.isEmptyObject(availability)
-        delete @_availability[member.id]
-
-  availabilityFor: (member, time) ->
-    time = time.toISOString() if moment.isMoment(time)
-    @availability()[member.id]?[time]
-
   start_date: (value) ->
     @recurrences()[0].start_date(value)
 
@@ -73,6 +55,11 @@ class App.Event extends Spine.Model
     if instances?
       @_instances = new Instances(instances, this)
     @_instances ||= new Instances([], this)
+
+  toJSON: ->
+    json = super
+    json.instances = @instances().toJSON()
+    json
 
   @comparator: (a, b) ->
     a.start_time() - b.start_time()
@@ -188,22 +175,24 @@ class Instance extends Spine.Model
   event: -> @_event
 
   available: ->
-    members = []
-    for own memberId, times of @event().availability()
-      for own time, available of times
-        if moment(time).isSame(@time(), "minute")
-          members.push @event().group().members().find(memberId)
-    members
+    ids = (id for own id, value of @availability() when value)
+    (@event().group().members().find(id) for id in ids)
 
-  availability: ->
-    availability = {}
-    members = @available()
+  availability: (availability) ->
+    if availability?
+      @_availability = $.extend {}, availability
+    @_availability ||= {}
+
+  availabilityByRole: ->
+    results = {}
+    ids = (id for own id, available of @availability() when available)
+    members = (@event().group().members().find(id) for id in ids)
     for role in @event().roles()
-      availability[role.id] = (m for m in members when m.suitable(role))
-    availability
+      results[role.id] = (m for m in members when m.suitable(role))
+    results
 
   setAvailability: (member, state) ->
-    @event().setAvailability member, @time(), state
+    @availability()[member.id] = state
     @trigger "change"
 
   assignments: (assignments) ->
@@ -229,6 +218,13 @@ class Instance extends Spine.Model
   assigned: (member, role) ->
     @assignmentsForRole(role).indexOf(member.id || member) > -1
 
+  toJSON: ->
+    {
+      time: @time().toISOString()
+      assignments: @assignments()
+      availability: @availability()
+    }
+
   @factory: (attrs, event) ->
     instance = @fromJSON(attrs)
     instance._event = event
@@ -240,7 +236,8 @@ class Instance extends Spine.Model
 class Instances
   constructor: (instances, event) ->
     @_event = event
-    @_instances = (Instance.factory(instance, event) for instance in instances)
+    all = instances.all?() || instances
+    @_instances = (Instance.factory(instance, event) for instance in all)
     @_instances.sort Instance.comparator
 
   all: -> @_instances
@@ -249,3 +246,6 @@ class Instances
     time = moment(time) unless moment.isMoment(time)
     for instance in @_instances
       return instance if time.isSame instance.time(), "minute"
+
+  toJSON: ->
+    (instance.toJSON() for instance in @all())

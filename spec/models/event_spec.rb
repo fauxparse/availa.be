@@ -2,9 +2,18 @@ require 'rails_helper'
 
 RSpec.describe Event, type: :model do
   subject(:event) { FactoryGirl.create :event, group: group }
+  let(:role) { event.roles.build skill: skill }
   let(:group) { FactoryGirl.create :group }
+  let(:skill) { FactoryGirl.create :skill, group: group }
   let(:user) do
     FactoryGirl.create :user, memberships: [User::Membership.new(group: group)]
+  end
+
+  [:dumbledore, :harry, :hermione, :ron].each do |user|
+    let(user) do
+      FactoryGirl.create user,
+        memberships: [User::Membership.new(group: group)]
+    end
   end
 
   it { is_expected.to validate_presence_of(:name) }
@@ -118,6 +127,24 @@ RSpec.describe Event, type: :model do
         it 'includes the event' do
           expect(Event.for_user(user)).to include(event)
         end
+      end
+    end
+
+    describe '#update' do
+      before do
+        event.instances.first.assignments.create role: role, user_ids: [ron.id]
+      end
+
+      it 'accepts partial updates' do
+        event.patched(
+          Hash[
+            event.instances.second.time.to_s,
+            assignments: Hash[role.id.to_s, [harry.id.to_s]]
+          ]
+        ).reload
+
+        expect(Event.for_user(ron)).to include(event)
+        expect(Event.for_user(harry)).to include(event)
       end
     end
   end

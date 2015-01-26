@@ -94,15 +94,23 @@ class Assignments extends Spine.Controller
     @el.addClass("assignments")
     @html @view("events/assignments")(instance: @instance, group: @group)
     @update()
-    @instance.on "change", @update
+    @instance.on "change", @changed
 
   release: =>
-    @instance.off "change", @update
+    @instance.off "change", @changed
     super
+
+  changed: =>
+    @update()
+    clearTimeout @_saveTimer
+    @_saveTimer = setTimeout @save, 250
+
+  save: =>
+    @instance.event().save()
 
   update: =>
     @$(".member").removeClass("available")
-    for own roleId, members of @instance.availability()
+    for own roleId, members of @instance.availabilityByRole()
       for member in members
         @$("[role-id=#{roleId}] [member-id=#{member.id}]").addClass("available")
       @$("[role-id=#{roleId}]").toggleClass("empty", !members.length)
@@ -138,19 +146,32 @@ class Availability extends Spine.Controller
   init: ->
     @el.addClass("availability")
     @html @view("events/availability")(instance: @instance, group: @group)
+    @update()
+    @instance.on "change", @changed
+
+  release: =>
+    @instance.off "change", @changed
+    super
+
+  changed: =>
+    @update()
+
+  update: ->
+    @$(".list-item").removeClass("available unavailable")
+    for own id, available of @instance.availability()
+      @$("[member-id=#{id}]")
+        .toggleClass("available", available == true)
+        .toggleClass("unavailable", available == false)
 
   toggleAvailability: (e) ->
     if @el.hasClass("show-all")
       li = $(e.target).closest("li")
       member = @group.members().find(li.attr("member-id"))
       if li.hasClass("available")
-        li.addClass("unavailable").removeClass("available")
         @instance.setAvailability member, false
       else if li.hasClass("unavailable")
-        li.removeClass("unavailable")
         @instance.setAvailability member, undefined
       else
-        li.addClass("available")
         @instance.setAvailability member, true
 
   changeView: (e) ->

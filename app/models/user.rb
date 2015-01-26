@@ -62,4 +62,14 @@ class User
   def pending
     Event.pending_for_user(self)
   end
+
+  def available_for?(event_or_instance)
+    instances = if event_or_instance.respond_to? :instances
+      event_or_instance.instances.all
+    else
+      [event_or_instance]
+    end
+
+    instances.any? { |a| a.availability.for_user(self).available }
+  end
 end
