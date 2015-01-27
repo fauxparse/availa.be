@@ -1,4 +1,4 @@
-- for role in @instance.event().roles()
+- for role in @instance.event().roles().all()
   %section{"role-id": role.id}
     %h3
       = if role.maximum() == 1 then role.name() else role.plural()

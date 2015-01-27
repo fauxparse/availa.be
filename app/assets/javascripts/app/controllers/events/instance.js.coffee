@@ -205,7 +205,7 @@ class Availability extends Spine.Controller
     menu =
       x: offset.left + avatar.width() / 2
       y: offset.top + avatar.height() / 2
-      items: @instance.event().roles()
+      items: @instance.event().roles().all()
 
     if menu.x < @el.width() / 3
       menu.end = 180

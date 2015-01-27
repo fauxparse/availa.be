@@ -148,7 +148,7 @@ class App.Events.Edit extends App.Events.Show
 
   limitsShown: (e) ->
     row = $(e.target).closest(".role")
-    role = @event.roles()[row.prevAll(".role").length]
+    role = @event.roles().at(row.prevAll(".role").length)
     menu = $(e.target).data("menu")
     menu.find(".limits").text(role.range())
     slider = menu.find(".slider")
@@ -182,11 +182,11 @@ class App.Events.Edit extends App.Events.Show
         new NewSkill({ skill }).on "skill", (skill) =>
           row.find("[rel=skill] .dropdown-toggle").text(skill.plural())
           skill.on "ajaxSuccess", (skill) =>
-            @event.roles()[index].skill_id = skill.id
+            @event.roles().at(index).skill_id = skill.id
             @renderRoles()
       else
         skill = @event.group().skills().find(item.attr("skill"))
-        @event.roles()[index].skill_id = skill.id
+        @event.roles().at(index).skill_id = skill.id
         row.
           find("[rel=skill] .dropdown-toggle").text(skill.plural()).end().
           find("[name=name]").attr(placeholder: skill.name()).end().
