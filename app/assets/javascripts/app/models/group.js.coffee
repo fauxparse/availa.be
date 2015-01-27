@@ -86,6 +86,7 @@ class Member extends Spine.Model
 class Members
   constructor: (members, group) ->
     @_group = group
+    members = members.all?() || members
     @_members = (Member.factory(member, group) for member in members)
 
     @_membersById = {}

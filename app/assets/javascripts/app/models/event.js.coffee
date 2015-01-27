@@ -18,20 +18,16 @@ class App.Event extends Spine.Model
     @_recurrences = Recurrence.fromJSON(value) if value?
     @_recurrences ||= [new Recurrence()]
 
-  roles: (value) ->
-    if value?
-      @_roles = Role.fromJSON(value)
-      for role, i in @_roles
-        role.position i
-    @_roles ||= [new Role(skill_id: @group().skills().first()?.id)]
+  roles: (roles) ->
+    if roles?
+      @_roles = new Roles(roles, this)
+    @_roles ||= new Roles([Role.blank(@group)], this)
 
   addRole: (skill) ->
-    @roles().push new Role(skill_id: skill.id, position: @roles().length)
+    @roles().push new Role(skill_id: skill.id)
 
   deleteRoleAt: (index) ->
-    @roles().splice(index, 1)
-    for role, i in @roles()
-      role.position i
+    @roles().delete index
 
   start_date: (value) ->
     @recurrences()[0].start_date(value)
@@ -162,6 +158,44 @@ class Role extends Spine.Model
   @comparator: (a, b) ->
     a.position() - b.position()
 
+  @blank: (group) ->
+    new Role(skill_id: group.skills().first()?.id)
+
+class Roles
+  constructor: (roles, event) ->
+    @_event = event
+    @_roles = roles.all?() || Role.fromJSON(roles)
+    for role, i in @_roles
+      role.position i
+
+    @_rolesById = {}
+    for role in @_roles
+      @_rolesById[role.id] = role
+
+    @_roles.sort Role.comparator
+
+  all: -> @_roles
+
+  find: (id) ->
+    @_rolesById[id]
+
+  toJSON: ->
+    (role.toJSON() for role in @all())
+
+  at: (index) ->
+    @_roles[index]
+
+  push: (role) ->
+    role.position @_roles.length
+    @_roles.push role
+    this
+
+  delete: (index) ->
+    @_roles.splice(index, 1)
+    for role, i in @_roles
+      role.position i
+    this
+
 class Instance extends Spine.Model
   @configure "Instance", "time", "assignments"
 
@@ -187,7 +221,7 @@ class Instance extends Spine.Model
     results = {}
     ids = (id for own id, available of @availability() when available)
     members = (@event().group().members().find(id) for id in ids)
-    for role in @event().roles()
+    for role in @event().roles().all()
       results[role.id] = (m for m in members when m.suitable(role))
     results
 
