@@ -132,7 +132,7 @@ RSpec.describe Event, type: :model do
 
     describe '#update' do
       before do
-        event.instances.first.assignments.create role: role, user_ids: [ron.id]
+        event.instances.first.assign ron, role
       end
 
       it 'accepts partial updates' do

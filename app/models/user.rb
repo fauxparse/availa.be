@@ -70,6 +70,6 @@ class User
       [event_or_instance]
     end
 
-    instances.any? { |a| a.availability.for_user(self).available }
+    instances.any? { |a| a.has_available? self }
   end
 end
