@@ -8,15 +8,7 @@ class InstanceSerializer < ActiveModel::Serializer
   def assignments
     Hash.new.tap do |hash|
       object.assignments.each do |assignment|
-        hash[assignment.role_id] = assignment.user_ids
-      end
-    end
-  end
-
-  def availability
-    Hash.new.tap do |hash|
-      object.availability.each do |a|
-        hash[a.user_id] = a.available
+        hash[assignment[:role_id]] = assignment.user_ids.map(&:to_s)
       end
     end
   end

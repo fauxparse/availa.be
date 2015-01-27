@@ -3,20 +3,9 @@ class Event
     include Mongoid::Document
 
     field :time, type: Time
+    field :availability, type: Hash, default: -> { {} }
+    field :assignments, type: Array, default: -> { [] }
     embedded_in :event
-    embeds_many :assignments, class_name: 'Event::Assignment' do
-      def for_role(role)
-        id = role.try(:id) || role
-        detect { |a| a.role_id.to_s == id.to_s } || build(role_id: id)
-      end
-    end
-    embeds_many :availability, class_name: 'Event::Availability' do
-      def for_user(user)
-        id = user.try(:id) || user
-        detect { |a| a.user_id.to_s == id.to_s } ||
-          build(user_id: id, available: false)
-      end
-    end
 
     validates_uniqueness_of :time
 
@@ -25,47 +14,64 @@ class Event
     end
 
     def assign(user, role)
-      assignments.for_role(role).assign user
+      unless assigned? user, role
+        assignments_for(role) << user.id
+      end
+    end
+
+    def assign!(user, role)
+      assign user, role
+      save
     end
 
     def assigned?(user, role = nil)
-      assignments.any? do |a|
-        (role.nil? || a.role == role) && a.assigned?(user)
-      end
+      assignments_for(role).include? user.id
     end
 
     def assignments=(values)
       values.each_pair do |role_id, user_ids|
-        Rails.logger.info [role_id, user_ids].inspect.red
-        assignments.for_role(role_id).user_ids = user_ids.map do |id|
-          BSON::ObjectId.from_string(id)
-        end
+        ids = user_ids.map { |id| BSON::ObjectId.from_string(id) }
+        assignments_for(role_id).clear.concat(ids)
       end
     end
 
     def availability=(values)
-      availability.delete_if do |a|
-        id = a.user_id.to_s
-        values.key?(id) && values[id].nil?
-      end
-
       values.each_pair do |user_id, available|
-        availability.for_user(user_id).available = available
+        set_availability_for(user_id, available)
       end
     end
 
-    def patch(hash)
-      self.availability = hash[:availability] || {}
-      self.assignments = hash[:assignments] || {}
+    def set_availability_for(user, available)
+      id = (user.try(:id) || user).to_s
+      write_attribute :availability, {} if availability.nil?
+
+      if available.nil?
+        self.availability.delete id
+      else
+        self.availability[id] = available
+      end
+    end
+
+    def has_available?(user)
+      availability_for(user) == true
+    end
+
+    def patch(attrs)
+      assign_attributes attrs
     end
 
     protected
 
-    def process_relations
-      # this was stopping availability from saving
-      pending_relations.each_pair do |name, value|
-        send("#{name}=", value)
-      end
+    def assignments_for(role)
+      id = role.try(:id) || BSON::ObjectId.from_string(role)
+      object = assignments.detect { |o| o[:role_id] == id } ||
+        { role_id: id, user_ids: [] }.tap { |o| assignments << o }
+      object[:user_ids]
+    end
+
+    def availability_for(user)
+      id = (user.try(:id) || user).to_s
+      availability[id]
     end
   end
 end

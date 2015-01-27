@@ -18,12 +18,14 @@ RSpec.describe Group, type: :model do
 
   describe '#users' do
     it 'returns a list of users' do
+      User.destroy_all
+
       users = [:harry, :hermione].map do |u|
         FactoryGirl.create(u, groups: [group])
       end
       dumbledore = FactoryGirl.create(:dumbledore)
 
-      expect(group.users).to eq(users)
+      expect(group.users).to match_array(users)
       expect(group.users).not_to include(dumbledore)
     end
   end

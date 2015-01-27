@@ -36,7 +36,7 @@ class Event
         :"roles.skill_id".in => user.abilities.collect(&:skill_id),
         :$nor => [
           assigned_to(user),
-          { 'instances.availability.user_id' => user.id }
+          { "instances.availability.#{user.id}" => { :$exists => true } }
         ]
       }
     end
@@ -46,14 +46,7 @@ class Event
     end
 
     def self.available(user)
-      {
-        'instances.availability' => {
-          '$elemMatch' => {
-            user_id: user.id,
-            available: true
-          }
-        }
-      }
+      { "instances.availability.#{user.id}" => true }
     end
 
     def self.owner(user)

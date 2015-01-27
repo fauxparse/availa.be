@@ -126,7 +126,7 @@ RSpec.describe User, type: :model do
 
   context 'assigned to an event' do
     before do
-      event.instances.first.assignments.create role: role, user_ids: [user.id]
+      event.instances.first.assign! user, role
     end
 
     it 'finds the event' do
@@ -160,10 +160,21 @@ RSpec.describe User, type: :model do
       end
     end
 
-    context 'when user has given availability' do
+    context 'when user has given positive availability' do
       before do
         instance = event.instances.first
-        instance.availability.for_user(user).update(available: false)
+        instance.update availability: Hash[user.id, true]
+      end
+
+      it 'does not includes the event' do
+        expect(user.pending).not_to include event
+      end
+    end
+
+    context 'when user has given negative availability' do
+      before do
+        instance = event.instances.first
+        instance.update availability: Hash[user.id, false]
       end
 
       it 'does not include the event' do
