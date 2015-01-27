@@ -63,6 +63,7 @@ class Event
     protected
 
     def assignments_for(role)
+      write_attribute :assignments, [] if assignments.nil?
       id = role.try(:id) || BSON::ObjectId.from_string(role)
       object = assignments.detect { |o| o[:role_id] == id } ||
         { role_id: id, user_ids: [] }.tap { |o| assignments << o }

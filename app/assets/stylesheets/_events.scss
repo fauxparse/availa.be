@@ -230,7 +230,7 @@ section .show-event {
 
   .container > header {
     position: relative;
-    background-color: $base-background-color;
+    background-color: rgba($base-background-color, 0.95);
     z-index: 1;
     padding: 1rem 1rem 0rem $keyline;
     border-bottom: 1px solid divider-color();
@@ -279,148 +279,107 @@ section .show-event {
     }
   }
 
-  .list-item {
-    .text .line {
-      font-size: 1rem;
+  h3 {
+    @include type-body-2;
+    color: secondary-color();
+    padding: 1rem;
+    text-transform: capitalize;
+
+    small {
+      font-size: 100%;
+      color: disabled-color();
       font-weight: $base-font-weight;
-      color: $black;
+    }
+
+    + .list {
+      padding-top: 0;
+    }
+  }
+
+  @include media($medium-screen) {
+    .list {
+      @include display(flex);
+      @include flex-direction(row);
+      @include flex-wrap(wrap);
+      @include user-select(none);
+
+      li:empty {
+        @include flex(1);
+        height: 0;
+        min-width: 50%;
+      }
+    }
+
+    .list-item {
+      @include flex(1);
+      min-width: 50%;
+    }
+  }
+
+  @include media($large-screen) {
+    .list li:empty,
+    .list-item {
+      min-width: (100%/3);
+    }
+  }
+
+  .list-item {
+    overflow: hidden;
+    height: 0;
+    position: relative;
+    background: $grey;
+    padding-right: $keyline;
+    @include user-select(none);
+    @include transition(height $animation-duration $animation-timing-function);
+
+    .slider {
+      width: 100%;
+      @include shadow(1);
+      @include transform(translateX(0));
+      @include transition-property(transform);
+      @include transition-duration($animation-duration);
+      @include transition-timing-function($animation-timing-function);
+    }
+
+    .text {
+      @include transition(opacity $animation-duration $animation-timing-function);
+
+      .line {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: $base-font-weight;
+        color: text-color();
+      }
+    }
+
+    .primary-action {
+      padding: 1rem 0;
+      margin-right: -$keyline;
+      background: $base-background-color;
     }
 
     .avatar {
       cursor: pointer;
       @include tappable-region;
+    }
 
-      i {
-        display: none;
+    &.hidden {
+      display: none;
+    }
+
+    &.open {
+      .slider {
+        @include transform(translateX(100%));
       }
-    }
 
-    .avatar {
-      @include transition(background-color 0.5s ease);
-    }
-
-    .avatar .letter {
-      @include transition(color 0.5s ease);
-    }
-  }
-
-  .assignments .list-item:not(.assigned),
-  .availability .list-item:not(.available) {
-    opacity: $secondary-alpha;
-
-    .avatar {
-      border-width: 0.125rem;
-      border-style: solid;
-      background: white !important;
-
-      .letter {
-        color: inherit;
-        margin: -0.125rem;
+      .text {
+        opacity: 0;
       }
     }
   }
 
-  .assignments {
-    section {
-      padding: 0 0 1rem;
-
-      &:not(:first-child) {
-        border-top: 1px solid divider-color();
-      }
-
-      h3 {
-        @include type-body-2;
-        color: secondary-color();
-        padding: 1rem;
-        text-transform: capitalize;
-
-        small {
-          font-size: 100%;
-          color: disabled-color();
-          font-weight: $base-font-weight;
-        }
-      }
-
-      .list-item {
-        width: 100%;
-        overflow: hidden;
-        height: 0;
-        @include transition(height $animation-duration $animation-timing-function);
-        @include transition-delay($animation-duration);
-
-        .primary-action {
-          @include transition-property(transform opacity);
-          @include transition-duration($animation-duration);
-          @include transition-timing-function($animation-timing-function);
-          @include transform(rotateX(90deg));
-          @include perspective(10);
-          opacity: 0;
-        }
-      }
-
-      .list-item.assigned,
-      .list-item.toggle,
-      &.show-all.empty .list-item.empty,
-      &.show-all .list-item.available,
-      &.show-all .list-item.assigned {
-        height: 3rem;
-        @include transition(height $animation-duration $animation-timing-function);
-
-        .primary-action {
-          opacity: 1;
-          @include transform(rotateX(0deg));
-          @include transition-delay($animation-duration/2);
-        }
-      }
-
-      .toggle,
-      .empty {
-        opacity: 1;
-
-        .icon {
-          left: 1.5rem;
-        }
-
-        .line {
-          font-size: 0.875rem;
-        }
-      }
-
-      .toggle {
-        .icon {
-          @include transition(transform $animation-duration $animation-timing-function);
-          color: secondary-color();
-        }
-
-        .line {
-          color: secondary-color();
-        }
-      }
-
-      &.show-all .toggle-open,
-      &:not(.show-all) .toggle-closed {
-        display: none;
-      }
-
-      .empty {
-        .icon, .line {
-          color: disabled-color();
-        }
-      }
-
-      &.show-all {
-        .list-item.available,
-        .list-item.assigned {
-          height: 3rem;
-        }
-
-        .toggle {
-          .icon {
-            @include transform(rotate(225deg));
-          }
-        }
-      }
-    }
+  .availability.show-all .list-item {
+    height: 3rem;
   }
 
   .availability {
@@ -475,98 +434,212 @@ section .show-event {
         }
       }
     }
-
-    .list {
-      @include display(flex);
-      @include flex-direction(row);
-      @include flex-wrap(wrap);
-      @include user-select(none);
-
-      li:empty {
-        @include flex(1);
-        min-width: 12rem;
-        height: 0;
-      }
-    }
-
-    .list-item {
-      @include flex(1);
-      min-width: 12rem;
-      display: none;
-
-      &.available {
-        opacity: 1;
-
-        &:not(.hidden) {
-          display: block;
-        }
-
-        .text .line {
-          color: text-color();
-        }
-
-        .avatar {
-          .letter {
-            color: secondary-color(white) !important;
-          }
-        }
-      }
-
-      &.unavailable {
-        opacity: $disabled-alpha;
-
-        .avatar {
-          .letter {
-            display: none;
-          }
-
-          i {
-            color: inherit;
-            display: block;
-            margin: -0.125rem;
-          }
-        }
-      }
-    }
-
-    &.show-all {
-      .list-item:not(.hidden) {
-        display: block;
-      }
-    }
   }
 }
 
-.radial-menu {
-  position: absolute;
-}
-
-.radial-menu-item {
-  position: absolute;
-  border-radius: 50%;
-  background: text-color();
-  color: text-color(white);
-  padding-top: 50%;
-  @include user-select(none);
-  @include transform(scale(0.1));
-  opacity: 0;
-  pointer-events: none;
-  @include shadow(2);
-
-  span {
-    @include ellipsis;
-    @include position(absolute, 50% 0rem null 0rem);
-    margin: -0.5em 0;
-    text-align: center;
-  }
-
-  i {
-    @include position(absolute, 50% null null 50%);
-    font-size: 2rem;
-    margin: -0.5em;
-  }
-
-  &.over {
-    background: $base-accent-color;
-  }
-}
+// .event-instance {
+//   .list-item {
+//     .text .line {
+//       font-size: 1rem;
+//       font-weight: $base-font-weight;
+//       color: $black;
+//     }
+//
+//     .avatar {
+//       cursor: pointer;
+//       @include tappable-region;
+//
+//       i {
+//         display: none;
+//       }
+//     }
+//
+//     .avatar {
+//       @include transition(background-color 0.5s ease);
+//     }
+//
+//     .avatar .letter {
+//       @include transition(color 0.5s ease);
+//     }
+//   }
+//
+//   .assignments .list-item:not(.assigned),
+//   .availability .list-item:not(.available) {
+//     opacity: $secondary-alpha;
+//
+//     .avatar {
+//       border-width: 0.125rem;
+//       border-style: solid;
+//       background: white !important;
+//
+//       .letter {
+//         color: inherit;
+//         margin: -0.125rem;
+//       }
+//     }
+//   }
+//
+//   .assignments {
+//     section {
+//       padding: 0 0 1rem;
+//
+//       &:not(:first-child) {
+//         border-top: 1px solid divider-color();
+//       }
+//
+//       h3 {
+//         @include type-body-2;
+//         color: secondary-color();
+//         padding: 1rem;
+//         text-transform: capitalize;
+//
+//         small {
+//           font-size: 100%;
+//           color: disabled-color();
+//           font-weight: $base-font-weight;
+//         }
+//       }
+//
+//       .list-item {
+//         width: 100%;
+//         overflow: hidden;
+//         height: 0;
+//         @include transition(height $animation-duration $animation-timing-function);
+//         @include transition-delay($animation-duration);
+//
+//         .primary-action {
+//           @include transition-property(transform opacity);
+//           @include transition-duration($animation-duration);
+//           @include transition-timing-function($animation-timing-function);
+//           @include transform(rotateX(90deg));
+//           @include perspective(10);
+//           opacity: 0;
+//         }
+//       }
+//
+//       .list-item.assigned,
+//       .list-item.toggle,
+//       &.show-all.empty .list-item.empty,
+//       &.show-all .list-item.available,
+//       &.show-all .list-item.assigned {
+//         height: 3rem;
+//         @include transition(height $animation-duration $animation-timing-function);
+//
+//         .primary-action {
+//           opacity: 1;
+//           @include transform(rotateX(0deg));
+//           @include transition-delay($animation-duration/2);
+//         }
+//       }
+//
+//       .toggle,
+//       .empty {
+//         opacity: 1;
+//
+//         .icon {
+//           left: 1.5rem;
+//         }
+//
+//         .line {
+//           font-size: 0.875rem;
+//         }
+//       }
+//
+//       .toggle {
+//         .icon {
+//           @include transition(transform $animation-duration $animation-timing-function);
+//           color: secondary-color();
+//         }
+//
+//         .line {
+//           color: secondary-color();
+//         }
+//       }
+//
+//       &.show-all .toggle-open,
+//       &:not(.show-all) .toggle-closed {
+//         display: none;
+//       }
+//
+//       .empty {
+//         .icon, .line {
+//           color: disabled-color();
+//         }
+//       }
+//
+//       &.show-all {
+//         .list-item.available,
+//         .list-item.assigned {
+//           height: 3rem;
+//         }
+//
+//         .toggle {
+//           .icon {
+//             @include transform(rotate(225deg));
+//           }
+//         }
+//       }
+//     }
+//   }
+//
+//
+//     .list {
+//       @include display(flex);
+//       @include flex-direction(row);
+//       @include flex-wrap(wrap);
+//       @include user-select(none);
+//
+//       li:empty {
+//         @include flex(1);
+//         min-width: 12rem;
+//         height: 0;
+//       }
+//     }
+//
+//     .list-item {
+//       @include flex(1);
+//       min-width: 12rem;
+//       display: none;
+//
+//       &.available {
+//         opacity: 1;
+//
+//         &:not(.hidden) {
+//           display: block;
+//         }
+//
+//         .text .line {
+//           color: text-color();
+//         }
+//
+//         .avatar {
+//           .letter {
+//             color: secondary-color(white) !important;
+//           }
+//         }
+//       }
+//
+//       &.unavailable {
+//         opacity: $disabled-alpha;
+//
+//         .avatar {
+//           .letter {
+//             display: none;
+//           }
+//
+//           i {
+//             color: inherit;
+//             display: block;
+//             margin: -0.125rem;
+//           }
+//         }
+//       }
+//     }
+//
+//     &.show-all {
+//       .list-item:not(.hidden) {
+//         display: block;
+//       }
+//     }
+//   }
+// }

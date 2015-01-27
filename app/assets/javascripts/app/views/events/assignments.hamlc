@@ -3,15 +3,16 @@
     %h3
       = if role.maximum() == 1 then role.name() else role.plural()
       %small = "(#{role.range()})"
-    %ul.members
+    %ul.members.list
       - for member in @group.members().all()
         - color = Color.of(member.id)
         %li.list-item{"member-id" => member.id}
-          .primary-action
-            .avatar{style: "background-color: #{color}; border-color: #{color}; color: #{color};"}
-              .letter= member.name().substr(0,1).toLocaleUpperCase()
-            .text
-              .line= member.name()
+          .slider
+            .primary-action
+              .avatar{style: "background-color: #{color}; border-color: #{color}; color: #{color};"}
+                .letter= member.name().substr(0,1).toLocaleUpperCase()
+              .text
+                .line= member.name()
       %li.list-item.empty
         .primary-action
           %i.icon.icon-warning

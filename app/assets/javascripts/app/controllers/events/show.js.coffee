@@ -40,6 +40,7 @@ class App.Events.Show extends App.Section.Page
       @el.removeClass "loading"
       App.Event.off "ajaxSuccess", @loaded
       @_loaded = true
+      @render()
 
   render: =>
     @header.
