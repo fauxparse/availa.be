@@ -90,9 +90,9 @@ class Route extends Spine.Module
       options.trigger = args.pop()
     options = $.extend({}, @options, options)
 
-    path = args.join('/')
+    path = args.join('/').replace(/\/$/, "") || "/"
     return if @path is path
-    @path = path.replace(/\/$/, "")
+    @path = path
 
     if options.trigger
       @trigger('navigate', @path)
@@ -141,7 +141,7 @@ class Route extends Spine.Module
     else
       path = window.location.hash
       path = path.replace(hashStrip, '')
-    path.replace(/\/$/, "")
+    path.replace(/\/$/, "") || "/"
 
   @getHost: ->
     "#{window.location.protocol}//#{window.location.host}"
