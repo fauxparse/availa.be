@@ -23,6 +23,8 @@ en:
         empty: "No potential %{plural}"
         add: "Add/edit %{plural}"
         done: "Finished editing"
+        m_of_n: "(%{m} of %{n})"
       availability:
         available: Available only
         all: All users
+        empty: "No users to display"

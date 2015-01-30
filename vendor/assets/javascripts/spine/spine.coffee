@@ -546,7 +546,7 @@ class Controller extends Module
           true
 
       match      = key.match(@eventSplitter)
-      eventName  = match[1]
+      eventName  = match[1].split(",").join(" ")
       selector   = match[2]
 
       if selector is ''

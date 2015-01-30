@@ -231,7 +231,7 @@ section .show-event {
   .container > header {
     position: relative;
     background-color: rgba($base-background-color, 0.95);
-    z-index: 1;
+    z-index: 10;
     padding: 1rem 1rem 0rem $keyline;
     border-bottom: 1px solid divider-color();
     height: $header-size;
@@ -289,6 +289,7 @@ section .show-event {
       font-size: 100%;
       color: disabled-color();
       font-weight: $base-font-weight;
+      text-transform: none;
     }
 
     + .list {
@@ -296,49 +297,81 @@ section .show-event {
     }
   }
 
+  section.invalid h3 small {
+    color: $red;
+  }
+
   @include media($medium-screen) {
     .list {
-      @include display(flex);
-      @include flex-direction(row);
-      @include flex-wrap(wrap);
+      @include clearfix;
       @include user-select(none);
 
       li:empty {
-        @include flex(1);
         height: 0;
-        min-width: 50%;
+        width: 50%;
       }
     }
 
     .list-item {
-      @include flex(1);
-      min-width: 50%;
+      float: left;
+      width: 50%;
     }
   }
 
   @include media($large-screen) {
     .list li:empty,
     .list-item {
-      min-width: (100%/3);
+      width: (100%/3);
     }
   }
 
-  .list-item {
-    overflow: hidden;
+  .member {
     height: 0;
+    overflow: hidden;
+    opacity: 0;
     position: relative;
-    background: $grey;
     padding-right: $keyline;
     @include user-select(none);
-    @include transition(height $animation-duration $animation-timing-function);
+    @include transition-property(height opacity);
+    @include transition-duration($animation-duration);
+    @include transition-timing-function($animation-timing-function);
 
     .slider {
+      position: relative;
+      z-index: 1;
       width: 100%;
-      @include shadow(1);
       @include transform(translateX(0));
       @include transition-property(transform);
       @include transition-duration($animation-duration);
       @include transition-timing-function($animation-timing-function);
+    }
+
+    .menu {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      padding: 0.5rem;
+      min-width: 100%;
+      background: $grey;
+      opacity: 0;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.12), inset 0 1px 2px rgba(0,0,0,0.24);
+      @include transition(opacity 0s linear $animation-duration);
+
+      button {
+        font-size: 1rem;
+        line-height: 2rem;
+        height: 2rem;
+        margin-right: 0.5rem;
+        padding: 0 0.75rem;
+        min-width: 3rem;
+        color: secondary-color(white);
+
+        &.active {
+          background: divider-color();
+          color: text-color(white);
+        }
+      }
     }
 
     .text {
@@ -361,15 +394,27 @@ section .show-event {
     .avatar {
       cursor: pointer;
       @include tappable-region;
+      @include transition-property(transform);
+      @include transition-duration($animation-duration);
+      @include transition-timing-function($animation-timing-function);
     }
 
     &.hidden {
-      display: none;
+      display: none !important;
     }
 
     &.open {
+      .menu {
+        opacity: 1;
+        @include transition(none);
+      }
+
       .slider {
         @include transform(translateX(100%));
+      }
+
+      .avatar {
+        @include transform(rotate(360deg));
       }
 
       .text {
@@ -378,8 +423,90 @@ section .show-event {
     }
   }
 
-  .availability.show-all .list-item {
+  .assignments section[role-id]:not(.empty) .empty,
+  .assignments section[role-id].empty .toggle {
+    display: none;
+  }
+
+  .assignments .member.assigned,
+  .assignments .toggle,
+  .assignments .show-all .member.available,
+  .availability .member.available,
+  .availability.show-all .member,
+  .assignments section.empty .empty {
     height: 3rem;
+    opacity: 1;
+  }
+
+  .assignments .member:not(.assigned),
+  .availability .member:not(.available) {
+    .avatar {
+      opacity: $secondary-alpha;
+      border-width: 0.125rem;
+      border-style: solid;
+      background: white !important;
+
+      .letter {
+        color: inherit;
+        margin: -0.125rem;
+      }
+    }
+
+    .text .line {
+      color: secondary-color();
+    }
+  }
+
+  .availability .member.unavailable {
+    .avatar {
+      opacity: $disabled-alpha;
+
+      .letter {
+        display: none;
+      }
+
+      i {
+        color: inherit;
+        display: block;
+        margin: -0.125rem;
+      }
+    }
+
+    .text .line {
+      color: disabled-color();
+    }
+  }
+
+  .assignments {
+    li.empty,
+    li.toggle {
+      float: none;
+      width: 100%;
+
+      .icon {
+        left: 1.5rem;
+      }
+
+      .icon, .line {
+        color: disabled-color();
+        @include transition-property(transform);
+        @include transition-duration($animation-duration);
+        @include transition-timing-function($animation-timing-function);
+      }
+    }
+
+    section:not(.show-all) .toggle .toggle-closed,
+    section.show-all .toggle .toggle-open {
+      display: none;
+    }
+
+    .show-all {
+      .toggle {
+        .icon {
+          @include transform(rotate(45deg));
+        }
+      }
+    }
   }
 
   .availability {
@@ -434,212 +561,22 @@ section .show-event {
         }
       }
     }
+
+    li.empty {
+      float: none;
+      width: 100%;
+
+      .icon {
+        left: 1.5rem;
+      }
+
+      .icon, .line {
+        color: disabled-color();
+      }
+
+      &.hidden {
+        display: none !important;
+      }
+    }
   }
 }
-
-// .event-instance {
-//   .list-item {
-//     .text .line {
-//       font-size: 1rem;
-//       font-weight: $base-font-weight;
-//       color: $black;
-//     }
-//
-//     .avatar {
-//       cursor: pointer;
-//       @include tappable-region;
-//
-//       i {
-//         display: none;
-//       }
-//     }
-//
-//     .avatar {
-//       @include transition(background-color 0.5s ease);
-//     }
-//
-//     .avatar .letter {
-//       @include transition(color 0.5s ease);
-//     }
-//   }
-//
-//   .assignments .list-item:not(.assigned),
-//   .availability .list-item:not(.available) {
-//     opacity: $secondary-alpha;
-//
-//     .avatar {
-//       border-width: 0.125rem;
-//       border-style: solid;
-//       background: white !important;
-//
-//       .letter {
-//         color: inherit;
-//         margin: -0.125rem;
-//       }
-//     }
-//   }
-//
-//   .assignments {
-//     section {
-//       padding: 0 0 1rem;
-//
-//       &:not(:first-child) {
-//         border-top: 1px solid divider-color();
-//       }
-//
-//       h3 {
-//         @include type-body-2;
-//         color: secondary-color();
-//         padding: 1rem;
-//         text-transform: capitalize;
-//
-//         small {
-//           font-size: 100%;
-//           color: disabled-color();
-//           font-weight: $base-font-weight;
-//         }
-//       }
-//
-//       .list-item {
-//         width: 100%;
-//         overflow: hidden;
-//         height: 0;
-//         @include transition(height $animation-duration $animation-timing-function);
-//         @include transition-delay($animation-duration);
-//
-//         .primary-action {
-//           @include transition-property(transform opacity);
-//           @include transition-duration($animation-duration);
-//           @include transition-timing-function($animation-timing-function);
-//           @include transform(rotateX(90deg));
-//           @include perspective(10);
-//           opacity: 0;
-//         }
-//       }
-//
-//       .list-item.assigned,
-//       .list-item.toggle,
-//       &.show-all.empty .list-item.empty,
-//       &.show-all .list-item.available,
-//       &.show-all .list-item.assigned {
-//         height: 3rem;
-//         @include transition(height $animation-duration $animation-timing-function);
-//
-//         .primary-action {
-//           opacity: 1;
-//           @include transform(rotateX(0deg));
-//           @include transition-delay($animation-duration/2);
-//         }
-//       }
-//
-//       .toggle,
-//       .empty {
-//         opacity: 1;
-//
-//         .icon {
-//           left: 1.5rem;
-//         }
-//
-//         .line {
-//           font-size: 0.875rem;
-//         }
-//       }
-//
-//       .toggle {
-//         .icon {
-//           @include transition(transform $animation-duration $animation-timing-function);
-//           color: secondary-color();
-//         }
-//
-//         .line {
-//           color: secondary-color();
-//         }
-//       }
-//
-//       &.show-all .toggle-open,
-//       &:not(.show-all) .toggle-closed {
-//         display: none;
-//       }
-//
-//       .empty {
-//         .icon, .line {
-//           color: disabled-color();
-//         }
-//       }
-//
-//       &.show-all {
-//         .list-item.available,
-//         .list-item.assigned {
-//           height: 3rem;
-//         }
-//
-//         .toggle {
-//           .icon {
-//             @include transform(rotate(225deg));
-//           }
-//         }
-//       }
-//     }
-//   }
-//
-//
-//     .list {
-//       @include display(flex);
-//       @include flex-direction(row);
-//       @include flex-wrap(wrap);
-//       @include user-select(none);
-//
-//       li:empty {
-//         @include flex(1);
-//         min-width: 12rem;
-//         height: 0;
-//       }
-//     }
-//
-//     .list-item {
-//       @include flex(1);
-//       min-width: 12rem;
-//       display: none;
-//
-//       &.available {
-//         opacity: 1;
-//
-//         &:not(.hidden) {
-//           display: block;
-//         }
-//
-//         .text .line {
-//           color: text-color();
-//         }
-//
-//         .avatar {
-//           .letter {
-//             color: secondary-color(white) !important;
-//           }
-//         }
-//       }
-//
-//       &.unavailable {
-//         opacity: $disabled-alpha;
-//
-//         .avatar {
-//           .letter {
-//             display: none;
-//           }
-//
-//           i {
-//             color: inherit;
-//             display: block;
-//             margin: -0.125rem;
-//           }
-//         }
-//       }
-//     }
-//
-//     &.show-all {
-//       .list-item:not(.hidden) {
-//         display: block;
-//       }
-//     }
-//   }
-// }

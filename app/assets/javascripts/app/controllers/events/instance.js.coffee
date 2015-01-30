@@ -8,9 +8,8 @@ class App.Events.Instance extends Spine.Controller
   events:
     "tap [rel=back]": "hide"
     "tap header .tabs a": "switchTabs"
-    "flick .list-item:not(.open)": "openItem"
-    "flick .list-item.open .avatar": "closeItem"
-    "tap .list-item.open .avatar": "closeItem"
+    "flick,drag .availability .list-item:not(.open)": "openItem"
+    "flick,tap .availability .list-item.open .avatar": "closeItem"
 
   init: ->
     @el.addClass "event-instance"
@@ -87,10 +86,12 @@ class App.Events.Instance extends Spine.Controller
     @$(".#{tab}").addClass("active").siblings().removeClass("active")
 
   openItem: (e) ->
+    e.preventDefault()
     $(e.target).closest(".list-item").addClass("open").trigger("open")
       .siblings(".open").trigger("close").removeClass("open").end()
 
   closeItem: (e) ->
+    e.preventDefault()
     $(e.target).closest(".list-item").removeClass("open").trigger("close")
 
 class Assignments extends Spine.Controller
@@ -119,16 +120,30 @@ class Assignments extends Spine.Controller
     @instance.event().save()
 
   update: =>
-    @$(".member").removeClass("available")
+    assigned = {}
+    available = {}
+
+    @$(".available").removeClass("available")
     for own roleId, members of @instance.availabilityByRole()
       for member in members
         @$("[role-id=#{roleId}] [member-id=#{member.id}]").addClass("available")
-      @$("[role-id=#{roleId}]").toggleClass("empty", !members.length)
+        available[roleId] = (available[roleId] || 0) + 1
 
-    @$(".member").removeClass("assigned")
+    @$(".assigned").removeClass("assigned")
     for own roleId, memberIds of @instance.assignments()
       for id in memberIds
         @$("[role-id=#{roleId}] [member-id=#{id}]").addClass("assigned")
+        assigned[roleId] = (assigned[roleId] || 0) + 1
+
+    for role in @instance.event().roles().all()
+      empty = !assigned[role.id] && !available[role.id]
+      m = assigned[role.id] || 0
+      n = role.range()
+      @$("[role-id=#{role.id}]")
+        .toggleClass("empty", empty)
+        .toggleClass("invalid", !role.validNumber(m))
+        .find("small[rel=role]")
+        .text(I18n.t("events.instance.assignments.m_of_n", {m, n}))
 
   toggle: (e) ->
     @$(e.target).closest("section").toggleClass("show-all")
@@ -137,7 +152,10 @@ class Assignments extends Spine.Controller
     li = $(e.target).closest("li")
     member = @group.members().find li.attr("member-id")
     roleId = li.closest("section").attr("role-id")
-    @instance.assign member, roleId
+    if @instance.assigned member, roleId
+      @instance.unassign member, roleId
+    else
+      @instance.assign member, roleId
 
 class Availability extends Spine.Controller
   tag: "section"
@@ -147,10 +165,11 @@ class Availability extends Spine.Controller
     "[type=search]": "searchBox"
 
   events:
-    "tap .avatar": "toggleAvailability"
+    "tap .member:not(.open) .avatar": "toggleAvailability"
     "click [rel=mode] .dropdown-menu": "changeView"
     "input [type=search]": "filter"
     "open [member-id]": "openItem"
+    "tap [member-id] button": "assignRole"
 
   init: ->
     @el.addClass("availability")
@@ -171,6 +190,14 @@ class Availability extends Spine.Controller
       @$("[member-id=#{id}]")
         .toggleClass("available", available == true)
         .toggleClass("unavailable", available == false)
+    @toggleEmpty()
+
+  toggleEmpty: ->
+    visible = if @el.hasClass("show-all")
+      @$(".member:not(.hidden)")
+    else
+      @$(".member.available:not(.hidden)")
+    @$(".empty").toggleClass("hidden", !!visible.length)
 
   toggleAvailability: (e) ->
     if @el.hasClass("show-all")
@@ -182,11 +209,13 @@ class Availability extends Spine.Controller
         @instance.setAvailability member, undefined
       else
         @instance.setAvailability member, true
+    @toggleEmpty()
 
   changeView: (e) ->
     mode = $(e.target).attr("rel")
     @el.toggleClass "show-all", mode == "all"
     @modeSelector.text I18n.t("events.instance.availability.#{mode}")
+    @toggleEmpty()
 
   filter: ->
     clearTimeout @_filter
@@ -199,8 +228,31 @@ class Availability extends Spine.Controller
         @$(".list-item[member-id=#{member.id}]").removeClass("hidden")
     else
       @$(".list-item").removeClass("hidden")
+    @toggleEmpty()
 
   openItem: (e) ->
     item = $(e.target).closest(".list-item")
-    unless item.has(".menu").length
+    menu = item.find(".menu")
+    member = @group.members().find(item.attr("member-id"))
+    unless menu.length
       menu = $("<div>", class: "menu").appendTo(item)
+      for role in @instance.event().roles().forMember(member)
+        $("<button>", "role-id": role.id, text: role.name())
+          .appendTo(menu)
+    menu.find("button").each (i, el) =>
+      button = $(el)
+      role = button.attr("role-id")
+      button.toggleClass("active", @instance.assigned(member, role))
+
+  assignRole: (e) ->
+    button = $(e.target).closest("[role-id]")
+    item = button.closest(".list-item")
+    member = @group.members().find(item.attr("member-id"))
+    role = button.attr("role-id")
+    if button.hasClass("active")
+      button.removeClass("active")
+      @instance.unassign(member, role)
+    else
+      button.addClass("active")
+      @instance.assign(member, role)
+    item.removeClass("open")

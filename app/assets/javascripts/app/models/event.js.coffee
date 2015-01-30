@@ -146,6 +146,9 @@ class Role extends Spine.Model
     else
       "#{@minimum()}–#{@maximum()}"
 
+  validNumber: (n) ->
+    @minimum() <= n <= (@maximum() || n)
+
   toJSON: ->
     data = super
     delete data.maximum unless @_maximum?
@@ -175,6 +178,9 @@ class Roles
     @_roles.sort Role.comparator
 
   all: -> @_roles
+
+  forMember: (member) ->
+    (role for role in @all() when member.suitable(role))
 
   find: (id) ->
     @_rolesById[id]
@@ -245,7 +251,7 @@ class Instance extends Spine.Model
   unassign: (member, role) ->
     if @assigned(member, role)
       members = @assignmentsForRole(role)
-      while (index = members.index(member.id ? member)) > -1
+      while (index = members.indexOf(member.id ? member)) > -1
         members.splice(index, 1)
       @trigger "change"
 

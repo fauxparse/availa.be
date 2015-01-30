@@ -2,11 +2,11 @@
   %section{"role-id": role.id}
     %h3
       = if role.maximum() == 1 then role.name() else role.plural()
-      %small = "(#{role.range()})"
+      %small{rel: "role"} = "(#{role.range()})"
     %ul.members.list
       - for member in @group.members().all()
         - color = Color.of(member.id)
-        %li.list-item{"member-id" => member.id}
+        %li.list-item.member{"member-id" => member.id}
           .slider
             .primary-action
               .avatar{style: "background-color: #{color}; border-color: #{color}; color: #{color};"}

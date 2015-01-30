@@ -12,7 +12,7 @@
 %ul.list
   - for member in @group.members().all()
     - color = Color.of(member.id)
-    %li.list-item{"member-id" => member.id}
+    %li.list-item.member{"member-id" => member.id}
       .slider
         .primary-action
           .avatar{style: "background-color: #{color}; border-color: #{color}; color: #{color};"}
@@ -20,5 +20,8 @@
             %i.icon-clear
           .text
             .line= member.name()
-  - for i in [0..7]
-    %li
+  %li.list-item.empty
+    .primary-action
+      %i.icon.icon-warning
+      .text
+        .line = I18n.t("events.instance.availability.empty")
