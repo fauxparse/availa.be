@@ -23,6 +23,7 @@ class App.Events.Show extends App.Section.Page
     @render()
 
     if @event_id
+      console.log "loading"
       @el.addClass "loading"
       url = @event.url()
       App.Event.on "ajaxSuccess", @loaded
@@ -34,13 +35,15 @@ class App.Events.Show extends App.Section.Page
     @$("header [rel=back]").attr href: @back
 
   loaded: =>
-    if App.Event.exists(@event_id)
-      @event = App.Event.find @event_id
-      @event.on "change", @render
-      @el.removeClass "loading"
-      App.Event.off "ajaxSuccess", @loaded
-      @_loaded = true
-      @render()
+    setTimeout =>
+      if App.Event.exists(@event_id)
+        @event = App.Event.find @event_id
+        @event.on "change", @render
+        @el.removeClass "loading"
+        App.Event.off "ajaxSuccess", @loaded
+        @_loaded = true
+        @render()
+    , 0
 
   render: =>
     @header.
