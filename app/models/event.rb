@@ -67,7 +67,7 @@ class Event
   end
 
   def patched(hash)
-    patch(hash)
+    patch hash
     save
     self
   end

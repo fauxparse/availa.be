@@ -17,6 +17,10 @@ class Group
     User.where(:"memberships.group_id" => id)
   end
 
+  def user_ids
+    users.only(:id).map(&:id)
+  end
+
   def admins
     users.where(:"memberships.admin" => true)
   end

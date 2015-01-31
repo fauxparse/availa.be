@@ -60,6 +60,12 @@ class Event
       assign_attributes attrs
     end
 
+    def patched(attrs)
+      patch attrs
+      save
+      self
+    end
+
     protected
 
     def assignments_for(role)

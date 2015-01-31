@@ -113,11 +113,6 @@ class Assignments extends Spine.Controller
 
   changed: =>
     @update()
-    clearTimeout @_saveTimer
-    @_saveTimer = setTimeout @save, 2000
-
-  save: =>
-    @instance.event().save()
 
   update: =>
     assigned = {}

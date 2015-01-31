@@ -47,8 +47,7 @@ class EventsController < ApplicationController
   protected
 
   def group
-    @group ||=
-      (Group.find_by(slug: params[:group_id]) if params[:group_id].present?)
+    @group ||= Group.find_by(slug: params[:group_id])
   end
 
   def event

@@ -232,8 +232,10 @@ class Instance extends Spine.Model
     results
 
   setAvailability: (member, state) ->
-    @availability()[member.id] = state
-    @trigger "change"
+    id = member.id ? member
+    @availability()[id] = state
+    @changes().availability[id] = state
+    @changed()
 
   assignments: (assignments) ->
     if assignments?
@@ -246,14 +248,16 @@ class Instance extends Spine.Model
   assign: (member, role) ->
     unless @assigned(member, role)
       @assignmentsForRole(role).push(member.id || member)
-      @trigger "change"
+      @changes().assignments[role.id ? role] = @assignmentsForRole(role)
+      @changed()
 
   unassign: (member, role) ->
     if @assigned(member, role)
       members = @assignmentsForRole(role)
       while (index = members.indexOf(member.id ? member)) > -1
         members.splice(index, 1)
-      @trigger "change"
+      @changes().assignments[role.id ? role] = @assignmentsForRole(role)
+      @changed()
 
   assigned: (member, role) ->
     @assignmentsForRole(role).indexOf(member.id || member) > -1
@@ -264,6 +268,37 @@ class Instance extends Spine.Model
       assignments: @assignments()
       availability: @availability()
     }
+
+  changed: ->
+    clearTimeout @_changeTimer
+    @trigger "change"
+    @_changeTimer = setTimeout @saveChanges, 2000
+
+  changes: ->
+    @_changes ||= { assignments: {}, availability: {} }
+
+  saveChanges: =>
+    @trigger "saving"
+    changes = $.extend {}, @changes()
+    params = $.extend {}, Spine.Ajax.defaults,
+      url: @url()
+      type: "put"
+      data: JSON.stringify(changes)
+      contentType: "application/json"
+    console.log params
+    $.ajax(params)
+      .done =>
+        delete @_changes
+        @trigger "saved"
+      .fail =>
+        @_changes = $.extend changes, @changes()
+        @trigger "failed"
+
+  url: ->
+    @event().url() + "/times/#{@toParam()}"
+
+  toParam: ->
+    @time().toISOString().replace(/\.\d+/, "")
 
   @factory: (attrs, event) ->
     instance = @fromJSON(attrs)

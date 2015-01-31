@@ -7,7 +7,10 @@ Rails.application.routes.draw do
     end
 
     resources :groups do
-      resources :events
+      resources :events do
+        resources :times, param: :time, controller: 'instances', only: :update
+      end
+
       resources :skills
 
       get 'preferences', on: :member
