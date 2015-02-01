@@ -25,10 +25,13 @@ class App.Groups.Show extends App.Section.Page
     App.Event.fetchGroup(@group)
 
   loaded: =>
-    @group = App.Group.find @group.id
-    @el.removeClass "loading"
-    App.Group.off "ajaxSuccess", @loaded
-    @_loaded = true
+    setTimeout =>
+      if App.Group.exists @group.id
+        @group = App.Group.find @group.id
+        @el.removeClass "loading"
+        App.Group.off "ajaxSuccess", @loaded
+        @_loaded = true
+    , 0
 
   render: =>
     @header.css(backgroundColor: @group.color())

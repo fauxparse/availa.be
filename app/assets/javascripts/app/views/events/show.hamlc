@@ -3,7 +3,7 @@
     %li.list-item{ time: instance.time().toISOString() }
       .primary-action
         .avatar
-          %i.icon-event
+          %i.icon.icon-unknown
         .text
           .line= instance.time().format("LLLL")
-          .line= "Boop"
+          .line.description= instance.description()

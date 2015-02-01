@@ -51,6 +51,19 @@ class App.Group extends Spine.Model
   @comparator: (a, b) ->
     a.name.toLocaleLowerCase().localeCompare b.name.toLowerCase()
 
+  @wait: (id, fetch = true) ->
+    promise = $.Deferred()
+    if @exists(id) && @find(id).members().count()
+      promise.resolve @find(id)
+    else
+      found = =>
+        if @exists(id)
+          @unbind "refresh", found
+          promise.resolve @find(id)
+      @bind "refresh", found
+      @fetch(id: id) if fetch
+    promise
+
 class Member extends Spine.Model
   @configure "Member", "name", "admin", "skill_ids"
 
@@ -75,6 +88,8 @@ class Member extends Spine.Model
   match: (regexp) ->
     regexp.test @_name
 
+  toString: -> @name()
+
   @factory: (attrs, group) ->
     member = @fromJSON attrs
     member._group = group
@@ -98,6 +113,8 @@ class Members
   group: -> @_group
 
   all: -> @_members
+
+  count: -> @all().length
 
   find: (id) ->
     @_membersById[id]

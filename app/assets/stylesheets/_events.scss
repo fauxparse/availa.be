@@ -201,6 +201,58 @@ section .show-event {
     .primary-action {
       cursor: pointer;
     }
+
+    .avatar {
+      background: white;
+      color: disabled-color();
+      border: 0.125rem solid disabled-color();
+
+      .icon {
+        display: none;
+        margin: -0.125rem;
+      }
+    }
+
+    .available .avatar {
+      border-color: $green;
+
+      .icon {
+        display: block;
+        color: $green;
+
+        &::before {
+          content: $font-icons-check;
+        }
+      }
+    }
+
+    .unavailable .avatar {
+      border-color: $red;
+
+      .icon {
+        display: block;
+        color: $red;
+
+        &::before {
+          content: $font-icons-clear;
+        }
+      }
+    }
+
+    .assigned .avatar {
+      background: $green;
+      border: none;
+
+      .icon {
+        display: block;
+        color: white;
+        margin: 0;
+
+        &::before {
+          content: $font-icons-check;
+        }
+      }
+    }
   }
 }
 

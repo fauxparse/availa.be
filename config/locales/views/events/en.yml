@@ -24,6 +24,7 @@ en:
         add: "Add/edit %{plural}"
         done: "Finished editing"
         m_of_n: "(%{m} of %{n})"
+        nobody: "(Nobody assigned yet)"
       availability:
         available: Available only
         all: All users

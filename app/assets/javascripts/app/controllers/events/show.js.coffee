@@ -10,7 +10,8 @@ class App.Events.Show extends App.Section.Page
     super
     @el.addClass("show-event")
     @on "release", =>
-      @event?.off "change", @render
+      @event?.off("change", @render)
+        .off("instance", @updateInstance)
 
   load: (params) ->
     @event?.off "change", @render
@@ -23,7 +24,6 @@ class App.Events.Show extends App.Section.Page
     @render()
 
     if @event_id
-      console.log "loading"
       @el.addClass "loading"
       url = @event.url()
       App.Event.on "ajaxSuccess", @loaded
@@ -39,10 +39,11 @@ class App.Events.Show extends App.Section.Page
       if App.Event.exists(@event_id)
         @event = App.Event.find @event_id
         @event.on "change", @render
+        @event.on "instance", @updateInstance
         @el.removeClass "loading"
         App.Event.off "ajaxSuccess", @loaded
         @_loaded = true
-        @render()
+        App.Group.wait(@event.group_id, false).done @render
     , 0
 
   render: =>
@@ -56,7 +57,9 @@ class App.Events.Show extends App.Section.Page
         append($("<h2>", text: @event.dateRange().toString())).
         end()
     @content.empty()
-    @html @view("events/show")(event: @event) if @_loaded
+    if @_loaded
+      @html @view("events/show")(event: @event)
+      @updateInstances()
 
   renderHeader: =>
     super
@@ -65,6 +68,20 @@ class App.Events.Show extends App.Section.Page
       append($("<i>", class: "icon-settings")).
       appendTo(@header)
     @refreshElements()
+
+  updateInstances: ->
+    for instance in @event.instances().all()
+      @updateInstance instance
+
+  updateInstance: (instance) =>
+    li = @$(".list-item[time=\"#{instance.time().toISOString()}\"]")
+    current = App.User.current()
+    available = instance.isAvailable(current)
+    li
+      .toggleClass("assigned", instance.assigned(current))
+      .toggleClass("available", available)
+      .toggleClass("unavailable", available == false)
+      .find(".description").text(instance.description()).end()
 
   showInstance: (e) ->
     e.preventDefault()
