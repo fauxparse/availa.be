@@ -64,12 +64,12 @@ class User
   end
 
   def available_for?(event_or_instance)
-    instances = if event_or_instance.respond_to? :instances
-      event_or_instance.instances.all
+    if event_or_instance.respond_to? :instances
+      instances = event_or_instance.instances.all
     else
-      [event_or_instance]
+      instances = [event_or_instance]
     end
 
-    instances.any? { |a| a.has_available? self }
+    instances.any? { |a| a.available? self }
   end
 end

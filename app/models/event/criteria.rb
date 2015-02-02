@@ -14,6 +14,7 @@ class Event
       }
     end
 
+    # rubocop:disable Metrics/MethodLength
     def self.user(user)
       {
         :$and => [
@@ -29,6 +30,7 @@ class Event
         ]
       }
     end
+    # rubocop:enable Metrics/MethodLength
 
     def self.pending(user)
       {

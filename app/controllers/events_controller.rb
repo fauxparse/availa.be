@@ -92,21 +92,17 @@ class EventsController < ApplicationController
     [
       :id,
       :time,
-      { :assignments => role_keys },
-      { :availability => id_keys }
+      { assignments: role_keys },
+      { availability: id_keys }
     ]
   end
 
   def role_keys
-    event.roles.reduce({}) { |h, r| h[r.id.to_s] = []; h }
+    event.roles.each_with_object({}) { |r, h| h[r.id.to_s] = [] }
   end
 
   def id_keys
-    @_id_keys ||= if event.group?
-      event.group.users.map { |u| u.id.to_s }
-    else
-      []
-    end
+    @_id_keys ||= event.group? ? event.group.users.map { |u| u.id.to_s } : []
   end
 
   def policy_scope(group)

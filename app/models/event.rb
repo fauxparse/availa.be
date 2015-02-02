@@ -76,9 +76,9 @@ class Event
 
   def update_instances
     valid_times = times.map(&:first)
-    instances.
-      select { |instance| !valid_times.include? instance.time }.
-      map(&:destroy)
+    instances
+      .select { |instance| !valid_times.include? instance.time }
+      .map(&:destroy)
     add_missing_instances valid_times
     instances.sort!
   end
@@ -95,5 +95,4 @@ class Event
     self.starts_at = all_times.first.try(:first)
     self.ends_at = all_times.last.try(:last)
   end
-
 end

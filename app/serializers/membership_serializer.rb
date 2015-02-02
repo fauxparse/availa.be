@@ -6,6 +6,6 @@ class MembershipSerializer < ActiveModel::Serializer
   end
 
   def skill_ids
-    object.abilities.map &:skill_id
+    object.abilities.map(&:skill_id)
   end
 end

@@ -30,8 +30,12 @@ class InstancesController < ApplicationController
 
   def instance_params
     params.require(:instance).permit(
-      assignments: event.roles.inject({}) { |h, r| h[r.id.to_s] = []; h },
+      assignments: event_role_params,
       availability: group.user_ids.map(&:to_s)
     )
+  end
+
+  def event_role_params
+    event.roles.each_with_object({}) { |i, a| a[i.id.to_s] = [] }
   end
 end

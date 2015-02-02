@@ -14,9 +14,7 @@ class Event
     end
 
     def assign(user, role)
-      unless assigned? user, role
-        assignments_for(role) << user.id
-      end
+      assignments_for(role) << user.id unless assigned? user, role
     end
 
     def assign!(user, role)
@@ -46,13 +44,13 @@ class Event
       write_attribute :availability, {} if availability.nil?
 
       if available.nil?
-        self.availability.delete id
+        availability.delete id
       else
-        self.availability[id] = available
+        availability[id] = available
       end
     end
 
-    def has_available?(user)
+    def available?(user)
       availability_for(user) == true
     end
 
@@ -72,7 +70,7 @@ class Event
       write_attribute :assignments, [] if assignments.nil?
       id = role.try(:id) || BSON::ObjectId.from_string(role)
       object = assignments.detect { |o| o[:role_id] == id } ||
-        { role_id: id, user_ids: [] }.tap { |o| assignments << o }
+               { role_id: id, user_ids: [] }.tap { |o| assignments << o }
       object[:user_ids]
     end
 
