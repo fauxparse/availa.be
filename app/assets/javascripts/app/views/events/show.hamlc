@@ -1,9 +1,12 @@
-%ul.list.instances
-  - for instance in @event.instances().all()
-    %li.list-item{ time: instance.time().toISOString() }
-      .primary-action
-        .avatar
-          %i.icon.icon-unknown
-        .text
-          .line= instance.time().format("LLLL")
-          .line.description= instance.description()
+%p Meh umami wayfarers chambray tilde flannel, Thundercats crucifix.  Kitsch Williamsburg aesthetic asymmetrical.  Chillwave Echo Park tofu Bushwick direct trade  umami.  Austin messenger bag flannel vegan, XOXO art party put a bird on it gentrify bitters taxidermy.  Retro 3 wolf moon Austin, photo booth iPhone meh lumbersexual biodiesel plaid.  Fanny pack PBR trust fund try-hard pour-over.  Before they sold out Vice lo-fi VHS fashion axe literally.
+
+.instances
+  %ul.list
+    - for instance in @event.instances().all()
+      %li.instance-availability.list-item{ time: instance.time().toISOString() }
+        .primary-action
+          .avatar
+            %i.icon.icon-unknown
+          .text
+            .line= instance.time().format("LLLL")
+            .line.description

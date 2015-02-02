@@ -3,6 +3,7 @@
 class App.Events.Instance extends Spine.Controller
   elements:
     ".container > header": "header"
+    ".container > header .instance-availability": "title"
     ".container": "container"
 
   events:
@@ -10,12 +11,15 @@ class App.Events.Instance extends Spine.Controller
     "tap header .tabs a": "switchTabs"
     "flick,drag .availability .list-item:not(.open)": "openItem"
     "flick,tap .availability .list-item.open .avatar": "closeItem"
+    "tap header .instance-availability .avatar": "cycleMyAvailability"
 
   init: ->
     @el.addClass "event-instance"
     @group = @instance.event().group()
 
     @html @view("events/instance")(instance: @instance, group: @group)
+
+    @changed()
 
     @controllers =
       assignments: Assignments
@@ -31,8 +35,10 @@ class App.Events.Instance extends Spine.Controller
       .addClass("active")
 
     $(window).on "resize", @resize
+    @instance.on "change", @changed
 
     @on "release", =>
+      @instance.off "change", @changed
       $(window).off "resize", @resize
 
   release: =>
@@ -40,20 +46,23 @@ class App.Events.Instance extends Spine.Controller
       @[key].release()
     super
 
+  changed: =>
+    available = @instance.isAvailable(App.User.current())
+    @title
+      .toggleClass("assigned", @instance.assigned(App.User.current()))
+      .toggleClass("available", !!available)
+      .toggleClass("unavailable", available == false)
+
   showFrom: (source) ->
     @_source = source
-    @appendTo("section.main")
 
     top = @_source.offset().top
-
-    @el.css
-      top: top
-      height: @_source.outerHeight()
-      opacity: 0
-    @el.transition(
-      { y: -top, height: "100%", opacity: 1 }
-      { duration: 500, easing: "easeOutCubic" }
-    ).queue @shown
+    @_source.css opacity: 0
+    @el.css(y: top).appendTo("section.main")
+    setTimeout =>
+      @el.addClass("in").queue @shown
+      setTimeout @shown, 500
+    , 0
 
   shown: =>
     @resize()
@@ -62,12 +71,11 @@ class App.Events.Instance extends Spine.Controller
 
   hide: (e) ->
     e?.preventDefault()
-    @el
-      .transition({ y: 0, height: @_source.outerHeight() })
-      .transition(opacity: 0)
-      .queue(@hidden)
+    @el.removeClass("in")
+    setTimeout @hidden, 500
 
   hidden: =>
+    @_source.css opacity: 1
     @trigger "hidden"
     @el.remove()
     @release()
@@ -79,7 +87,7 @@ class App.Events.Instance extends Spine.Controller
     top = Math.max(@container.scrollTop() - @_scrollOffset, 0)
     @header
       .toggleClass("floating", !!top)
-      .css(transform: "translateY(#{top}px)")
+      .css(y: top)
 
   switchTabs: (e) ->
     tab = $(e.target).closest("a").attr("rel")
@@ -93,6 +101,12 @@ class App.Events.Instance extends Spine.Controller
   closeItem: (e) ->
     e.preventDefault()
     $(e.target).closest(".list-item").removeClass("open").trigger("close")
+
+  cycleMyAvailability: (e) ->
+    e.preventDefault()
+    current = App.User.current()
+    unless @instance.assigned(current)
+      @instance.cycleAvailability(current)
 
 class Assignments extends Spine.Controller
   tag: "section"
@@ -160,7 +174,7 @@ class Availability extends Spine.Controller
     "[type=search]": "searchBox"
 
   events:
-    "tap .member:not(.open) .avatar": "toggleAvailability"
+    "tap .member:not(.open) .avatar": "cycleAvailability"
     "click [rel=mode] .dropdown-menu": "changeView"
     "input [type=search]": "filter"
     "open [member-id]": "openItem"
@@ -194,16 +208,10 @@ class Availability extends Spine.Controller
       @$(".member.available:not(.hidden)")
     @$(".empty").toggleClass("hidden", !!visible.length)
 
-  toggleAvailability: (e) ->
+  cycleAvailability: (e) ->
     if @el.hasClass("show-all")
-      li = $(e.target).closest("li")
-      member = @group.members().find(li.attr("member-id"))
-      if li.hasClass("available")
-        @instance.setAvailability member, false
-      else if li.hasClass("unavailable")
-        @instance.setAvailability member, undefined
-      else
-        @instance.setAvailability member, true
+      member = $(e.target).closest("li").attr("member-id")
+      @instance.cycleAvailability member
     @toggleEmpty()
 
   changeView: (e) ->

@@ -38,6 +38,12 @@ class Instance extends Spine.Model
     @changes().availability[id] = state
     @changed()
 
+  cycleAvailability: (member) ->
+    switch @isAvailable(member)
+      when true then @setAvailability(member, false)
+      when false then @setAvailability(member, undefined)
+      else @setAvailability(member, true)
+
   assignments: (assignments) ->
     if assignments?
       @_assignments = assignments

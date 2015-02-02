@@ -3,12 +3,17 @@
 class App.Events.Show extends App.Section.Page
   back: "/events"
 
+  elements:
+    "header": "header"
+
   events:
     "tap .instances .primary-action": "showInstance"
+    "tap .instance-availability .avatar": "cycleMyAvailability"
 
   init: ->
     super
     @el.addClass("show-event")
+      .on("scroll", @scroll)
     @on "release", =>
       @event?.off("change", @render)
         .off("instance", @updateInstance)
@@ -59,7 +64,8 @@ class App.Events.Show extends App.Section.Page
     @content.empty()
     if @_loaded
       @html @view("events/show")(event: @event)
-      @updateInstances()
+      App.Group.wait(@event.group_id, false).done @updateInstances
+    @resize()
 
   renderHeader: =>
     super
@@ -69,7 +75,25 @@ class App.Events.Show extends App.Section.Page
       appendTo(@header)
     @refreshElements()
 
-  updateInstances: ->
+  resize: ->
+    @_scrollMin = parseInt @header.css("minHeight"), 10
+    @_scrollOffset = (@header.outerHeight() - @_scrollMin)
+    @scroll()
+
+  scroll: =>
+    scrollTop = @el.scrollTop()
+    top = Math.max(0, scrollTop - @_scrollOffset)
+    @header
+      .toggleClass("floating", !!top)
+      .css(y: top)
+    @header.find(".top-left-button, [rel=edit]")
+      .css y: Math.min(scrollTop, @_scrollMin + 16)
+
+  activate: ->
+    super
+    @resize()
+
+  updateInstances: =>
     for instance in @event.instances().all()
       @updateInstance instance
 
@@ -79,7 +103,7 @@ class App.Events.Show extends App.Section.Page
     available = instance.isAvailable(current)
     li
       .toggleClass("assigned", instance.assigned(current))
-      .toggleClass("available", available)
+      .toggleClass("available", !!available)
       .toggleClass("unavailable", available == false)
       .find(".description").text(instance.description()).end()
 
@@ -89,3 +113,11 @@ class App.Events.Show extends App.Section.Page
     instance = @event.instances().find source.attr("time")
     controller = new App.Events.Instance { instance }
     controller.showFrom source
+
+  cycleMyAvailability: (e) ->
+    time = moment($(e.target).closest("li").attr("time"))
+    current = App.User.current()
+    instance = @event.instances().find(time)
+    unless instance.assigned(current)
+      e.stopPropagation()
+      instance.cycleAvailability(current)

@@ -1,10 +1,15 @@
 .container
   %header
-    %button{rel: "back"}
-      %i.icon-clear
-    .title
-      %h1= @instance.event().name()
-      %h2= @instance.time().format("LLLL")
+    .list-item.instance-availability
+      .primary-action
+        .avatar
+          %i.icon.icon-check
+        .text
+          .line= @instance.time().format("LLLL")
+          .line= @instance.event().name()
+      .secondary-action
+        %button{rel: "back"}
+          %i.icon-clear
     %ul.tabs
       %li
         %a{href: "#", rel: "assignments"}

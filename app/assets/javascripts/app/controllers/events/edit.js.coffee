@@ -50,7 +50,8 @@ class App.Events.Edit extends App.Events.Show
       @render()
 
   render: =>
-    @title I18n.t("events.edit.title", @event.name()) unless @event.isNew()
+    unless @event.isNew() or !@event?
+      @title I18n.t("events.edit.title", @event.name())
     @content.empty()
     if @_loaded
       weekdays = ([w, i] for w, i in moment.weekdaysMin()).
@@ -69,7 +70,7 @@ class App.Events.Edit extends App.Events.Show
   renderRoles: ->
     @roles.empty()
     group = @event.group()
-    for role in @event.roles()
+    for role in @event.roles().all()
       $(@view("events/role")({ role, group })).
         data({ role }).
         appendTo(@roles)

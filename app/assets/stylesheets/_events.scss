@@ -174,9 +174,69 @@ section.edit-event {
   }
 }
 
+.list-item.instance-availability {
+  .avatar {
+    background: white;
+    color: disabled-color();
+    border: 0.125rem solid disabled-color();
+
+    .icon {
+      display: none;
+      margin: -0.125rem;
+    }
+  }
+
+  &.available .avatar {
+    border-color: $green;
+
+    .icon {
+      display: block;
+      color: $green;
+
+      &::before {
+        content: $font-icons-check;
+      }
+    }
+  }
+
+  &.unavailable .avatar {
+    border-color: $red;
+
+    .icon {
+      display: block;
+      color: $red;
+
+      &::before {
+        content: $font-icons-clear;
+      }
+    }
+  }
+
+  &.assigned .avatar {
+    background: $green;
+    border: none;
+
+    .icon {
+      display: block;
+      color: white;
+      margin: 0;
+
+      &::before {
+        content: $font-icons-check;
+      }
+    }
+  }
+}
+
 section .show-event {
   > header {
     height: auto;
+    min-height: 5rem;
+
+    @include shadow(0);
+    @include transition-property(box-shadow);
+    @include transition-duration($animation-duration);
+    @include transition-timing-function($animation-timing-function);
 
     .title {
       padding-top: 6rem;
@@ -195,63 +255,22 @@ section .show-event {
         color: secondary-color(white);
       }
     }
+
+    &.floating {
+      position: relative;
+      z-index: 10;
+      @include shadow(1);
+    }
+  }
+
+  .content p {
+    margin-left: $keyline;
+    margin-right: 1rem;
   }
 
   .instances {
     .primary-action {
       cursor: pointer;
-    }
-
-    .avatar {
-      background: white;
-      color: disabled-color();
-      border: 0.125rem solid disabled-color();
-
-      .icon {
-        display: none;
-        margin: -0.125rem;
-      }
-    }
-
-    .available .avatar {
-      border-color: $green;
-
-      .icon {
-        display: block;
-        color: $green;
-
-        &::before {
-          content: $font-icons-check;
-        }
-      }
-    }
-
-    .unavailable .avatar {
-      border-color: $red;
-
-      .icon {
-        display: block;
-        color: $red;
-
-        &::before {
-          content: $font-icons-clear;
-        }
-      }
-    }
-
-    .assigned .avatar {
-      background: $green;
-      border: none;
-
-      .icon {
-        display: block;
-        color: white;
-        margin: 0;
-
-        &::before {
-          content: $font-icons-check;
-        }
-      }
     }
   }
 }
@@ -260,7 +279,16 @@ section .show-event {
   position: absolute;
   left: 0;
   right: 0;
-  opacity: 0;
+  height: 4.5rem;
+  @include shadow(2);
+  @include transition-property(transform height);
+  @include transition-duration($animation-duration);
+  @include transition-timing-function($animation-timing-function);
+
+  &.in {
+    @include transform(translate(0, 0) !important);
+    height: 100%;
+  }
 
   .container {
     @include position(absolute, 0rem 0rem 0rem 0rem);
@@ -278,13 +306,12 @@ section .show-event {
     }
   }
 
-  $header-size: 7rem;
+  $header-size: 7.5rem;
 
   .container > header {
     position: relative;
     background-color: rgba($base-background-color, 0.95);
     z-index: 10;
-    padding: 1rem 1rem 0rem $keyline;
     border-bottom: 1px solid divider-color();
     height: $header-size;
     @include transition(box-shadow 0.25s ease, border-color 0.25s ease);
@@ -353,27 +380,29 @@ section .show-event {
     color: $red;
   }
 
-  @include media($medium-screen) {
-    .list {
-      @include clearfix;
-      @include user-select(none);
+  section {
+    @include media($medium-screen) {
+      .list {
+        @include clearfix;
+        @include user-select(none);
 
-      li:empty {
-        height: 0;
+        li:empty {
+          height: 0;
+          width: 50%;
+        }
+      }
+
+      .list-item {
+        float: left;
         width: 50%;
       }
     }
 
-    .list-item {
-      float: left;
-      width: 50%;
-    }
-  }
-
-  @include media($large-screen) {
-    .list li:empty,
-    .list-item {
-      width: (100%/3);
+    @include media($large-screen) {
+      .list li:empty,
+      .list-item {
+        width: (100%/3);
+      }
     }
   }
 
