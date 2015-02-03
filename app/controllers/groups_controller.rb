@@ -29,7 +29,7 @@ class GroupsController < ApplicationController
   protected
 
   def preferences_params
-    params.require(:preferences).permit(:color)
+    params.require(:preferences).permit(:name, :color)
   end
 
   def group

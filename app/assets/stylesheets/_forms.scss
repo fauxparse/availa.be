@@ -23,13 +23,34 @@ input, textarea {
 }
 
 fieldset {
-  background: $base-background-color;
+  background: transparent;
   border: none;
   padding: 0 1rem 1rem;
+
+  :not(fieldset) > & {
+    + fieldset {
+      border-top: 1px solid divider-color();
+    }
+
+    > legend {
+      float: left;
+      @include type-caption;
+      font-weight: $bold-font-weight;
+      width: 100%;
+      padding: 0.5rem 0 0.5rem ($keyline - 1rem);
+
+      &::after {
+        content: "";
+        display: block;
+        clear: both;
+      }
+    }
+  }
 
   fieldset {
     position: relative;
     padding: 0 0 0 3.5rem;
+    border-top: none;
 
     legend {
       position: absolute;
@@ -38,6 +59,7 @@ fieldset {
 
       i {
         font-size: 1.5rem;
+        color: secondary-color();
       }
     }
   }
@@ -83,6 +105,14 @@ fieldset {
     &.large {
       font-size: 1.5rem;
       line-height: 1.4em;
+    }
+  }
+
+  label {
+    @include type-caption;
+
+    &:first-child {
+      margin-top: 0.5rem;
     }
   }
 
@@ -217,5 +247,79 @@ fieldset {
   &.noUi-vertical {
     height: 2px;
   }
+}
 
+input.switch {
+  $switch-track-width: 2.125rem;
+  $switch-track-height: 0.875rem;
+  $switch-knob-size: 1.25rem;
+
+  display: none;
+
+  ~ span {
+    display: block;
+    padding-left: 3rem;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      margin: ($switch-track-height/-2) 0;
+      width: $switch-track-width;
+      height: $switch-track-height;
+      border-radius: ($switch-track-height/2);
+      background: disabled-color();
+      @include transition(background ($animation-duration/2) $animation-timing-function);
+      cursor: pointer;
+    }
+
+    &::after {
+      content: "";
+      @include position(absolute, 50% null null ($switch-track-height/2));
+      margin: ($switch-knob-size/-2);
+      width: $switch-knob-size;
+      height: $switch-knob-size;
+      border-radius: 50%;
+      background: $grey-100;
+      @include shadow(1);
+      @include transition(left ($animation-duration/2) $animation-timing-function);
+      cursor: pointer;
+    }
+  }
+
+  &:checked ~ span {
+    &::before {
+      background: secondary-color($base-accent-color);
+    }
+
+    &::after {
+      background: $base-accent-color;
+      left: $switch-track-width - ($switch-track-height/2);
+    }
+  }
+}
+
+.input-group {
+  @include align-items(stretch);
+  @include display(flex);
+  @include flex-direction(row);
+  @include justify-content(flex-start);
+
+  label, label:first-child {
+    @include type-form-control;
+    display: block;
+    line-height: 2em;
+    height: 2em;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: none;
+    border-bottom: 1px solid divider-color();
+  }
+
+  input {
+    @include flex(1);
+  }
 }

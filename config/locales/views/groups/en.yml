@@ -9,3 +9,5 @@ en:
       title: "Settings for %{group}"
       icon: settings
       save: Save
+      personal_preferences: Personal settings
+      group_preferences: Group settings

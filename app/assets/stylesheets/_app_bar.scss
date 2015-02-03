@@ -4,6 +4,10 @@
   background-color: $app-bar-background-color;
   color: white;
   padding: 1rem;
+  @include shadow(0);
+  @include transition-property(box-shadow);
+  @include transition-duration($animation-duration);
+  @include transition-timing-function($animation-timing-function);
 
   @include align-items(stretch);
   @include display(flex);
@@ -78,5 +82,11 @@
       margin-left: 0rem;
       margin-right: 1rem;
     }
+  }
+
+  &.floating {
+    position: relative;
+    z-index: 10;
+    @include shadow(1);
   }
 }

@@ -1,3 +1,42 @@
-.color-selector
-  - for color in Color.all()
-    .color{color: color.name, style: "background-color: #{color};", class: "#{if @group.color() == color then "active" else ""}"}
+%fieldset
+  %legend= I18n.t("groups.preferences.personal_preferences")
+  %fieldset
+    %legend
+      %i.icon-person
+    .field
+      %label{for: "user_name"}= I18n.t("mongoid.attributes.group.membership.name")
+      %input{type: "text", name: "name", id: "user_name", value: @member._name, placeholder: App.User.current().name}
+  %fieldset
+    %legend
+      %i.icon-skill
+    %ul.abilities.switches
+      - for skill in @group.skills().all()
+        %li
+          %label
+            %input.switch{type: "checkbox", name: "skill_ids", value: skill.id, checked: @member.hasSkill(skill)}
+            %span= skill.name()
+
+%fieldset
+  %legend= I18n.t("groups.preferences.group_preferences")
+
+  %fieldset
+    %legend
+      %i.icon-group
+    .field.with-floating-label
+      %input{type: "text", name: "name", value: @group.name(), id: "group_name", disabled: !@group.admin, required: true}
+      %label{for: "group_name"}= I18n.t("mongoid.attributes.group.name")
+
+  %fieldset
+    %legend
+      %i.icon-explore
+    .field{rel: "slug"}
+      .input-group
+        %input{type: "text", name: "slug", value: @group.slug, id: "group_slug", disabled: true, required: true}
+        %label.input-add-on{for: "group_slug"}= location.origin + App.Group.url() + "/"
+
+  %fieldset
+    %legend
+      %i.icon-palette
+    .color-selector
+      - for color in Color.all()
+        .color{color: color.name, style: "background-color: #{color};", class: "#{if @group.color() == color then "active" else ""}"}

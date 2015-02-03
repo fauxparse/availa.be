@@ -4,9 +4,13 @@ class App.Group extends Spine.Model
 
   @hasMany "skills", "App.Skill"
 
-  toString: -> @name
+  toString: -> @name()
 
   url: -> App.Group.url() + "/" + @toParam()
+
+  name: (value) ->
+    @_name = value if arguments.length
+    @_name
 
   toParam: -> @slug
 
@@ -17,9 +21,8 @@ class App.Group extends Spine.Model
 
   preferences: (preferences) ->
     if preferences?
-      @_preferences = $.extend @_preferences or {}, preferences
+      @_preferences = $.extend {}, @_preferences or {}, preferences
       unless @_loading
-        Spine.Ajax.disable => @save()
         @savePreferences()
     @_preferences
 
@@ -27,9 +30,10 @@ class App.Group extends Spine.Model
     if @preferences().color
       Color[@preferences().color]
     else
-      Color.of @name
+      Color.of @name()
 
   savePreferences: ->
+    Spine.Ajax.disable => @save()
     clearTimeout @_save
     @_save = setTimeout =>
       $.ajax
@@ -38,7 +42,7 @@ class App.Group extends Spine.Model
         contentType: "application/json"
         dataType: "json"
         data: JSON.stringify(preferences: @preferences())
-    , 250
+    , 1500
 
   members: (members) ->
     if members?
@@ -49,7 +53,7 @@ class App.Group extends Spine.Model
     super || @findByAttribute("slug", id)
 
   @comparator: (a, b) ->
-    a.name.toLocaleLowerCase().localeCompare b.name.toLowerCase()
+    a.name().toLocaleLowerCase().localeCompare b.name().toLowerCase()
 
   @wait: (id, fetch = true) ->
     promise = $.Deferred()
@@ -67,6 +71,9 @@ class App.Group extends Spine.Model
 class Member extends Spine.Model
   @configure "Member", "name", "admin", "skill_ids"
 
+  url: ->
+    @group().url() + "/members/#{@id}"
+
   name: (value) ->
     @_name = value if arguments.length
     @_name
@@ -78,8 +85,19 @@ class Member extends Spine.Model
   isSelf: ->
     @id == App.User.current().id
 
+  group: -> @_group
+
   skills: ->
     (skill for skill in group.skills().all() when skill.id in @skill_ids)
+
+  skill: (skill, able = true) ->
+    if able && !@hasSkill(skill)
+      @skill_ids.push(skill.id || skill)
+    else if !able && @hasSkill(skill)
+      @skill_ids.splice @skill_ids.indexOf(skill.id || skill), 1
+
+  hasSkill: (skill) ->
+    @skill_ids.indexOf(skill.id || skill) > -1
 
   suitable: (role) ->
     # TODO: match with user's skills for this group
@@ -89,6 +107,14 @@ class Member extends Spine.Model
     regexp.test @_name
 
   toString: -> @name()
+
+  save: ->
+    params = $.extend {}, Spine.Ajax.defaults,
+      url: @url()
+      type: "put"
+      contentType: "application/json"
+      data: JSON.stringify(@toJSON())
+    $.ajax params
 
   @factory: (attrs, group) ->
     member = @fromJSON attrs
@@ -108,6 +134,9 @@ class Members
     for member in @_members
       @_membersById[member.id] = member
 
+    @sort()
+
+  sort: ->
     @_members.sort Member.comparator
 
   group: -> @_group

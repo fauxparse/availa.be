@@ -30,6 +30,8 @@ class User
     ]
   }
 
+  scope :member_of, lambda { |group| where "memberships.group_id" => group.id }
+
   def groups
     if memberships.any?
       Array Group.find(*memberships.map(&:group_id))

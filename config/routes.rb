@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       end
 
       resources :skills
+      resources :members
 
       get 'preferences', on: :member
       put 'preferences', on: :member

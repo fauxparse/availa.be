@@ -1,13 +1,13 @@
 {
   "checksum": {
-    "previous": "a95f0e7984836e3cc07aab431291dc7ce9ff935927a980d37d2c70545b79c76d",
-    "current": "a95f0e7984836e3cc07aab431291dc7ce9ff935927a980d37d2c70545b79c76d"
+    "previous": "35b0e3f22516bc1caa233df7dbd351da628c12762a6ee01680f29f5355f37d7c",
+    "current": "35b0e3f22516bc1caa233df7dbd351da628c12762a6ee01680f29f5355f37d7c"
   },
   "fonts": [
-    "app/assets/fonts/icons_a95f0e7984836e3cc07aab431291dc7c.ttf",
-    "app/assets/fonts/icons_a95f0e7984836e3cc07aab431291dc7c.svg",
-    "app/assets/fonts/icons_a95f0e7984836e3cc07aab431291dc7c.woff",
-    "app/assets/fonts/icons_a95f0e7984836e3cc07aab431291dc7c.eot"
+    "app/assets/fonts/icons_35b0e3f22516bc1caa233df7dbd351da.ttf",
+    "app/assets/fonts/icons_35b0e3f22516bc1caa233df7dbd351da.svg",
+    "app/assets/fonts/icons_35b0e3f22516bc1caa233df7dbd351da.woff",
+    "app/assets/fonts/icons_35b0e3f22516bc1caa233df7dbd351da.eot"
   ],
   "glyphs": {
     "access-time": {
@@ -62,6 +62,10 @@
       "codepoint": 61905,
       "source": "app/assets/icons/svg/event.svg"
     },
+    "explore": {
+      "codepoint": 62261,
+      "source": "app/assets/icons/svg/explore.svg"
+    },
     "group": {
       "codepoint": 62002,
       "source": "app/assets/icons/svg/group.svg"
@@ -90,6 +94,10 @@
       "codepoint": 62255,
       "source": "app/assets/icons/svg/more-vert.svg"
     },
+    "palette": {
+      "codepoint": 62259,
+      "source": "app/assets/icons/svg/palette.svg"
+    },
     "person": {
       "codepoint": 62189,
       "source": "app/assets/icons/svg/person.svg"
@@ -105,6 +113,10 @@
     "settings": {
       "codepoint": 62252,
       "source": "app/assets/icons/svg/settings.svg"
+    },
+    "skill": {
+      "codepoint": 62260,
+      "source": "app/assets/icons/svg/skill.svg"
     },
     "unknown": {
       "codepoint": 62258,

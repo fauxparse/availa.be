@@ -3,7 +3,7 @@
     .avatar{style: "background-color: #{@group.color()};"}
       %i.icon.icon-group
     .text
-      .line{style: "color: #{@group.color()};"}= @group.name
+      .line{style: "color: #{@group.color()};"}= @group.name()
       .line Lorem ipsum dolor sit amet
   %a.secondary-action{href: "/groups/#{@group.slug}/preferences", rel: "preferences"}
     %i{class: "icon icon-#{I18n.t("groups.preferences.icon")}"}

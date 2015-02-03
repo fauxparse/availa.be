@@ -12,8 +12,7 @@ class GroupSerializer < ActiveModel::Serializer
     super.tap do |data|
       data.merge!(
         admin: membership.admin?,
-        preferences: membership.preferences.as_json.except('_id'),
-        abilities: membership.abilities.map { |a| a.as_json.except('_id') }
+        preferences: membership.preferences.as_json.except('_id')
       )
     end
   end

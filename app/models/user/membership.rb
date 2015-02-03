@@ -21,5 +21,22 @@ class User
     def name
       preferences.name || user.name
     end
+
+    def name=(value)
+      value = nil if value.blank?
+      preferences.name = value
+    end
+
+    def skill_ids
+      abilities.collect(&:id)
+    end
+
+    def skill_ids=(ids)
+      abilities.keep_if { |a| ids.include? a.skill_id.to_s }
+      ids.each do |id|
+        abilities.detect { |a| a.skill_id.to_s == id.to_s } ||
+          abilities.build(skill_id: id)
+      end
+    end
   end
 end

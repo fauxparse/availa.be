@@ -12,11 +12,6 @@ class App.Groups.Index extends App.Section.Page
     @sidebarList = $(".main-navigation .groups-list")
     App.Group.bind "refresh change", @renderSidebarList
 
-    @sidebarList.on "click", "[rel=preferences]", (e) ->
-      e.preventDefault()
-      group = App.Group.find($(e.target).closest("[group-id]").attr("group-id"))
-      new App.GroupPreferences({ group })
-
   render: =>
     @content.html @view("groups/index")(groups: App.Group.sort().all())
 

@@ -4,11 +4,11 @@
 
 @font-face {
   font-family: "icons";
-  src: font-url("icons_a95f0e7984836e3cc07aab431291dc7c.eot");
-  src: font-url("icons_a95f0e7984836e3cc07aab431291dc7c.eot?#iefix") format("embedded-opentype"),
-       font-url("icons_a95f0e7984836e3cc07aab431291dc7c.woff") format("woff"),
-       font-url("icons_a95f0e7984836e3cc07aab431291dc7c.ttf") format("truetype"),
-       font-url("icons_a95f0e7984836e3cc07aab431291dc7c.svg#icons") format("svg");
+  src: font-url("icons_35b0e3f22516bc1caa233df7dbd351da.eot");
+  src: font-url("icons_35b0e3f22516bc1caa233df7dbd351da.eot?#iefix") format("embedded-opentype"),
+       font-url("icons_35b0e3f22516bc1caa233df7dbd351da.woff") format("woff"),
+       font-url("icons_35b0e3f22516bc1caa233df7dbd351da.ttf") format("truetype"),
+       font-url("icons_35b0e3f22516bc1caa233df7dbd351da.svg#icons") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -16,7 +16,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: "icons";
-    src: font-url("icons_a95f0e7984836e3cc07aab431291dc7c.svg#icons") format("svg");
+    src: font-url("icons_35b0e3f22516bc1caa233df7dbd351da.svg#icons") format("svg");
   }
 }
 
@@ -36,6 +36,7 @@
 .icon-empty:before,
 .icon-error:before,
 .icon-event:before,
+.icon-explore:before,
 .icon-group:before,
 .icon-group-add:before,
 .icon-inbox:before,
@@ -43,10 +44,12 @@
 .icon-menu:before,
 .icon-more-horiz:before,
 .icon-more-vert:before,
+.icon-palette:before,
 .icon-person:before,
 .icon-reorder:before,
 .icon-search:before,
 .icon-settings:before,
+.icon-skill:before,
 .icon-unknown:before,
 .icon-warning:before {
     display: inline-block;
@@ -76,6 +79,7 @@
 .icon-empty:before { content: "\f330"; }
 .icon-error:before { content: "\f325"; }
 .icon-event:before { content: "\f1d1"; }
+.icon-explore:before { content: "\f335"; }
 .icon-group:before { content: "\f232"; }
 .icon-group-add:before { content: "\f328"; }
 .icon-inbox:before { content: "\f326"; }
@@ -83,10 +87,12 @@
 .icon-menu:before { content: "\f2aa"; }
 .icon-more-horiz:before { content: "\f32e"; }
 .icon-more-vert:before { content: "\f32f"; }
+.icon-palette:before { content: "\f333"; }
 .icon-person:before { content: "\f2ed"; }
 .icon-reorder:before { content: "\f324"; }
 .icon-search:before { content: "\f32d"; }
 .icon-settings:before { content: "\f32c"; }
+.icon-skill:before { content: "\f334"; }
 .icon-unknown:before { content: "\f332"; }
 .icon-warning:before { content: "\f331"; }
 
@@ -103,6 +109,7 @@ $font-icons-done: "\f32b";
 $font-icons-empty: "\f330";
 $font-icons-error: "\f325";
 $font-icons-event: "\f1d1";
+$font-icons-explore: "\f335";
 $font-icons-group: "\f232";
 $font-icons-group-add: "\f328";
 $font-icons-inbox: "\f326";
@@ -110,9 +117,11 @@ $font-icons-lock: "\f327";
 $font-icons-menu: "\f2aa";
 $font-icons-more-horiz: "\f32e";
 $font-icons-more-vert: "\f32f";
+$font-icons-palette: "\f333";
 $font-icons-person: "\f2ed";
 $font-icons-reorder: "\f324";
 $font-icons-search: "\f32d";
 $font-icons-settings: "\f32c";
+$font-icons-skill: "\f334";
 $font-icons-unknown: "\f332";
 $font-icons-warning: "\f331";

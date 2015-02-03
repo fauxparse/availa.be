@@ -1,0 +1,7 @@
+en:
+  mongoid:
+    attributes:
+      group:
+        name: Group name
+        membership:
+          name: Display name

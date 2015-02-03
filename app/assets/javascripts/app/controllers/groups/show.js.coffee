@@ -4,6 +4,7 @@ class App.Groups.Show extends App.Section.Page
   back: "/groups"
 
   elements:
+    "header [rel=edit]": "settingsButton"
     ".upcoming-events": "upcoming"
 
   init: ->
@@ -17,7 +18,7 @@ class App.Groups.Show extends App.Section.Page
   load: (params) ->
     @el.addClass("loading")
     @group = App.Group.findByAttribute "slug", params.group_id
-    @title @group.name
+    @title @group.name()
     @render()
     @group.on("change", @render)
     App.Group.on "ajaxSuccess", @loaded
@@ -28,6 +29,7 @@ class App.Groups.Show extends App.Section.Page
     setTimeout =>
       if App.Group.exists @group.id
         @group = App.Group.find @group.id
+        @settingsButton.attr("href", @group.url() + "/preferences")
         @el.removeClass "loading"
         App.Group.off "ajaxSuccess", @loaded
         @_loaded = true
@@ -40,6 +42,12 @@ class App.Groups.Show extends App.Section.Page
 
   renderHeader: ->
     super
+
+    $("<a>", rel: "edit", href: "#").
+      addClass("button").
+      append($("<i>", class: "icon-settings")).
+      appendTo(@header)
+    @refreshElements()
 
     # icon = "<i class=\"icon-add\"></i>"
     # $("<a>", href: "#{@group.url()}/events/new", html: icon, rel: "add").
